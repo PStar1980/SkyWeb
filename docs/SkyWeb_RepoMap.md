@@ -1,27 +1,8 @@
 SkyWeb/
 ├── .gitignore
-├── SkyWeb_Structure.md
 ├── .github/
 │   └── workflows/
 ├── apps/
-│   ├── server/
-│   │   ├── .env
-│   │   ├── .env.example
-│   │   ├── package-lock.json
-│   │   ├── package.json
-│   │   ├── server.js
-│   │   ├── config/
-│   │   ├── controllers/
-│   │   │   ├── transactionController.js
-│   │   │   └── userController.js
-│   │   ├── middleware/
-│   │   ├── models/
-│   │   │   ├── Transaction.js
-│   │   │   └── User.js
-│   │   ├── routes/
-│   │   │   ├── transactionRoutes.js
-│   │   │   └── userRoutes.js
-│   │   └── utils/
 │   └── web/
 │       ├── eslint.config.js
 │       ├── index.html
@@ -35,13 +16,14 @@ SkyWeb/
 │           ├── App.jsx
 │           ├── index.css
 │           ├── main.jsx
+│           ├── api/
 │           ├── assets/
 │           │   └── react.svg
 │           ├── components/
 │           │   ├── AccountCard.jsx
 │           │   ├── Navbar.jsx
 │           │   └── TransactionList.jsx
-│           ├── context/
+│           ├── hooks/
 │           ├── pages/
 │           │   ├── Dashboard.jsx
 │           │   ├── Home.jsx
@@ -50,6 +32,9 @@ SkyWeb/
 │               ├── api.js
 │               └── userService.js
 ├── docs/
-│   └── SkyWeb_Repo_Structure.md
+│   └── SkyWeb_RepoMap.md
 ├── scripts/
 └── shared/
+    ├── chartConfigs/
+    ├── constants/
+    └── contracts/

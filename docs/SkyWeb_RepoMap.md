@@ -4,6 +4,7 @@ SkyWeb/
 ├── .prettierignore
 ├── .prettierrc.json
 ├── eslint.config.mjs
+├── npm-install-debug.log
 ├── package-lock.json
 ├── package.json
 ├── README.md
@@ -11,7 +12,25 @@ SkyWeb/
 │   └── workflows/
 ├── .husky/
 │   ├── pre-commit
-│   └── pre-push
+│   ├── pre-push
+│   └── _/
+│       ├── .gitignore
+│       ├── applypatch-msg
+│       ├── commit-msg
+│       ├── h
+│       ├── husky.sh
+│       ├── post-applypatch
+│       ├── post-checkout
+│       ├── post-commit
+│       ├── post-merge
+│       ├── post-rewrite
+│       ├── pre-applypatch
+│       ├── pre-auto-gc
+│       ├── pre-commit
+│       ├── pre-merge-commit
+│       ├── pre-push
+│       ├── pre-rebase
+│       └── prepare-commit-msg
 ├── apps/
 │   └── web/
 │       ├── index.html

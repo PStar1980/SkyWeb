@@ -1,17 +1,31 @@
-import { Link } from 'react-router-dom';
-import { Navbar, Container, Nav } from 'react-bootstrap';
+import { NavLink } from 'react-router-dom';
 
-export default function NavBar() {
+function getNavLinkClass({ isActive }) {
+  return isActive ? 'skyweb-nav-link active' : 'skyweb-nav-link';
+}
+
+export default function Navbar() {
   return (
-    <Navbar bg="dark" variant="dark" expand="lg">
-      <Container>
-        <Navbar.Brand as={Link} to="/">NeoFinTech</Navbar.Brand>
-        <Nav className="me-auto">
-          <Nav.Link as={Link} to="/">Home</Nav.Link>
-          <Nav.Link as={Link} to="/login">Login</Nav.Link>
-          <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
-        </Nav>
-      </Container>
-    </Navbar>
+    <header className="skyweb-navbar">
+      <NavLink className="skyweb-brand" to="/">
+        <span className="skyweb-brand-mark">⌁</span>
+        <span>SkyWeb</span>
+      </NavLink>
+
+      <nav className="skyweb-nav" aria-label="Primary navigation">
+        <NavLink className={getNavLinkClass} end to="/">
+          Home
+        </NavLink>
+        <NavLink className={getNavLinkClass} end to="/macro">
+          Macro
+        </NavLink>
+        <NavLink className={getNavLinkClass} to="/macro/views">
+          Views
+        </NavLink>
+        <NavLink className={getNavLinkClass} to="/macro/indicators">
+          Indicators
+        </NavLink>
+      </nav>
+    </header>
   );
 }

@@ -1,42 +1,400 @@
-#root {
-  max-width: 1280px;
+.skyweb-shell {
+  min-height: 100vh;
+}
+
+.skyweb-main {
+  width: min(1180px, calc(100vw - 2rem));
   margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  padding: 2rem 0 4rem;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.skyweb-navbar {
+  border-bottom: 1px solid rgba(138, 163, 202, 0.16);
+  background: rgba(5, 10, 20, 0.86);
+  backdrop-filter: blur(18px);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.skyweb-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18rem;
+  font-weight: 900;
+  letter-spacing: -0.045em;
+}
+
+.skyweb-brand-mark {
+  color: #70b7ff;
+}
+
+.skyweb-nav-link {
+  border-radius: 999px;
+  color: rgba(220, 232, 255, 0.72) !important;
+  padding-inline: 0.9rem !important;
+}
+
+.skyweb-nav-link:hover,
+.skyweb-nav-link.active {
+  background: rgba(112, 183, 255, 0.12);
+  color: #ffffff !important;
+}
+
+.skyweb-kicker,
+.skyweb-card-kicker,
+.skyweb-panel-label {
+  color: #70b7ff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.skyweb-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: 1.25rem;
+  align-items: stretch;
+  margin-top: 1rem;
+}
+
+.skyweb-hero-content,
+.skyweb-hero-panel,
+.skyweb-card,
+.skyweb-page-card,
+.skyweb-table-card,
+.skyweb-alert,
+.skyweb-loading,
+.skyweb-empty {
+  border: 1px solid rgba(138, 163, 202, 0.16);
+  border-radius: 1.25rem;
+  background: rgba(11, 19, 35, 0.78);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.22);
+}
+
+.skyweb-hero-content {
+  padding: clamp(1.4rem, 3vw, 3rem);
+}
+
+.skyweb-hero-content h1,
+.skyweb-page-header h1,
+.skyweb-page-card h1 {
+  max-width: 820px;
+  margin: 0.45rem 0 1rem;
+  color: #ffffff;
+  font-size: clamp(2.35rem, 6vw, 5rem);
+  font-weight: 900;
+  letter-spacing: -0.075em;
+  line-height: 0.96;
+}
+
+.skyweb-page-header h1,
+.skyweb-page-card h1 {
+  font-size: clamp(2rem, 4vw, 3.7rem);
+}
+
+.skyweb-hero-content p,
+.skyweb-page-header p,
+.skyweb-card p,
+.skyweb-page-card p,
+.skyweb-alert p {
+  color: rgba(220, 232, 255, 0.74);
+  font-size: 1.02rem;
+  line-height: 1.72;
+}
+
+.skyweb-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1.4rem;
+}
+
+.skyweb-btn-primary,
+.skyweb-btn-ghost {
+  border-radius: 999px;
+  font-weight: 800;
+  padding: 0.75rem 1.1rem;
+}
+
+.skyweb-btn-primary {
+  border: 1px solid rgba(112, 183, 255, 0.4);
+  background: linear-gradient(135deg, #2b8cff, #7f5cff);
+  color: #ffffff;
+}
+
+.skyweb-btn-primary:hover,
+.skyweb-btn-ghost:hover {
+  transform: translateY(-1px);
+}
+
+.skyweb-btn-ghost {
+  border: 1px solid rgba(138, 163, 202, 0.24);
+  background: rgba(255, 255, 255, 0.04);
+  color: #dce8ff;
+}
+
+.skyweb-hero-panel {
+  position: relative;
+  overflow: hidden;
+  padding: 1.4rem;
+}
+
+.skyweb-hero-panel::after {
+  position: absolute;
+  width: 16rem;
+  height: 16rem;
+  right: -6rem;
+  bottom: -6rem;
+  border-radius: 999px;
+  background: rgba(112, 183, 255, 0.12);
+  content: '';
+}
+
+.skyweb-hero-panel h2,
+.skyweb-card h2,
+.skyweb-table-header h2 {
+  color: #ffffff;
+  font-weight: 850;
+  letter-spacing: -0.035em;
+}
+
+.skyweb-hero-panel ul {
+  position: relative;
+  z-index: 1;
+  margin: 1rem 0 0;
+  padding-left: 1.2rem;
+  color: rgba(220, 232, 255, 0.78);
+  line-height: 1.85;
+}
+
+.skyweb-section-grid,
+.skyweb-view-grid,
+.skyweb-metric-grid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.skyweb-section-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.skyweb-view-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.skyweb-metric-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.skyweb-card,
+.skyweb-page-card,
+.skyweb-table-card {
+  padding: 1.25rem;
+}
+
+.skyweb-view-card {
+  border: 1px solid rgba(138, 163, 202, 0.16);
+  border-radius: 1.1rem;
+  background: rgba(11, 19, 35, 0.78);
+  color: inherit;
+  padding: 1.15rem;
+  text-decoration: none;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.skyweb-view-card:hover {
+  border-color: rgba(112, 183, 255, 0.42);
+  background: rgba(18, 30, 52, 0.86);
+  transform: translateY(-2px);
+}
+
+.skyweb-view-card h2 {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 850;
+}
+
+.skyweb-card-link {
+  color: #70b7ff;
+  font-weight: 800;
+}
+
+.skyweb-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.skyweb-toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 220px;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.skyweb-toolbar .form-control,
+.skyweb-toolbar .form-select {
+  border-color: rgba(138, 163, 202, 0.2);
+  background-color: rgba(5, 10, 20, 0.72);
+  color: #ffffff;
+}
+
+.skyweb-alert,
+.skyweb-loading,
+.skyweb-empty {
+  padding: 1rem;
+  color: rgba(220, 232, 255, 0.78);
+}
+
+.skyweb-alert {
+  border-color: rgba(255, 190, 92, 0.28);
+  background: rgba(88, 57, 16, 0.26);
+}
+
+.skyweb-metric-card {
+  border: 1px solid rgba(138, 163, 202, 0.16);
+  border-radius: 1rem;
+  background: rgba(11, 19, 35, 0.78);
+  padding: 1rem;
+}
+
+.skyweb-metric-card span,
+.skyweb-latest-item span {
+  display: block;
+  color: rgba(220, 232, 255, 0.58);
+  font-size: 0.82rem;
+}
+
+.skyweb-metric-card strong {
+  display: block;
+  color: #ffffff;
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.skyweb-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.skyweb-chip {
+  border: 1px solid rgba(112, 183, 255, 0.22);
+  border-radius: 999px;
+  background: rgba(112, 183, 255, 0.08);
+  color: #dce8ff;
+  padding: 0.35rem 0.7rem;
+  text-decoration: none;
+}
+
+.skyweb-chip:hover {
+  border-color: rgba(112, 183, 255, 0.5);
+  color: #ffffff;
+}
+
+.skyweb-latest-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.skyweb-latest-item {
+  border: 1px solid rgba(138, 163, 202, 0.12);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+  padding: 0.8rem;
+}
+
+.skyweb-latest-item strong {
+  display: block;
+  overflow: hidden;
+  color: #ffffff;
+  font-size: 0.94rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.skyweb-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.skyweb-table {
+  margin-bottom: 0;
+  color: #dce8ff;
+}
+
+.skyweb-table th {
+  color: rgba(220, 232, 255, 0.62);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.skyweb-table td {
+  color: rgba(220, 232, 255, 0.82);
+  vertical-align: middle;
+}
+
+.skyweb-table tr {
+  border-color: rgba(138, 163, 202, 0.12);
+}
+
+.skyweb-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+.skyweb-narrow-page {
+  max-width: 720px;
+  margin: 2rem auto 0;
+}
+
+.skyweb-note {
+  border: 1px solid rgba(112, 183, 255, 0.2);
+  border-radius: 0.9rem;
+  background: rgba(112, 183, 255, 0.08);
+  color: rgba(220, 232, 255, 0.76);
+  padding: 0.85rem;
+}
+
+@media (max-width: 992px) {
+  .skyweb-hero,
+  .skyweb-section-grid,
+  .skyweb-view-grid,
+  .skyweb-metric-grid {
+    grid-template-columns: 1fr;
   }
-  to {
-    transform: rotate(360deg);
+
+  .skyweb-page-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .skyweb-latest-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@media (max-width: 640px) {
+  .skyweb-main {
+    width: min(100vw - 1rem, 1180px);
+    padding-top: 1rem;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .skyweb-toolbar {
+    grid-template-columns: 1fr;
+  }
 
-.read-the-docs {
-  color: #888;
+  .skyweb-latest-grid {
+    grid-template-columns: 1fr;
+  }
 }

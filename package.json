@@ -1,0 +1,56 @@
+{
+  "name": "skyweb",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Public-facing web layer for SkyServer-backed dashboards, macro data views, and future Sky ecosystem experiences.",
+  "type": "module",
+  "scripts": {
+    "prepare": "husky init",
+    "web": "vite --config apps/web/vite.config.js",
+    "web:dev": "npm run web",
+    "web:build": "vite build --config apps/web/vite.config.js",
+    "web:preview": "vite preview --config apps/web/vite.config.js",
+    "dev": "npm run web",
+    "build": "npm run web:build",
+    "preview": "npm run web:preview",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "npm run lint:fix && npm run format",
+    "prepush": "npm run lint:fix && npm run format:check"
+  },
+  "lint-staged": {
+    "*.{js,jsx,mjs,cjs,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,html,css,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.15.2",
+    "bootstrap": "^5.3.8",
+    "react": "^19.2.6",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "^19.2.6",
+    "react-router-dom": "^7.15.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.39.1",
+    "@vitejs/plugin-react": "^6.0.1",
+    "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "globals": "^16.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.6",
+    "prettier": "^3.6.2",
+    "vite": "^8.0.10"
+  }
+}

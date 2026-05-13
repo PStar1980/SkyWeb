@@ -1,15 +1,30 @@
-import NavBar from './components/Navbar';
-import { Outlet } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter } from 'react-router-dom';
+import Navbar from './components/Navbar.jsx';
+import Home from './pages/Home.jsx';
+import MacroOverview from './pages/MacroOverview.jsx';
+import MacroViews from './pages/MacroViews.jsx';
+import MacroViewDetail from './pages/MacroViewDetail.jsx';
+import MacroIndicators from './pages/MacroIndicators.jsx';
+import './App.css';
 
-function App() {
+export default function App() {
   return (
-    <div>
-      <NavBar />
-      <div className="container mt-4">
-        <Outlet />
+    <BrowserRouter>
+      <div className="skyweb-app">
+        <Navbar />
+        <main className="skyweb-main">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/macro" element={<MacroOverview />} />
+            <Route path="/macro/views" element={<MacroViews />} />
+            <Route path="/macro/views/:viewKey" element={<MacroViewDetail />} />
+            <Route path="/macro/indicators" element={<MacroIndicators />} />
+            <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </main>
       </div>
-    </div>
+    </BrowserRouter>
   );
 }
-
-export default App;

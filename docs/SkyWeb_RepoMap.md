@@ -1,40 +1,36 @@
 SkyWeb/
+├── .env.example
 ├── .gitignore
+├── .prettierignore
+├── .prettierrc.json
+├── eslint.config.mjs
+├── package-lock.json
+├── package.json
+├── README.md
 ├── .github/
 │   └── workflows/
+├── .husky/
+│   ├── pre-commit
+│   └── pre-push
 ├── apps/
 │   └── web/
-│       ├── eslint.config.js
 │       ├── index.html
-│       ├── package-lock.json
-│       ├── package.json
 │       ├── vite.config.js
-│       ├── public/
-│       │   └── vite.svg
 │       └── src/
 │           ├── App.css
 │           ├── App.jsx
 │           ├── index.css
 │           ├── main.jsx
-│           ├── api/
-│           ├── assets/
-│           │   └── react.svg
 │           ├── components/
-│           │   ├── AccountCard.jsx
-│           │   ├── Navbar.jsx
-│           │   └── TransactionList.jsx
-│           ├── hooks/
+│           │   └── Navbar.jsx
 │           ├── pages/
-│           │   ├── Dashboard.jsx
 │           │   ├── Home.jsx
-│           │   └── Login.jsx
+│           │   ├── MacroIndicators.jsx
+│           │   ├── MacroOverview.jsx
+│           │   ├── MacroViewDetail.jsx
+│           │   └── MacroViews.jsx
 │           └── services/
 │               ├── api.js
-│               └── userService.js
-├── docs/
-│   └── SkyWeb_RepoMap.md
-├── scripts/
-└── shared/
-    ├── chartConfigs/
-    ├── constants/
-    └── contracts/
+│               └── macroService.js
+└── docs/
+    └── SkyWeb_RepoMap.md

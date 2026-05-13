@@ -5,7 +5,7 @@
   "description": "Public-facing web layer for SkyServer-backed dashboards, macro data views, and future Sky ecosystem experiences.",
   "type": "module",
   "scripts": {
-    "prepare": "husky init",
+    "prepare": "husky",
     "web": "vite --config apps/web/vite.config.js",
     "web:dev": "npm run web",
     "web:build": "vite build --config apps/web/vite.config.js",
@@ -18,7 +18,9 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "clean": "npm run lint:fix && npm run format",
-    "prepush": "npm run lint:fix && npm run format:check"
+    "prepush": "npm run lint:fix && npm run format:check",
+    "setup": "npm install",
+    "hooks": "husky"
   },
   "lint-staged": {
     "*.{js,jsx,mjs,cjs,ts,tsx}": [

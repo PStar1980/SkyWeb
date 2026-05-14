@@ -453,3 +453,216 @@
 .skyweb-number-cell {
   font-variant-numeric: tabular-nums;
 }
+
+.skyweb-app {
+  min-height: 100vh;
+}
+
+.skyweb-navbar {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  min-height: 3.25rem;
+  padding: 0.65rem max(1rem, calc((100vw - 1180px) / 2));
+}
+
+.skyweb-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.skyweb-brand,
+.skyweb-nav-link,
+.skyweb-card-link {
+  text-decoration: none;
+}
+
+.skyweb-header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.skyweb-dashboard-pulse {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.28fr);
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 1rem;
+  border: 1px solid rgba(112, 183, 255, 0.2);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(43, 140, 255, 0.16), rgba(127, 92, 255, 0.1)),
+    rgba(11, 19, 35, 0.82);
+  padding: 1.25rem;
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.22);
+}
+
+.skyweb-dashboard-pulse h2,
+.skyweb-section-heading h2,
+.skyweb-card h2 {
+  margin: 0.35rem 0 0.35rem;
+}
+
+.skyweb-dashboard-pulse p {
+  max-width: 760px;
+  margin: 0;
+  color: rgba(220, 232, 255, 0.76);
+  line-height: 1.65;
+}
+
+.skyweb-pulse-stack {
+  border: 1px solid rgba(138, 163, 202, 0.16);
+  border-radius: 1rem;
+  background: rgba(5, 10, 20, 0.45);
+  padding: 1rem;
+}
+
+.skyweb-pulse-stack span,
+.skyweb-metric-card small,
+.skyweb-view-meta dt,
+.skyweb-results-summary {
+  color: rgba(220, 232, 255, 0.58);
+  font-size: 0.82rem;
+}
+
+.skyweb-pulse-stack strong {
+  display: block;
+  color: #ffffff;
+  font-size: 1.45rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.skyweb-dashboard-section,
+.skyweb-dashboard-two-column {
+  margin-top: 1.25rem;
+}
+
+.skyweb-section-heading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.skyweb-dashboard-two-column {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 1rem;
+}
+
+.skyweb-coverage-list {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.skyweb-coverage-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgba(138, 163, 202, 0.13);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+  padding: 0.72rem 0.8rem;
+}
+
+.skyweb-coverage-row span {
+  color: rgba(220, 232, 255, 0.78);
+}
+
+.skyweb-coverage-row strong {
+  color: #ffffff;
+  font-size: 1.25rem;
+}
+
+.skyweb-metric-card small {
+  display: block;
+  margin-top: 0.2rem;
+}
+
+.skyweb-metric-card-default,
+.skyweb-metric-card {
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease;
+}
+
+.skyweb-metric-card:hover {
+  border-color: rgba(112, 183, 255, 0.34);
+  transform: translateY(-1px);
+}
+
+.skyweb-view-meta {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+
+.skyweb-view-meta div {
+  border: 1px solid rgba(138, 163, 202, 0.12);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.035);
+  padding: 0.65rem;
+}
+
+.skyweb-view-meta dt,
+.skyweb-view-meta dd {
+  margin: 0;
+}
+
+.skyweb-view-meta dd {
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.skyweb-view-card p {
+  min-height: 3.2rem;
+}
+
+.skyweb-toolbar-three {
+  grid-template-columns: minmax(0, 1fr) 220px 220px;
+}
+
+.skyweb-results-summary {
+  margin: 0.5rem 0 0.85rem;
+}
+
+.skyweb-chip-static {
+  cursor: default;
+}
+
+.skyweb-detail-metrics,
+.skyweb-indicator-metrics {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 992px) {
+  .skyweb-dashboard-pulse,
+  .skyweb-dashboard-two-column,
+  .skyweb-toolbar-three {
+    grid-template-columns: 1fr;
+  }
+
+  .skyweb-header-actions {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .skyweb-navbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .skyweb-nav-link {
+    padding-inline: 0.7rem !important;
+  }
+}

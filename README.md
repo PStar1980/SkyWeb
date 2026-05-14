@@ -6,9 +6,9 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 9.1 — Public Macro API Bridge**
+**Phase 9.2 — Macro Dashboard v1**
 
-SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated SkyWeb application shell and is now wired to SkyServer public macro APIs.
+SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, and now exposes a first-pass macro dashboard experience.
 
 Implemented foundation pieces:
 
@@ -20,7 +20,10 @@ Implemented foundation pieces:
 - Shared API client
 - Macro API service layer
 - Public-facing home page
-- Macro overview, views, view detail, and indicator explorer pages
+- Macro dashboard overview with live summary metrics
+- Curated view cards with coverage metadata
+- View detail pages with latest-row and preview-table surfaces
+- Indicator explorer with source/frequency filtering
 - Public macro API namespace: `/api/public/macro/*`
 
 ## Repository Layout
@@ -89,7 +92,7 @@ During local development, Vite proxies `/api/*` to the SkyServer API using `VITE
 ### 9.0 — SkyWeb Foundation
 
 - Establish SkyWeb identity and README
-- Add root workspace scripts
+- Add root package scripts
 - Add environment template
 - Add API service layer
 - Add macro dashboard route skeleton
@@ -103,11 +106,12 @@ During local development, Vite proxies `/api/*` to the SkyServer API using `VITE
 
 ### 9.2 — Macro Dashboard v1
 
-- Macro overview cards
-- Curated macro view list
-- View detail pages
-- Latest values and table previews
-- Region/category filtering
+- Live macro overview dashboard
+- Summary metrics for views, indicators, regions, and combined rows
+- Featured macro view cards enriched with latest-date and row coverage
+- Regional and category coverage panels
+- View detail metrics, latest values, and readable preview tables
+- Indicator source/frequency filtering
 
 ### 9.3 — SkyWeb Auth Preparation
 

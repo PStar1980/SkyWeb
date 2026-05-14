@@ -1,6 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import StatCard from '../components/StatCard.jsx';
+import ViewCard from '../components/ViewCard.jsx';
+import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import macroService from '../services/macroService.js';
+import {
+  formatCategory,
+  formatDate,
+  formatNumber,
+  formatRegion,
+  getMaxDate,
+} from '../utils/formatters.js';
 
 function getErrorMessage(error) {
   if (!error) {
@@ -23,13 +33,44 @@ function groupViewsByRegion(views = []) {
   }, {});
 }
 
+function groupViewsByCategory(views = []) {
+  return views.reduce((groups, view) => {
+    const category = view.category || 'macro';
+    groups[category] = groups[category] || [];
+    groups[category].push(view);
+    return groups;
+  }, {});
+}
+
+function getLatestDateFromViews(views = []) {
+  return getMaxDate(views.map((view) => view?.stats?.maxDate || view?.maxDate).filter(Boolean));
+}
+
+function sortFeaturedViews(views = []) {
+  return [...views]
+    .sort((left, right) => {
+      const leftRows = left?.stats?.totalRows || 0;
+      const rightRows = right?.stats?.totalRows || 0;
+      return rightRows - leftRows;
+    })
+    .slice(0, 6);
+}
+
 export default function MacroOverview() {
   const [summary, setSummary] = useState(null);
   const [views, setViews] = useState([]);
+  const [indicators, setIndicators] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const groupedViews = useMemo(() => groupViewsByRegion(views), [views]);
+  const groupedCategories = useMemo(() => groupViewsByCategory(views), [views]);
+  const featuredViews = useMemo(() => sortFeaturedViews(views), [views]);
+  const latestDate = useMemo(() => getLatestDateFromViews(views), [views]);
+  const totalRows = useMemo(
+    () => views.reduce((sum, view) => sum + Number(view?.stats?.totalRows || 0), 0),
+    [views],
+  );
 
   useEffect(() => {
     let active = true;
@@ -39,17 +80,26 @@ export default function MacroOverview() {
       setError(null);
 
       try {
-        const [summaryPayload, viewPayload] = await Promise.all([
+        const [summaryPayload, viewPayload, indicatorPayload] = await Promise.all([
           macroService.getSummary(),
           macroService.listViews(),
+          macroService.listIndicators({ limit: 500, active: true }),
         ]);
 
         if (!active) {
           return;
         }
 
+        const summaryViews = summaryPayload.views || [];
+        const listViews = viewPayload.items || [];
+        const viewsByKey = new Map(listViews.map((view) => [view.viewKey, view]));
+        const mergedViews = summaryViews.length
+          ? summaryViews.map((view) => ({ ...(viewsByKey.get(view.viewKey) || {}), ...view }))
+          : listViews;
+
         setSummary(summaryPayload);
-        setViews(viewPayload.items || []);
+        setViews(mergedViews);
+        setIndicators(indicatorPayload.items || []);
       } catch (loadError) {
         if (!active) {
           return;
@@ -72,68 +122,118 @@ export default function MacroOverview() {
 
   return (
     <>
-      <header className="skyweb-page-header">
+      <header className="skyweb-page-header skyweb-dashboard-header">
         <div>
           <div className="skyweb-kicker">Macro dashboards</div>
-          <h1>SkyWeb Macro Overview</h1>
+          <h1>SkyWeb Macro Dashboard</h1>
           <p>
-            A public-facing gateway for curated macroeconomic views powered by SkyServer public
-            APIs.
+            A public-facing command center for curated macroeconomic views powered by SkyServer
+            public APIs.
           </p>
         </div>
-        <Link className="btn skyweb-btn-ghost" to="/macro/views">
-          View all macro views
-        </Link>
+        <div className="skyweb-header-actions">
+          <Link className="btn skyweb-btn-ghost" to="/macro/indicators">
+            Browse indicators
+          </Link>
+          <Link className="btn skyweb-btn-primary" to="/macro/views">
+            View all macro views
+          </Link>
+        </div>
       </header>
 
-      {loading && <div className="skyweb-loading">Loading macro overview...</div>}
+      {loading && <LoadingState>Loading macro dashboard...</LoadingState>}
 
       {!loading && error && (
-        <section className="skyweb-alert">
-          <strong>Macro API unavailable.</strong>
-          <p>{getErrorMessage(error)}</p>
-        </section>
+        <ErrorState title="Macro API unavailable.">{getErrorMessage(error)}</ErrorState>
       )}
 
       {!loading && !error && (
         <>
-          <section className="skyweb-metric-grid">
-            <article className="skyweb-metric-card">
-              <span>Macro views</span>
-              <strong>{summary?.viewCount ?? views.length}</strong>
-            </article>
-            <article className="skyweb-metric-card">
-              <span>Indicators</span>
-              <strong>{summary?.indicatorCount ?? '—'}</strong>
-            </article>
-            <article className="skyweb-metric-card">
-              <span>Regions</span>
-              <strong>{Object.keys(groupedViews).length}</strong>
-            </article>
-            <article className="skyweb-metric-card">
-              <span>API mode</span>
-              <strong>{import.meta.env.VITE_MACRO_API_PREFIX || '/macro'}</strong>
-            </article>
+          <section className="skyweb-dashboard-pulse">
+            <div>
+              <div className="skyweb-card-kicker">Public data surface</div>
+              <h2>Macro layer online</h2>
+              <p>
+                {views.length} curated view(s), {indicators.length} active indicator(s), and{' '}
+                {formatNumber(totalRows, { compact: true })} combined public rows are available for
+                exploration.
+              </p>
+            </div>
+            <div className="skyweb-pulse-stack">
+              <span>Latest data</span>
+              <strong>{latestDate ? formatDate(latestDate) : '—'}</strong>
+            </div>
           </section>
 
-          <section className="skyweb-section-grid">
-            {Object.entries(groupedViews).map(([region, regionViews]) => (
-              <article className="skyweb-card" key={region}>
-                <div className="skyweb-card-kicker">{region}</div>
-                <h2>{regionViews.length} view(s)</h2>
-                <div className="skyweb-chip-list">
-                  {regionViews.slice(0, 8).map((view) => (
-                    <Link
-                      className="skyweb-chip"
-                      key={view.viewKey}
-                      to={`/macro/views/${view.viewKey}`}
-                    >
-                      {view.label}
-                    </Link>
-                  ))}
-                </div>
-              </article>
-            ))}
+          <section className="skyweb-metric-grid">
+            <StatCard
+              label="Macro views"
+              value={summary?.viewCount ?? views.length}
+              detail="Curated public views"
+            />
+            <StatCard
+              label="Indicators"
+              value={summary?.indicatorCount ?? indicators.length}
+              detail="Active source series"
+            />
+            <StatCard
+              label="Regions"
+              value={Object.keys(groupedViews).length}
+              detail="Coverage groups"
+            />
+            <StatCard
+              label="Rows"
+              value={formatNumber(totalRows, { compact: true })}
+              detail="Combined view rows"
+            />
+          </section>
+
+          <section className="skyweb-dashboard-section">
+            <div className="skyweb-section-heading">
+              <div>
+                <div className="skyweb-card-kicker">Featured views</div>
+                <h2>High-coverage macro surfaces</h2>
+              </div>
+              <Link className="skyweb-card-link" to="/macro/views">
+                Browse all →
+              </Link>
+            </div>
+            {featuredViews.length > 0 ? (
+              <div className="skyweb-view-grid skyweb-featured-grid">
+                {featuredViews.map((view) => (
+                  <ViewCard key={view.viewKey} view={view} />
+                ))}
+              </div>
+            ) : (
+              <EmptyState>No featured views returned.</EmptyState>
+            )}
+          </section>
+
+          <section className="skyweb-dashboard-two-column">
+            <article className="skyweb-card">
+              <div className="skyweb-card-kicker">Regional coverage</div>
+              <h2>Views by region</h2>
+              <div className="skyweb-coverage-list">
+                {Object.entries(groupedViews).map(([region, regionViews]) => (
+                  <div className="skyweb-coverage-row" key={region}>
+                    <span>{formatRegion(region)}</span>
+                    <strong>{regionViews.length}</strong>
+                  </div>
+                ))}
+              </div>
+            </article>
+
+            <article className="skyweb-card">
+              <div className="skyweb-card-kicker">Category coverage</div>
+              <h2>Views by category</h2>
+              <div className="skyweb-chip-list">
+                {Object.entries(groupedCategories).map(([category, categoryViews]) => (
+                  <span className="skyweb-chip skyweb-chip-static" key={category}>
+                    {formatCategory(category)} · {categoryViews.length}
+                  </span>
+                ))}
+              </div>
+            </article>
           </section>
         </>
       )}

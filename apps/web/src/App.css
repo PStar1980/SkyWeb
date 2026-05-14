@@ -443,3 +443,13 @@
     grid-template-columns: 1fr;
   }
 }
+
+.skyweb-table-date {
+  color: #ffffff;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.skyweb-number-cell {
+  font-variant-numeric: tabular-nums;
+}

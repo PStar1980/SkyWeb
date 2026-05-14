@@ -328,25 +328,70 @@
   margin-bottom: 0.75rem;
 }
 
-.skyweb-table {
-  margin-bottom: 0;
-  color: #dce8ff;
+.skyweb-table-card .table-responsive {
+  overflow: auto;
+  border: 1px solid rgba(138, 163, 202, 0.14);
+  border-radius: 0.95rem;
+  background: rgba(5, 10, 20, 0.38);
 }
 
-.skyweb-table th {
-  color: rgba(220, 232, 255, 0.62);
+.skyweb-table {
+  --bs-table-bg: transparent;
+  --bs-table-color: rgba(220, 232, 255, 0.82);
+  --bs-table-border-color: rgba(138, 163, 202, 0.12);
+  --bs-table-striped-bg: rgba(112, 183, 255, 0.045);
+  --bs-table-striped-color: rgba(220, 232, 255, 0.86);
+  --bs-table-hover-bg: rgba(112, 183, 255, 0.08);
+  --bs-table-hover-color: #ffffff;
+  margin-bottom: 0;
+  color: var(--bs-table-color);
+}
+
+.skyweb-table > :not(caption) > * > * {
+  border-bottom-color: var(--bs-table-border-color);
+  background-color: transparent;
+  box-shadow: none;
+  color: inherit;
+}
+
+.skyweb-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-bottom: 1px solid rgba(112, 183, 255, 0.22);
+  background: rgba(8, 17, 31, 0.98);
+  color: rgba(220, 232, 255, 0.74);
   font-size: 0.78rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
 }
 
+.skyweb-table tbody tr {
+  border-color: rgba(138, 163, 202, 0.12);
+}
+
+.skyweb-table tbody tr:nth-child(even) > * {
+  background: rgba(112, 183, 255, 0.035);
+}
+
+.skyweb-table tbody tr:hover > * {
+  background: rgba(112, 183, 255, 0.08);
+  color: #ffffff;
+}
+
 .skyweb-table td {
-  color: rgba(220, 232, 255, 0.82);
+  color: rgba(220, 232, 255, 0.86);
   vertical-align: middle;
 }
 
-.skyweb-table tr {
-  border-color: rgba(138, 163, 202, 0.12);
+.skyweb-table th,
+.skyweb-table td {
+  padding: 0.82rem 0.95rem;
+}
+
+.skyweb-table .skyweb-mono {
+  color: #a9cbff;
 }
 
 .skyweb-mono {

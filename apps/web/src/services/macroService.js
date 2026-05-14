@@ -1,6 +1,6 @@
 import api from './api.js';
 
-const macroPrefix = import.meta.env.VITE_MACRO_API_PREFIX || '/macro';
+const macroPrefix = import.meta.env.VITE_MACRO_API_PREFIX || '/public/macro';
 
 function buildQuery(params = {}) {
   return Object.fromEntries(

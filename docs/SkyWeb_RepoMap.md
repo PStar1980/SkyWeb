@@ -4,7 +4,6 @@ SkyWeb/
 ├── .prettierignore
 ├── .prettierrc.json
 ├── eslint.config.mjs
-├── npm-install-debug.log
 ├── package-lock.json
 ├── package.json
 ├── README.md

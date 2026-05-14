@@ -115,7 +115,7 @@ export default function MacroIndicators() {
           <strong>Indicators unavailable.</strong>
           <p>
             {error.status === 401 || error.status === 403
-              ? 'Public indicator access is coming after the public macro API bridge.'
+              ? 'SkyServer public indicator access is unavailable. Confirm the API is running and /api/public/macro is mounted.'
               : error.message}
           </p>
         </section>

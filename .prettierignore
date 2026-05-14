@@ -17,6 +17,7 @@ eslint.config.js
 
 # Logs and cache
 logs/
+*.log
 tmp/
 .cache/
 

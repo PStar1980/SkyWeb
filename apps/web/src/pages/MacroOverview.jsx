@@ -8,7 +8,7 @@ function getErrorMessage(error) {
   }
 
   if (error.status === 401 || error.status === 403) {
-    return 'SkyServer macro endpoints are currently protected. Phase 9.1 will add safe public macro endpoints for SkyWeb.';
+    return 'SkyServer public macro endpoints are unavailable. Confirm the SkyServer API is running and /api/public/macro is mounted.';
   }
 
   return error.message || 'Unable to load macro overview.';
@@ -77,8 +77,8 @@ export default function MacroOverview() {
           <div className="skyweb-kicker">Macro dashboards</div>
           <h1>SkyWeb Macro Overview</h1>
           <p>
-            A public-facing gateway for curated macroeconomic views powered by SkyServer. The shell
-            is ready now; public API access arrives in the next Phase 9 slice.
+            A public-facing gateway for curated macroeconomic views powered by SkyServer public
+            APIs.
           </p>
         </div>
         <Link className="btn skyweb-btn-ghost" to="/macro/views">
@@ -90,7 +90,7 @@ export default function MacroOverview() {
 
       {!loading && error && (
         <section className="skyweb-alert">
-          <strong>Macro API not available yet.</strong>
+          <strong>Macro API unavailable.</strong>
           <p>{getErrorMessage(error)}</p>
         </section>
       )}

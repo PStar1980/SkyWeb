@@ -6,21 +6,22 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 9.0 — Foundation Cleanup**
+**Phase 9.1 — Public Macro API Bridge**
 
-SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated SkyWeb application shell.
+SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated SkyWeb application shell and is now wired to SkyServer public macro APIs.
 
 Implemented foundation pieces:
 
-- Root workspace `package.json`
+- Single root `package.json`
 - Root `.env.example`
 - Vite dev proxy to SkyServer API
 - SkyWeb branding and navigation
-- Macro dashboard route skeleton
+- Macro dashboard route shell
 - Shared API client
 - Macro API service layer
 - Public-facing home page
 - Macro overview, views, view detail, and indicator explorer pages
+- Public macro API namespace: `/api/public/macro/*`
 
 ## Repository Layout
 
@@ -34,7 +35,6 @@ SkyWeb/
 │       │   └── services/    # API service clients
 │       └── vite.config.js
 ├── docs/                    # Repo maps and project docs
-├── shared/                  # Future shared contracts/configs
 ├── .env.example
 └── package.json
 ```
@@ -78,7 +78,7 @@ Important variables:
 ```text
 VITE_SKYSERVER_API_BASE_URL=/api
 VITE_SKYSERVER_API_ORIGIN=http://localhost:7171
-VITE_MACRO_API_PREFIX=/macro
+VITE_MACRO_API_PREFIX=/public/macro
 VITE_SKYWEB_PUBLIC_MODE=true
 ```
 

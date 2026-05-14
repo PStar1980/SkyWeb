@@ -8,9 +8,9 @@ export default function Home() {
           <div className="skyweb-kicker">Sky ecosystem public layer</div>
           <h1>Macro dashboards, living data, and public proof of work.</h1>
           <p>
-            SkyWeb is the presentation layer for curated SkyServer data. Phase 9 begins with a macro
-            dashboard foundation, then grows into charts, saved views, and public-facing evidence
-            surfaces.
+            SkyWeb is the presentation layer for curated SkyServer data. Phase 9 now connects SkyWeb
+            to safe public macro APIs, then grows into charts, saved views, and public-facing
+            evidence surfaces.
           </p>
           <div className="skyweb-hero-actions">
             <Link className="btn skyweb-btn-primary" to="/macro">
@@ -22,13 +22,13 @@ export default function Home() {
           </div>
         </div>
         <div className="skyweb-hero-panel">
-          <div className="skyweb-panel-label">Phase 9.0</div>
-          <h2>Foundation online</h2>
+          <div className="skyweb-panel-label">Phase 9.1</div>
+          <h2>Public macro bridge online</h2>
           <ul>
             <li>SkyWeb identity cleaned up</li>
             <li>SkyServer API proxy configured</li>
-            <li>Macro routes staged</li>
-            <li>Public dashboard shell ready</li>
+            <li>Public macro API bridge configured</li>
+            <li>Dashboard shell connected to live SkyServer data</li>
           </ul>
         </div>
       </section>

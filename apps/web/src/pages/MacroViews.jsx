@@ -106,7 +106,7 @@ export default function MacroViews() {
           <strong>Views unavailable.</strong>
           <p>
             {error.status === 401 || error.status === 403
-              ? 'Public macro API is coming in Phase 9.1.'
+              ? 'SkyServer public macro API is unavailable. Confirm the API is running and /api/public/macro is mounted.'
               : error.message}
           </p>
         </section>

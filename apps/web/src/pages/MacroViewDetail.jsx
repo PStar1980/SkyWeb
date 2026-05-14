@@ -1,120 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import StatCard from '../components/StatCard.jsx';
+import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import macroService from '../services/macroService.js';
-
-const dateFormatter = new Intl.DateTimeFormat(undefined, {
-  year: 'numeric',
-  month: 'short',
-  day: 'numeric',
-});
-
-const numberFormatter = new Intl.NumberFormat(undefined, {
-  maximumFractionDigits: 4,
-});
-
-function isDateKey(key = '') {
-  return String(key).toLowerCase().includes('date');
-}
-
-function parseDateOnly(value) {
-  if (typeof value !== 'string') {
-    return null;
-  }
-
-  const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
-
-  if (!match) {
-    return null;
-  }
-
-  const [, year, month, day] = match;
-  return new Date(Number(year), Number(month) - 1, Number(day));
-}
-
-function formatDate(value) {
-  if (!value) {
-    return '—';
-  }
-
-  const date = parseDateOnly(value) || new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return String(value);
-  }
-
-  return dateFormatter.format(date);
-}
-
-function isNumericLike(value) {
-  if (typeof value === 'number') {
-    return Number.isFinite(value);
-  }
-
-  if (typeof value !== 'string') {
-    return false;
-  }
-
-  const trimmedValue = value.trim();
-
-  if (trimmedValue === '') {
-    return false;
-  }
-
-  return /^-?\d+(\.\d+)?$/.test(trimmedValue);
-}
-
-function formatNumber(value) {
-  const numberValue = typeof value === 'number' ? value : Number(value);
-
-  if (!Number.isFinite(numberValue)) {
-    return String(value);
-  }
-
-  return Number.isInteger(numberValue)
-    ? numberValue.toLocaleString()
-    : numberFormatter.format(numberValue);
-}
-
-function formatValue(value, key = '') {
-  if (value === null || value === undefined) {
-    return '—';
-  }
-
-  if (isDateKey(key)) {
-    return formatDate(value);
-  }
-
-  if (isNumericLike(value)) {
-    return formatNumber(value);
-  }
-
-  return String(value);
-}
-
-function formatColumnLabel(value = '') {
-  const text = String(value)
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-    .replace(/_/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim();
-
-  if (!text) {
-    return '';
-  }
-
-  return text
-    .split(' ')
-    .map((word) => {
-      const upperWord = word.toUpperCase();
-
-      if (['GDP', 'CPI', 'PCE', 'YOY', 'CAD', 'USD', 'FX'].includes(upperWord)) {
-        return upperWord;
-      }
-
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
-    .join(' ');
-}
+import {
+  formatColumnLabel,
+  formatDate,
+  formatNumber,
+  formatValue,
+  isDateKey,
+} from '../utils/formatters.js';
 
 function getColumnsFromRows(rows = []) {
   const firstRow = rows[0] || {};
@@ -169,6 +64,12 @@ function getCellClassName(column) {
   return undefined;
 }
 
+function getLatestFields(latest = {}) {
+  return Object.entries(latest)
+    .filter(([key]) => !['createdAt', 'updatedAt'].includes(key))
+    .slice(0, 12);
+}
+
 export default function MacroViewDetail() {
   const { viewKey } = useParams();
   const [rows, setRows] = useState([]);
@@ -185,6 +86,9 @@ export default function MacroViewDetail() {
 
     return getColumnsFromRows(rows).slice(0, 10);
   }, [columns, rows]);
+
+  const latestFields = useMemo(() => getLatestFields(latest), [latest]);
+  const stats = view?.stats || {};
 
   useEffect(() => {
     let active = true;
@@ -239,35 +143,55 @@ export default function MacroViewDetail() {
         </Link>
       </header>
 
-      {loading && <div className="skyweb-loading">Loading view data...</div>}
+      {loading && <LoadingState>Loading view data...</LoadingState>}
       {!loading && error && (
-        <section className="skyweb-alert">
-          <strong>View unavailable.</strong>
-          <p>
-            {error.status === 401 || error.status === 403
-              ? 'SkyServer public macro API is unavailable. Confirm the API is running and /api/public/macro is mounted.'
-              : error.message}
-          </p>
-        </section>
+        <ErrorState title="View unavailable.">
+          {error.status === 401 || error.status === 403
+            ? 'SkyServer public macro API is unavailable. Confirm the API is running and /api/public/macro is mounted.'
+            : error.message}
+        </ErrorState>
       )}
 
       {!loading && !error && (
         <>
+          <section className="skyweb-metric-grid skyweb-detail-metrics">
+            <StatCard
+              label="Rows"
+              value={stats.totalRows !== undefined ? formatNumber(stats.totalRows) : rows.length}
+              detail="Historical records"
+            />
+            <StatCard
+              label="Latest date"
+              value={
+                stats.maxDate
+                  ? formatDate(stats.maxDate)
+                  : latest?.date
+                    ? formatDate(latest.date)
+                    : '—'
+              }
+              detail="Newest public row"
+            />
+            <StatCard
+              label="Earliest date"
+              value={stats.minDate ? formatDate(stats.minDate) : '—'}
+              detail="First available row"
+            />
+            <StatCard label="Fields" value={displayColumns.length} detail="Preview columns" />
+          </section>
+
           <section className="skyweb-card mb-4">
             <div className="skyweb-card-kicker">Latest row</div>
-            {latest ? (
+            {latestFields.length > 0 ? (
               <div className="skyweb-latest-grid">
-                {Object.entries(latest)
-                  .slice(0, 12)
-                  .map(([key, value]) => (
-                    <div className="skyweb-latest-item" key={key}>
-                      <span>{formatColumnLabel(key)}</span>
-                      <strong>{formatValue(value, key)}</strong>
-                    </div>
-                  ))}
+                {latestFields.map(([key, value]) => (
+                  <div className="skyweb-latest-item" key={key}>
+                    <span>{formatColumnLabel(key)}</span>
+                    <strong>{formatValue(value, key)}</strong>
+                  </div>
+                ))}
               </div>
             ) : (
-              <div className="skyweb-empty">No latest row returned.</div>
+              <EmptyState>No latest row returned.</EmptyState>
             )}
           </section>
 
@@ -304,7 +228,7 @@ export default function MacroViewDetail() {
                 </tbody>
               </table>
             </div>
-            {rows.length === 0 && <div className="skyweb-empty">No rows returned.</div>}
+            {rows.length === 0 && <EmptyState>No rows returned.</EmptyState>}
           </section>
         </>
       )}

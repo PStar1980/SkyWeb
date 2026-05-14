@@ -40,15 +40,20 @@ SkyWeb/
 │           ├── index.css
 │           ├── main.jsx
 │           ├── components/
-│           │   └── Navbar.jsx
+│           │   ├── Navbar.jsx
+│           │   ├── PageState.jsx
+│           │   ├── StatCard.jsx
+│           │   └── ViewCard.jsx
 │           ├── pages/
 │           │   ├── Home.jsx
 │           │   ├── MacroIndicators.jsx
 │           │   ├── MacroOverview.jsx
 │           │   ├── MacroViewDetail.jsx
 │           │   └── MacroViews.jsx
-│           └── services/
-│               ├── api.js
-│               └── macroService.js
+│           ├── services/
+│           │   ├── api.js
+│           │   └── macroService.js
+│           └── utils/
+│               └── formatters.js
 └── docs/
     └── SkyWeb_RepoMap.md

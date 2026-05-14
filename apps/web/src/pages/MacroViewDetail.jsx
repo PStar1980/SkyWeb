@@ -65,7 +65,9 @@ function getCellClassName(column) {
 }
 
 function getLatestFields(latest = {}) {
-  return Object.entries(latest)
+  const safeLatest = latest || {};
+
+  return Object.entries(safeLatest)
     .filter(([key]) => !['createdAt', 'updatedAt'].includes(key))
     .slice(0, 12);
 }

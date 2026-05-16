@@ -42,16 +42,22 @@ SkyWeb/
 │           ├── components/
 │           │   ├── Navbar.jsx
 │           │   ├── PageState.jsx
+│           │   ├── ProtectedRoute.jsx
 │           │   ├── StatCard.jsx
 │           │   └── ViewCard.jsx
+│           ├── context/
+│           │   └── AuthContext.jsx
 │           ├── pages/
+│           │   ├── Account.jsx
 │           │   ├── Home.jsx
+│           │   ├── Login.jsx
 │           │   ├── MacroIndicators.jsx
 │           │   ├── MacroOverview.jsx
 │           │   ├── MacroViewDetail.jsx
 │           │   └── MacroViews.jsx
 │           ├── services/
 │           │   ├── api.js
+│           │   ├── authService.js
 │           │   └── macroService.js
 │           └── utils/
 │               └── formatters.js

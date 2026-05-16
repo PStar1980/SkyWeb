@@ -6,7 +6,7 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 9.2 — Macro Dashboard v1**
+**Phase 9.3 — Auth Shell + Member Layer Prep**
 
 SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, and now exposes a first-pass macro dashboard experience.
 
@@ -138,3 +138,10 @@ SkyWeb should not duplicate SkyServer administration features. SkyServer owns:
 - Repository/system configuration
 
 SkyWeb consumes curated APIs exposed by SkyServer and focuses on public presentation, exploration, and future user personalization.
+
+## Phase 9.3 Implementation Notes
+
+- SkyWeb login posts to `/api/auth/login` with `appCode: SKYWEB`.
+- Public macro pages remain unauthenticated.
+- `/account` is protected by the SkyWeb AuthContext and reads `/api/skyweb/profile`.
+- SkyWeb profiles and preferences are staged in the `skyweb` database schema.

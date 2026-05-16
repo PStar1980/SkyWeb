@@ -1,10 +1,19 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext.jsx';
 
 function getNavLinkClass({ isActive }) {
   return isActive ? 'skyweb-nav-link active' : 'skyweb-nav-link';
 }
 
 export default function Navbar() {
+  const navigate = useNavigate();
+  const { isAuthenticated, loading, logout, user } = useAuth();
+
+  async function handleLogout() {
+    await logout();
+    navigate('/', { replace: true });
+  }
+
   return (
     <header className="skyweb-navbar">
       <NavLink className="skyweb-brand" to="/">
@@ -26,6 +35,24 @@ export default function Navbar() {
           Indicators
         </NavLink>
       </nav>
+
+      <div className="skyweb-nav-account">
+        {!loading && isAuthenticated && (
+          <>
+            <NavLink className={getNavLinkClass} to="/account">
+              {user?.displayName || user?.username || 'Account'}
+            </NavLink>
+            <button className="skyweb-nav-button" onClick={handleLogout} type="button">
+              Logout
+            </button>
+          </>
+        )}
+        {!loading && !isAuthenticated && (
+          <NavLink className={getNavLinkClass} to="/login">
+            Login
+          </NavLink>
+        )}
+      </div>
     </header>
   );
 }

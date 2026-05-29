@@ -342,6 +342,39 @@ export default function MacroOverview() {
               </div>
             </article>
           </section>
+
+          <section className="skyweb-dashboard-section skyweb-screenshot-section">
+            <div className="skyweb-section-heading">
+              <div>
+                <div className="skyweb-card-kicker">Portfolio proof</div>
+                <h2>Built as a public evidence surface</h2>
+                <p className="skyweb-section-copy">
+                  SkyWeb now gives the Sky ecosystem a visible layer: live data, curated macro
+                  stories, chart previews, route-driven catalogs, and a private member runway.
+                </p>
+              </div>
+              <Link className="skyweb-card-link" to="/account">
+                Member layer →
+              </Link>
+            </div>
+            <div className="skyweb-proof-strip">
+              <article>
+                <span>Public API</span>
+                <strong>{summary?.viewCount ?? views.length} views</strong>
+                <p>Curated SkyServer macro surfaces exposed through safe public endpoints.</p>
+              </article>
+              <article>
+                <span>Data coverage</span>
+                <strong>{formatNumber(totalRows, { compact: true })} rows</strong>
+                <p>Combined public rows available for dashboard, catalog, and drilldown views.</p>
+              </article>
+              <article>
+                <span>Exploration</span>
+                <strong>{categoryLanes.length} lanes</strong>
+                <p>Category-driven paths that turn raw tables into guided macro questions.</p>
+              </article>
+            </div>
+          </section>
         </>
       )}
     </>

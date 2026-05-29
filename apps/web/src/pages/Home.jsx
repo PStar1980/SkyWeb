@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 export default function Home() {
   return (
     <>
-      <section className="skyweb-hero skyweb-home-hero">
+      <section className="skyweb-hero skyweb-home-hero skyweb-screenshot-section">
         <div className="skyweb-hero-content">
           <div className="skyweb-kicker">Sky ecosystem public layer</div>
           <h1>Macro dashboards, living data, and public proof of work.</h1>
           <p>
-            SkyWeb is the presentation layer for curated SkyServer data. It now consumes live public
-            macro APIs and turns the SkyServer data plane into a browsable analytics surface.
+            SkyWeb is the presentation layer for curated SkyServer data. It consumes live public
+            macro APIs and turns the SkyServer data plane into a browsable analytics surface with
+            charts, story cards, drilldowns, and a staged member layer.
           </p>
           <div className="skyweb-hero-actions">
             <Link className="btn skyweb-btn-primary" to="/macro">
@@ -21,15 +22,38 @@ export default function Home() {
           </div>
         </div>
         <div className="skyweb-hero-panel skyweb-status-panel">
-          <div className="skyweb-panel-label">Phase 9.2</div>
-          <h2>Dashboard layer online</h2>
+          <div className="skyweb-panel-label">SkyWeb Phase 5.4</div>
+          <h2>Presentation layer polished</h2>
           <ul>
-            <li>SkyServer public macro bridge connected</li>
-            <li>Live macro overview dashboard staged</li>
-            <li>View cards enriched with coverage metadata</li>
-            <li>Reusable UI components now in place</li>
+            <li>Public macro dashboard is live and screenshot-ready</li>
+            <li>Metric-selectable chart drilldowns are online</li>
+            <li>Macro overview now guides visitors through data stories</li>
+            <li>SkyWeb auth shell and account surface are staged</li>
           </ul>
         </div>
+      </section>
+
+      <section
+        className="skyweb-proof-strip skyweb-screenshot-section"
+        aria-label="SkyWeb proof points"
+      >
+        <article>
+          <span>Control plane</span>
+          <strong>SkyServer-backed</strong>
+          <p>Public APIs are curated from the private ingestion, access, and automation layer.</p>
+        </article>
+        <article>
+          <span>Analytics surface</span>
+          <strong>Live macro views</strong>
+          <p>
+            Dashboards, catalogs, indicators, tables, and trend previews are wired to real data.
+          </p>
+        </article>
+        <article>
+          <span>Member runway</span>
+          <strong>Auth prepared</strong>
+          <p>App-scoped SkyWeb login is ready for saved dashboards, preferences, and watchlists.</p>
+        </article>
       </section>
 
       <section className="skyweb-section-grid skyweb-home-grid">
@@ -48,8 +72,8 @@ export default function Home() {
           <div className="skyweb-card-kicker">Dashboard layer</div>
           <h2>Built for decisions</h2>
           <p>
-            The first dashboard pass focuses on clean cards, fast filtering, latest values, and
-            table previews before charts and saved dashboards arrive later.
+            The dashboard now combines signal cards, category lanes, regional coverage, latest data,
+            and interactive chart drilldowns.
           </p>
           <Link className="skyweb-card-link" to="/macro">
             Open overview →
@@ -62,8 +86,8 @@ export default function Home() {
             SkyServer now supports application-scoped auth, giving SkyWeb a clean future boundary
             for user profiles, personalization, alerts, and saved views.
           </p>
-          <Link className="skyweb-card-link" to="/macro/indicators">
-            Inspect indicators →
+          <Link className="skyweb-card-link" to="/account">
+            Open account →
           </Link>
         </article>
       </section>

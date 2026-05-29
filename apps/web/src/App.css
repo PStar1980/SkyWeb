@@ -1360,3 +1360,238 @@
     flex-direction: column;
   }
 }
+
+/* Phase 5.4 — responsive and presentation polish */
+.skyweb-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.skyweb-navbar::-webkit-scrollbar {
+  height: 0.35rem;
+}
+
+.skyweb-navbar::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(112, 183, 255, 0.28);
+}
+
+.skyweb-nav-account {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  align-items: center;
+  margin-left: auto;
+}
+
+.skyweb-nav-button {
+  border: 1px solid rgba(138, 163, 202, 0.24);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #dce8ff;
+  font-weight: 800;
+  padding: 0.42rem 0.8rem;
+}
+
+.skyweb-nav-button:hover {
+  border-color: rgba(112, 183, 255, 0.48);
+  color: #ffffff;
+}
+
+.skyweb-screenshot-section {
+  scroll-margin-top: 5rem;
+}
+
+.skyweb-proof-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.skyweb-proof-strip article {
+  border: 1px solid rgba(112, 183, 255, 0.18);
+  border-radius: 1.05rem;
+  background:
+    linear-gradient(135deg, rgba(43, 140, 255, 0.1), rgba(127, 92, 255, 0.05)),
+    rgba(11, 19, 35, 0.82);
+  padding: 1rem;
+}
+
+.skyweb-proof-strip span {
+  display: block;
+  color: #70b7ff;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.skyweb-proof-strip strong {
+  display: block;
+  margin: 0.35rem 0;
+  color: #ffffff;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.skyweb-proof-strip p {
+  margin: 0;
+  color: rgba(220, 232, 255, 0.68);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.skyweb-view-card,
+.skyweb-story-card,
+.skyweb-lane-card,
+.skyweb-card,
+.skyweb-page-card,
+.skyweb-table-card,
+.skyweb-chart-panel,
+.skyweb-dashboard-pulse,
+.skyweb-proof-strip article {
+  overflow-wrap: anywhere;
+}
+
+.skyweb-chart-panel,
+.skyweb-table-card,
+.skyweb-dashboard-section,
+.skyweb-dashboard-two-column,
+.skyweb-proof-strip,
+.skyweb-section-grid {
+  margin-top: 1rem;
+}
+
+.skyweb-table-card .table-responsive {
+  max-width: 100%;
+  scrollbar-color: rgba(112, 183, 255, 0.45) rgba(5, 10, 20, 0.42);
+  scrollbar-width: thin;
+}
+
+.skyweb-table-card .table-responsive::-webkit-scrollbar {
+  height: 0.65rem;
+}
+
+.skyweb-table-card .table-responsive::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgba(112, 183, 255, 0.45);
+}
+
+.skyweb-table-card .table-responsive::-webkit-scrollbar-track {
+  background: rgba(5, 10, 20, 0.42);
+}
+
+@media (max-width: 1200px) {
+  .skyweb-main {
+    width: min(100vw - 1.5rem, 1180px);
+  }
+
+  .skyweb-featured-grid,
+  .skyweb-view-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .skyweb-navbar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.65rem 1rem;
+    padding-block: 0.7rem;
+  }
+
+  .skyweb-nav {
+    order: 3;
+    width: 100%;
+  }
+
+  .skyweb-nav-account {
+    margin-left: 0;
+  }
+
+  .skyweb-header-actions {
+    justify-content: flex-start;
+  }
+
+  .skyweb-proof-strip,
+  .skyweb-story-grid,
+  .skyweb-lane-grid,
+  .skyweb-dashboard-two-column {
+    grid-template-columns: 1fr;
+  }
+
+  .skyweb-chart-stage {
+    overflow-x: auto;
+  }
+
+  .skyweb-sparkline {
+    min-width: 560px;
+  }
+}
+
+@media (max-width: 540px) {
+  .skyweb-main {
+    width: min(100vw - 0.85rem, 1180px);
+  }
+
+  .skyweb-hero-content,
+  .skyweb-hero-panel,
+  .skyweb-card,
+  .skyweb-page-card,
+  .skyweb-table-card,
+  .skyweb-dashboard-pulse,
+  .skyweb-chart-panel,
+  .skyweb-proof-strip article {
+    border-radius: 0.95rem;
+    padding: 0.95rem;
+  }
+
+  .skyweb-hero-actions,
+  .skyweb-header-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .skyweb-hero-actions .btn,
+  .skyweb-header-actions .btn {
+    width: 100%;
+  }
+
+  .skyweb-table th,
+  .skyweb-table td {
+    padding: 0.7rem 0.78rem;
+  }
+}
+
+@media print {
+  .skyweb-navbar,
+  .skyweb-header-actions,
+  .skyweb-card-link,
+  .skyweb-chart-controls,
+  .skyweb-toolbar {
+    display: none !important;
+  }
+
+  .skyweb-main {
+    width: 100%;
+    padding: 0;
+  }
+
+  .skyweb-card,
+  .skyweb-page-card,
+  .skyweb-table-card,
+  .skyweb-dashboard-pulse,
+  .skyweb-story-card,
+  .skyweb-lane-card,
+  .skyweb-proof-strip article {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+}

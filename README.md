@@ -6,9 +6,9 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 4 — Auth Shell & Member Layer Prep**
+**Phase 5.1 — Chart Foundation**
 
-SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, and now has a first-pass authenticated member shell.
+SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, now has a first-pass authenticated member shell, and is beginning its dashboard polish phase with reusable chart primitives.
 
 Implemented foundation pieces:
 
@@ -27,6 +27,8 @@ Implemented foundation pieces:
 - SkyWeb login/session context using app-scoped `SKYWEB` authentication
 - Protected `/account` route backed by `/api/skyweb/profile`
 - Profile/preferences table foundation in the `skyweb` schema
+- Lightweight SVG chart foundation for macro view drilldowns
+- Trend metric cards for latest/range/change summaries
 
 ## Repository Layout
 
@@ -103,7 +105,7 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 | ✅ Phase 2 | SkyServer public macro API bridge: safe unauthenticated macro endpoints with public limits                           |
 | ✅ Phase 3 | Macro Dashboard v1: live overview, curated view cards, drilldowns, formatted tables, and indicator explorer          |
 | ✅ Phase 4 | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation |
-| 🔜 Phase 5 | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces             |
+| 🔄 Phase 5 | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces             |
 | 🔜 Phase 6 | Profile and preferences UI: editable member profile, saved display preferences, and account settings                 |
 | 🔜 Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb dashboard features                                        |
 | 🔜 Phase 8 | Macro alerts foundation: user-tracked indicators, views, threshold metadata, and notification prep                   |
@@ -146,8 +148,18 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 
 ### Phase 5 — Dashboard Polish
 
-- Charts and trend previews
+#### 5.1 — Chart Foundation
+
+- Add reusable lightweight SVG sparkline component
+- Add reusable chart panel component
+- Add trend metric summary cards
+- Add numeric-series helpers for public macro rows
+- Add first macro view drilldown trend preview
+
+#### Coming next
+
 - Better macro-card storytelling
+- More chart/table pairing options
 - Saved dashboard entry points
 - Responsive public dashboard UI
 

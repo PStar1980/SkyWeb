@@ -40,10 +40,13 @@ SkyWeb/
 │           ├── index.css
 │           ├── main.jsx
 │           ├── components/
+│           │   ├── ChartPanel.jsx
 │           │   ├── Navbar.jsx
 │           │   ├── PageState.jsx
 │           │   ├── ProtectedRoute.jsx
+│           │   ├── Sparkline.jsx
 │           │   ├── StatCard.jsx
+│           │   ├── TrendMetricCard.jsx
 │           │   └── ViewCard.jsx
 │           ├── context/
 │           │   └── AuthContext.jsx
@@ -60,6 +63,7 @@ SkyWeb/
 │           │   ├── authService.js
 │           │   └── macroService.js
 │           └── utils/
+│               ├── charting.js
 │               └── formatters.js
 └── docs/
     └── SkyWeb_RepoMap.md

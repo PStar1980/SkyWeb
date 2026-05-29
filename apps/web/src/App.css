@@ -787,3 +787,199 @@
     grid-template-columns: 1fr;
   }
 }
+
+.skyweb-chart-panel {
+  border: 1px solid rgba(112, 183, 255, 0.2);
+  border-radius: 1.25rem;
+  background:
+    linear-gradient(135deg, rgba(43, 140, 255, 0.12), rgba(127, 92, 255, 0.08)),
+    rgba(11, 19, 35, 0.84);
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.22);
+  margin-bottom: 1rem;
+  padding: 1.25rem;
+}
+
+.skyweb-chart-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.skyweb-chart-header h2 {
+  margin: 0.3rem 0 0.35rem;
+  color: #ffffff;
+  font-weight: 850;
+  letter-spacing: -0.04em;
+}
+
+.skyweb-chart-header p {
+  max-width: 720px;
+  margin: 0;
+  color: rgba(220, 232, 255, 0.72);
+  line-height: 1.65;
+}
+
+.skyweb-chart-picker {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 240px;
+}
+
+.skyweb-chart-picker span {
+  color: rgba(220, 232, 255, 0.66);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.skyweb-chart-picker .form-select {
+  border-color: rgba(138, 163, 202, 0.2);
+  background-color: rgba(5, 10, 20, 0.72);
+  color: #ffffff;
+}
+
+.skyweb-chart-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 0.35fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.skyweb-chart-stage {
+  border: 1px solid rgba(138, 163, 202, 0.13);
+  border-radius: 1rem;
+  background: rgba(5, 10, 20, 0.42);
+  padding: 1rem;
+}
+
+.skyweb-sparkline {
+  display: block;
+  width: 100%;
+  height: 260px;
+  overflow: visible;
+}
+
+.skyweb-sparkline-area {
+  fill: rgba(112, 183, 255, 0.1);
+}
+
+.skyweb-sparkline-line {
+  fill: none;
+  stroke: #70b7ff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
+}
+
+.skyweb-sparkline-up .skyweb-sparkline-line {
+  stroke: #67e8a5;
+}
+
+.skyweb-sparkline-down .skyweb-sparkline-line {
+  stroke: #ffb86b;
+}
+
+.skyweb-sparkline-up .skyweb-sparkline-area {
+  fill: rgba(103, 232, 165, 0.1);
+}
+
+.skyweb-sparkline-down .skyweb-sparkline-area {
+  fill: rgba(255, 184, 107, 0.1);
+}
+
+.skyweb-sparkline-point,
+.skyweb-sparkline-point-muted {
+  fill: #ffffff;
+  stroke: rgba(5, 10, 20, 0.95);
+  stroke-width: 3;
+}
+
+.skyweb-sparkline-point-muted {
+  fill: rgba(220, 232, 255, 0.62);
+}
+
+.skyweb-sparkline-empty {
+  display: grid;
+  min-height: 220px;
+  place-items: center;
+  border: 1px dashed rgba(138, 163, 202, 0.24);
+  border-radius: 0.9rem;
+  color: rgba(220, 232, 255, 0.62);
+}
+
+.skyweb-chart-axis {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.6rem;
+  color: rgba(220, 232, 255, 0.58);
+  font-size: 0.82rem;
+}
+
+.skyweb-trend-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.skyweb-trend-metric {
+  border: 1px solid rgba(138, 163, 202, 0.13);
+  border-radius: 0.95rem;
+  background: rgba(255, 255, 255, 0.035);
+  padding: 0.9rem;
+}
+
+.skyweb-trend-metric span,
+.skyweb-trend-metric small,
+.skyweb-trend-metric em {
+  display: block;
+  color: rgba(220, 232, 255, 0.6);
+  font-size: 0.8rem;
+  font-style: normal;
+}
+
+.skyweb-trend-metric strong {
+  display: block;
+  margin: 0.2rem 0;
+  color: #ffffff;
+  font-size: 1.28rem;
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+
+.skyweb-trend-metric em {
+  margin-top: 0.4rem;
+  font-weight: 800;
+}
+
+.skyweb-trend-metric-up {
+  border-color: rgba(103, 232, 165, 0.24);
+}
+
+.skyweb-trend-metric-up em {
+  color: #8ff0bd;
+}
+
+.skyweb-trend-metric-down {
+  border-color: rgba(255, 184, 107, 0.28);
+}
+
+.skyweb-trend-metric-down em {
+  color: #ffca8a;
+}
+
+@media (max-width: 992px) {
+  .skyweb-chart-header,
+  .skyweb-chart-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skyweb-chart-header {
+    flex-direction: column;
+  }
+
+  .skyweb-chart-picker {
+    width: 100%;
+  }
+}

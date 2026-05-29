@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import ChartPanel from '../components/ChartPanel.jsx';
 import StatCard from '../components/StatCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import macroService from '../services/macroService.js';
@@ -72,6 +73,10 @@ function getLatestFields(latest = {}) {
     .slice(0, 12);
 }
 
+function getPreviewRows(rows = [], limit = 25) {
+  return rows.slice(0, limit);
+}
+
 export default function MacroViewDetail() {
   const { viewKey } = useParams();
   const [rows, setRows] = useState([]);
@@ -90,6 +95,7 @@ export default function MacroViewDetail() {
   }, [columns, rows]);
 
   const latestFields = useMemo(() => getLatestFields(latest), [latest]);
+  const previewRows = useMemo(() => getPreviewRows(rows), [rows]);
   const stats = view?.stats || {};
 
   useEffect(() => {
@@ -101,7 +107,7 @@ export default function MacroViewDetail() {
 
       try {
         const [rowsPayload, latestPayload, columnsPayload] = await Promise.all([
-          macroService.getViewRows(viewKey, { limit: 25 }),
+          macroService.getViewRows(viewKey, { limit: 120 }),
           macroService.getLatestViewRow(viewKey),
           macroService.getViewColumns(viewKey),
         ]);
@@ -181,6 +187,12 @@ export default function MacroViewDetail() {
             <StatCard label="Fields" value={displayColumns.length} detail="Preview columns" />
           </section>
 
+          <ChartPanel
+            columns={columns}
+            rows={rows}
+            title={`${view?.label || viewKey} trend preview`}
+          />
+
           <section className="skyweb-card mb-4">
             <div className="skyweb-card-kicker">Latest row</div>
             {latestFields.length > 0 ? (
@@ -201,7 +213,7 @@ export default function MacroViewDetail() {
             <div className="skyweb-table-header">
               <div>
                 <div className="skyweb-card-kicker">Preview rows</div>
-                <h2>First {rows.length} row(s)</h2>
+                <h2>First {previewRows.length} row(s)</h2>
               </div>
             </div>
             <div className="table-responsive">
@@ -214,7 +226,7 @@ export default function MacroViewDetail() {
                   </tr>
                 </thead>
                 <tbody>
-                  {rows.map((row, rowIndex) => (
+                  {previewRows.map((row, rowIndex) => (
                     <tr key={`${viewKey}-${rowIndex}`}>
                       {displayColumns.map((column) => {
                         const value = getCellValue(row, column);
@@ -230,7 +242,7 @@ export default function MacroViewDetail() {
                 </tbody>
               </table>
             </div>
-            {rows.length === 0 && <EmptyState>No rows returned.</EmptyState>}
+            {previewRows.length === 0 && <EmptyState>No rows returned.</EmptyState>}
           </section>
         </>
       )}

@@ -1,30 +1,37 @@
 import { useMemo, useState } from 'react';
-import {
-  buildSeries,
-  getNumericSeriesKeys,
-  getSeriesLabel,
-  summarizeSeries,
-} from '../utils/charting.js';
+import { getPreferredSeriesKey, getSeriesCatalog, summarizeSeries } from '../utils/charting.js';
 import { formatNumber } from '../utils/formatters.js';
+import MetricQuickCard from './MetricQuickCard.jsx';
 import Sparkline from './Sparkline.jsx';
 import TrendMetricCard from './TrendMetricCard.jsx';
 
-function getPreferredKey(keys = []) {
-  return (
-    keys.find((key) => /yoy|change|spread|rate|value|index|gdp|cpi/i.test(key)) || keys[0] || ''
-  );
-}
+const WINDOW_OPTIONS = [
+  { label: '30 points', value: 30 },
+  { label: '60 points', value: 60 },
+  { label: '120 points', value: 120 },
+  { label: 'All loaded', value: 0 },
+];
 
 export default function ChartPanel({ rows = [], columns = [], title = 'Trend preview' }) {
-  const seriesKeys = useMemo(() => getNumericSeriesKeys(rows, columns), [rows, columns]);
-  const preferredKey = useMemo(() => getPreferredKey(seriesKeys), [seriesKeys]);
+  const catalog = useMemo(() => getSeriesCatalog(rows, columns), [rows, columns]);
+  const seriesKeys = useMemo(() => catalog.map((item) => item.key), [catalog]);
+  const preferredKey = useMemo(() => getPreferredSeriesKey(seriesKeys), [seriesKeys]);
   const [selectedKey, setSelectedKey] = useState('');
+  const [windowSize, setWindowSize] = useState(120);
   const activeKey = seriesKeys.includes(selectedKey) ? selectedKey : preferredKey;
-  const series = useMemo(() => buildSeries(rows, activeKey), [rows, activeKey]);
-  const summary = useMemo(() => summarizeSeries(series), [series]);
-  const selectedLabel = activeKey ? getSeriesLabel(activeKey) : 'Metric';
+  const activeMetric = catalog.find((item) => item.key === activeKey) || catalog[0] || null;
+  const displaySeries = useMemo(() => {
+    if (!activeMetric?.series) {
+      return [];
+    }
 
-  if (!seriesKeys.length) {
+    return windowSize > 0 ? activeMetric.series.slice(-windowSize) : activeMetric.series;
+  }, [activeMetric, windowSize]);
+  const summary = useMemo(() => summarizeSeries(displaySeries), [displaySeries]);
+  const selectedLabel = activeMetric?.label || 'Metric';
+  const quickMetrics = catalog.slice(0, 6);
+
+  if (!catalog.length) {
     return null;
   }
 
@@ -32,35 +39,74 @@ export default function ChartPanel({ rows = [], columns = [], title = 'Trend pre
     <section className="skyweb-chart-panel">
       <div className="skyweb-chart-header">
         <div>
-          <div className="skyweb-card-kicker">Chart foundation</div>
+          <div className="skyweb-card-kicker">Trend surface</div>
           <h2>{title}</h2>
           <p>
-            Lightweight SVG trend preview generated directly from the public macro rows. No chart
-            library required yet.
+            Select a metric, compare recent movement, and pair the chart with the latest public row
+            before diving into the preview table.
           </p>
         </div>
-        <label className="skyweb-chart-picker">
-          <span>Metric</span>
-          <select
-            className="form-select"
-            onChange={(event) => setSelectedKey(event.target.value)}
-            value={activeKey}
-          >
-            {seriesKeys.map((key) => (
-              <option key={key} value={key}>
-                {getSeriesLabel(key)}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="skyweb-chart-controls">
+          <label className="skyweb-chart-picker">
+            <span>Metric</span>
+            <select
+              className="form-select"
+              onChange={(event) => setSelectedKey(event.target.value)}
+              value={activeKey}
+            >
+              {catalog.map((item) => (
+                <option key={item.key} value={item.key}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="skyweb-chart-picker skyweb-chart-window-picker">
+            <span>Window</span>
+            <select
+              className="form-select"
+              onChange={(event) => setWindowSize(Number(event.target.value))}
+              value={windowSize}
+            >
+              {WINDOW_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div className="skyweb-metric-option-grid">
+        {quickMetrics.map((metric) => (
+          <MetricQuickCard
+            active={metric.key === activeKey}
+            key={metric.key}
+            metric={metric}
+            onSelect={setSelectedKey}
+          />
+        ))}
+      </div>
+
+      <div className="skyweb-chart-meta-strip">
+        <span>Selected: {selectedLabel}</span>
+        <span>{formatNumber(displaySeries.length)} plotted point(s)</span>
+        <span>
+          {displaySeries[0]?.label || '—'} → {displaySeries[displaySeries.length - 1]?.label || '—'}
+        </span>
       </div>
 
       <div className="skyweb-chart-grid">
         <div className="skyweb-chart-stage">
-          <Sparkline label={`${selectedLabel} trend`} points={series} tone={summary.direction} />
+          <Sparkline
+            label={`${selectedLabel} trend`}
+            points={displaySeries}
+            tone={summary.direction}
+          />
           <div className="skyweb-chart-axis">
-            <span>{series[0]?.label || '—'}</span>
-            <span>{series[series.length - 1]?.label || '—'}</span>
+            <span>{displaySeries[0]?.label || '—'}</span>
+            <span>{displaySeries[displaySeries.length - 1]?.label || '—'}</span>
           </div>
         </div>
         <div className="skyweb-trend-grid">

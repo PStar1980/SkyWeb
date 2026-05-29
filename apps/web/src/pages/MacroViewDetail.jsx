@@ -4,6 +4,7 @@ import ChartPanel from '../components/ChartPanel.jsx';
 import StatCard from '../components/StatCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import macroService from '../services/macroService.js';
+import { getDateRangeFromRows } from '../utils/charting.js';
 import {
   formatColumnLabel,
   formatDate,
@@ -11,6 +12,9 @@ import {
   formatValue,
   isDateKey,
 } from '../utils/formatters.js';
+
+const CHART_ROW_LIMIT = 240;
+const PREVIEW_ROW_LIMIT = 25;
 
 function getColumnsFromRows(rows = []) {
   const firstRow = rows[0] || {};
@@ -73,7 +77,7 @@ function getLatestFields(latest = {}) {
     .slice(0, 12);
 }
 
-function getPreviewRows(rows = [], limit = 25) {
+function getPreviewRows(rows = [], limit = PREVIEW_ROW_LIMIT) {
   return rows.slice(0, limit);
 }
 
@@ -96,7 +100,11 @@ export default function MacroViewDetail() {
 
   const latestFields = useMemo(() => getLatestFields(latest), [latest]);
   const previewRows = useMemo(() => getPreviewRows(rows), [rows]);
+  const loadedRange = useMemo(() => getDateRangeFromRows(rows), [rows]);
   const stats = view?.stats || {};
+  const totalRows = stats.totalRows !== undefined ? stats.totalRows : rows.length;
+  const latestDate = stats.maxDate || latest?.date || loadedRange.maxDate;
+  const oldestLoadedDate = loadedRange.minDate;
 
   useEffect(() => {
     let active = true;
@@ -107,7 +115,7 @@ export default function MacroViewDetail() {
 
       try {
         const [rowsPayload, latestPayload, columnsPayload] = await Promise.all([
-          macroService.getViewRows(viewKey, { limit: 120 }),
+          macroService.getViewRows(viewKey, { limit: CHART_ROW_LIMIT }),
           macroService.getLatestViewRow(viewKey),
           macroService.getViewColumns(viewKey),
         ]);
@@ -163,26 +171,16 @@ export default function MacroViewDetail() {
       {!loading && !error && (
         <>
           <section className="skyweb-metric-grid skyweb-detail-metrics">
-            <StatCard
-              label="Rows"
-              value={stats.totalRows !== undefined ? formatNumber(stats.totalRows) : rows.length}
-              detail="Historical records"
-            />
+            <StatCard label="Rows" value={formatNumber(totalRows)} detail="Historical records" />
             <StatCard
               label="Latest date"
-              value={
-                stats.maxDate
-                  ? formatDate(stats.maxDate)
-                  : latest?.date
-                    ? formatDate(latest.date)
-                    : '—'
-              }
+              value={latestDate ? formatDate(latestDate) : '—'}
               detail="Newest public row"
             />
             <StatCard
-              label="Earliest date"
-              value={stats.minDate ? formatDate(stats.minDate) : '—'}
-              detail="First available row"
+              label="Loaded window"
+              value={oldestLoadedDate ? formatDate(oldestLoadedDate) : '—'}
+              detail={`Oldest of ${formatNumber(rows.length)} loaded row(s)`}
             />
             <StatCard label="Fields" value={displayColumns.length} detail="Preview columns" />
           </section>
@@ -213,7 +211,11 @@ export default function MacroViewDetail() {
             <div className="skyweb-table-header">
               <div>
                 <div className="skyweb-card-kicker">Preview rows</div>
-                <h2>First {previewRows.length} row(s)</h2>
+                <h2>Latest {previewRows.length} row(s)</h2>
+                <p>
+                  Showing the newest public records from the loaded chart window. The first row is
+                  the latest observation.
+                </p>
               </div>
             </div>
             <div className="table-responsive">
@@ -227,7 +229,10 @@ export default function MacroViewDetail() {
                 </thead>
                 <tbody>
                   {previewRows.map((row, rowIndex) => (
-                    <tr key={`${viewKey}-${rowIndex}`}>
+                    <tr
+                      className={rowIndex === 0 ? 'skyweb-row-highlight' : undefined}
+                      key={`${viewKey}-${rowIndex}`}
+                    >
                       {displayColumns.map((column) => {
                         const value = getCellValue(row, column);
 

@@ -6,7 +6,7 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 5.3 — Macro Overview Storytelling**
+**Phase 5.4 — Responsive & Portfolio Polish**
 
 SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, now has a first-pass authenticated member shell, and is beginning its dashboard polish phase with reusable chart primitives and richer macro drilldown UX.
 
@@ -35,6 +35,9 @@ Implemented foundation pieces:
 - Decision-lane cards for category-driven exploration
 - Clickable regional coverage bars and recently refreshed view list
 - Query-aware macro view catalog links from dashboard storytelling surfaces
+- Screenshot-ready home and macro proof strips for public portfolio presentation
+- Sticky responsive navigation and tighter small-screen dashboard/card behavior
+- Table and chart overflow handling for cleaner browser, screenshot, and print views
 
 ## Repository Layout
 
@@ -179,12 +182,20 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 - Add recently refreshed view list for current public data surfaces
 - Add query-aware links into the macro view catalog
 
+#### 5.4 — Responsive & Portfolio Polish
+
+- Add screenshot-ready proof strips to the home and macro dashboard surfaces
+- Refresh the home page status panel to reflect the current dashboard polish layer
+- Make the navbar sticky and more resilient across desktop, tablet, and mobile widths
+- Improve table/chart overflow behavior for narrow screens and screenshot capture
+- Add print-friendly presentation rules for dashboard screenshots and exported views
+
 #### Coming next
 
 - More chart/table pairing options
 - Saved dashboard entry points
-- Responsive public dashboard UI
-- Screenshot-ready public portfolio polish
+- Deeper profile/preferences UI
+- Watchlist and saved dashboard foundations
 
 ## Relationship to SkyServer
 

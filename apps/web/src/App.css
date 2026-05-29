@@ -1108,3 +1108,255 @@
     grid-template-columns: 1fr;
   }
 }
+
+.skyweb-section-copy {
+  max-width: 760px;
+  margin: 0.25rem 0 0;
+  color: rgba(220, 232, 255, 0.62);
+  line-height: 1.6;
+}
+
+.skyweb-story-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.skyweb-story-card {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  border: 1px solid rgba(138, 163, 202, 0.16);
+  border-radius: 1.1rem;
+  background:
+    radial-gradient(circle at top right, rgba(112, 183, 255, 0.12), transparent 42%),
+    rgba(11, 19, 35, 0.82);
+  color: inherit;
+  padding: 1rem;
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.skyweb-story-card-link:hover {
+  border-color: rgba(112, 183, 255, 0.42);
+  background:
+    radial-gradient(circle at top right, rgba(112, 183, 255, 0.18), transparent 45%),
+    rgba(18, 30, 52, 0.9);
+  transform: translateY(-2px);
+}
+
+.skyweb-story-card h2 {
+  margin: 0.45rem 0 0.35rem;
+  color: #ffffff;
+  font-size: 1.02rem;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.skyweb-story-card strong {
+  display: block;
+  color: #ffffff;
+  font-size: clamp(1.35rem, 2.5vw, 1.95rem);
+  font-weight: 900;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.skyweb-story-card p {
+  margin: 0.75rem 0 0;
+  color: rgba(220, 232, 255, 0.68);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.skyweb-story-card span:not(.skyweb-card-kicker) {
+  display: block;
+  margin-top: auto;
+  padding-top: 0.8rem;
+  color: rgba(112, 183, 255, 0.78);
+  font-size: 0.8rem;
+  font-weight: 800;
+  overflow-wrap: anywhere;
+}
+
+.skyweb-lane-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.skyweb-lane-card {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  border: 1px solid rgba(138, 163, 202, 0.16);
+  border-radius: 1.1rem;
+  background: rgba(11, 19, 35, 0.78);
+  color: inherit;
+  padding: 1.05rem;
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.skyweb-lane-card:hover {
+  border-color: rgba(112, 183, 255, 0.42);
+  background: rgba(18, 30, 52, 0.88);
+  transform: translateY(-2px);
+}
+
+.skyweb-lane-card h3 {
+  margin: 0.4rem 0 0.45rem;
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 850;
+  letter-spacing: -0.025em;
+}
+
+.skyweb-lane-card p {
+  color: rgba(220, 232, 255, 0.68);
+  line-height: 1.55;
+}
+
+.skyweb-lane-card dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: auto 0 0.9rem;
+}
+
+.skyweb-lane-card dl div {
+  border: 1px solid rgba(138, 163, 202, 0.12);
+  border-radius: 0.78rem;
+  background: rgba(255, 255, 255, 0.035);
+  padding: 0.58rem;
+}
+
+.skyweb-lane-card dt,
+.skyweb-lane-card dd {
+  margin: 0;
+}
+
+.skyweb-lane-card dt {
+  color: rgba(220, 232, 255, 0.56);
+  font-size: 0.76rem;
+}
+
+.skyweb-lane-card dd {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 850;
+}
+
+.skyweb-coverage-bar-list {
+  gap: 0.75rem;
+}
+
+.skyweb-coverage-bar-row {
+  display: grid;
+  gap: 0.48rem;
+  border: 1px solid rgba(138, 163, 202, 0.13);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.035);
+  color: inherit;
+  padding: 0.78rem;
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.skyweb-coverage-bar-row:hover {
+  border-color: rgba(112, 183, 255, 0.38);
+  background: rgba(112, 183, 255, 0.07);
+}
+
+.skyweb-coverage-row-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.skyweb-coverage-row-main span,
+.skyweb-fresh-row span {
+  color: rgba(220, 232, 255, 0.82);
+  font-weight: 800;
+}
+
+.skyweb-coverage-row-main strong,
+.skyweb-fresh-row strong {
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.skyweb-coverage-bar-track {
+  overflow: hidden;
+  height: 0.46rem;
+  border-radius: 999px;
+  background: rgba(5, 10, 20, 0.52);
+}
+
+.skyweb-coverage-bar-track span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(43, 140, 255, 0.72), rgba(127, 92, 255, 0.9));
+}
+
+.skyweb-coverage-bar-row small {
+  color: rgba(220, 232, 255, 0.58);
+  font-size: 0.8rem;
+}
+
+.skyweb-fresh-list {
+  display: grid;
+  gap: 0.65rem;
+  margin-top: 1rem;
+}
+
+.skyweb-fresh-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid rgba(138, 163, 202, 0.13);
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.035);
+  padding: 0.72rem 0.8rem;
+  text-decoration: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.skyweb-fresh-row:hover {
+  border-color: rgba(112, 183, 255, 0.38);
+  background: rgba(112, 183, 255, 0.07);
+}
+
+@media (max-width: 1100px) {
+  .skyweb-story-grid,
+  .skyweb-lane-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .skyweb-story-grid,
+  .skyweb-lane-grid,
+  .skyweb-dashboard-pulse {
+    grid-template-columns: 1fr;
+  }
+
+  .skyweb-fresh-row,
+  .skyweb-coverage-row-main {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

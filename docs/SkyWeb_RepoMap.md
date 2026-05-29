@@ -47,6 +47,7 @@ SkyWeb/
 │           │   ├── ProtectedRoute.jsx
 │           │   ├── Sparkline.jsx
 │           │   ├── StatCard.jsx
+│           │   ├── StoryCard.jsx
 │           │   ├── TrendMetricCard.jsx
 │           │   └── ViewCard.jsx
 │           ├── context/
@@ -65,6 +66,7 @@ SkyWeb/
 │           │   └── macroService.js
 │           └── utils/
 │               ├── charting.js
-│               └── formatters.js
+│               ├── formatters.js
+│               └── macroStory.js
 └── docs/
     └── SkyWeb_RepoMap.md

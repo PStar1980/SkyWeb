@@ -6,7 +6,7 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 5.2 — Macro Drilldown UX Upgrade**
+**Phase 5.3 — Macro Overview Storytelling**
 
 SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, now has a first-pass authenticated member shell, and is beginning its dashboard polish phase with reusable chart primitives and richer macro drilldown UX.
 
@@ -31,6 +31,10 @@ Implemented foundation pieces:
 - Trend metric cards for latest/range/change summaries
 - Metric-selectable chart panels with quick metric cards and chart window controls
 - Drilldown UX refinements for loaded date windows, latest-row emphasis, and chart/table pairing
+- Macro overview signal board for freshest, deepest, cross-border, and breadth stories
+- Decision-lane cards for category-driven exploration
+- Clickable regional coverage bars and recently refreshed view list
+- Query-aware macro view catalog links from dashboard storytelling surfaces
 
 ## Repository Layout
 
@@ -167,12 +171,20 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 - Rename preview rows as latest rows and highlight the newest table observation
 - Replace unclear earliest-date stat with loaded-window context
 
+#### 5.3 — Macro Overview Storytelling
+
+- Add signal-board cards for freshest surface, deepest history, cross-border lens, and catalog breadth
+- Add decision-lane cards that frame categories as analytical questions
+- Add regional coverage bars with row-share context
+- Add recently refreshed view list for current public data surfaces
+- Add query-aware links into the macro view catalog
+
 #### Coming next
 
-- Better macro-card storytelling
 - More chart/table pairing options
 - Saved dashboard entry points
 - Responsive public dashboard UI
+- Screenshot-ready public portfolio polish
 
 ## Relationship to SkyServer
 

@@ -1,9 +1,17 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard.jsx';
+import StoryCard from '../components/StoryCard.jsx';
 import ViewCard from '../components/ViewCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import macroService from '../services/macroService.js';
+import {
+  buildOverviewStories,
+  buildViewSearchPath,
+  getFeaturedStoryViews,
+  getViewRowCount,
+  summarizeViewGroups,
+} from '../utils/macroStory.js';
 import {
   formatCategory,
   formatDate,
@@ -24,36 +32,46 @@ function getErrorMessage(error) {
   return error.message || 'Unable to load macro overview.';
 }
 
-function groupViewsByRegion(views = []) {
-  return views.reduce((groups, view) => {
-    const region = view.region || 'OTHER';
-    groups[region] = groups[region] || [];
-    groups[region].push(view);
-    return groups;
-  }, {});
-}
-
-function groupViewsByCategory(views = []) {
-  return views.reduce((groups, view) => {
-    const category = view.category || 'macro';
-    groups[category] = groups[category] || [];
-    groups[category].push(view);
-    return groups;
-  }, {});
-}
-
 function getLatestDateFromViews(views = []) {
   return getMaxDate(views.map((view) => view?.stats?.maxDate || view?.maxDate).filter(Boolean));
 }
 
-function sortFeaturedViews(views = []) {
-  return [...views]
-    .sort((left, right) => {
-      const leftRows = left?.stats?.totalRows || 0;
-      const rightRows = right?.stats?.totalRows || 0;
-      return rightRows - leftRows;
-    })
-    .slice(0, 6);
+function getCategoryDescription(category = '') {
+  const normalized = String(category || '').toLowerCase();
+
+  const descriptions = {
+    inflation: 'Price pressure, CPI/PCE movement, and inflation divergence surfaces.',
+    rates: 'Policy rates, yield curve shape, credit yields, and funding pressure.',
+    growth: 'Output, production, and momentum signals across the business cycle.',
+    labor: 'Employment, earnings, claims, and labor-market slack context.',
+    credit: 'Financial conditions, leverage, stress, and credit-risk context.',
+    housing: 'Housing starts, permits, and residential momentum indicators.',
+    trade: 'Cross-border, FX, and external-balance data surfaces.',
+    liquidity: 'Liquidity, money-market, and financial plumbing views.',
+    macro_regime: 'Composite signals intended to frame the broader macro backdrop.',
+  };
+
+  return descriptions[normalized] || 'Curated macro view group with shared analytical purpose.';
+}
+
+function CoverageRow({ item, label, to }) {
+  const sharePercent = Math.round((item.rowShare || 0) * 100);
+
+  return (
+    <Link className="skyweb-coverage-bar-row" to={to}>
+      <div className="skyweb-coverage-row-main">
+        <span>{label}</span>
+        <strong>{item.viewCount} view(s)</strong>
+      </div>
+      <div className="skyweb-coverage-bar-track" aria-hidden="true">
+        <span style={{ width: `${Math.max(6, sharePercent)}%` }} />
+      </div>
+      <small>
+        {formatNumber(item.rows, { compact: true })} rows · latest{' '}
+        {item.latestDate ? formatDate(item.latestDate) : '—'}
+      </small>
+    </Link>
+  );
 }
 
 export default function MacroOverview() {
@@ -63,12 +81,34 @@ export default function MacroOverview() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const groupedViews = useMemo(() => groupViewsByRegion(views), [views]);
-  const groupedCategories = useMemo(() => groupViewsByCategory(views), [views]);
-  const featuredViews = useMemo(() => sortFeaturedViews(views), [views]);
+  const featuredViews = useMemo(() => getFeaturedStoryViews(views), [views]);
+  const overviewStories = useMemo(
+    () => buildOverviewStories(views, indicators).filter(Boolean),
+    [indicators, views],
+  );
+  const categoryLanes = useMemo(
+    () => summarizeViewGroups(views, 'category', { priority: 'category' }).slice(0, 6),
+    [views],
+  );
+  const regionCoverage = useMemo(
+    () => summarizeViewGroups(views, 'region', { priority: 'region' }),
+    [views],
+  );
   const latestDate = useMemo(() => getLatestDateFromViews(views), [views]);
   const totalRows = useMemo(
-    () => views.reduce((sum, view) => sum + Number(view?.stats?.totalRows || 0), 0),
+    () => views.reduce((sum, view) => sum + getViewRowCount(view), 0),
+    [views],
+  );
+  const freshestViews = useMemo(
+    () =>
+      [...views]
+        .filter((view) => view?.stats?.maxDate || view?.maxDate)
+        .sort((left, right) => {
+          const leftDate = new Date(left?.stats?.maxDate || left?.maxDate).getTime();
+          const rightDate = new Date(right?.stats?.maxDate || right?.maxDate).getTime();
+          return rightDate - leftDate;
+        })
+        .slice(0, 5),
     [views],
   );
 
@@ -149,14 +189,15 @@ export default function MacroOverview() {
 
       {!loading && !error && (
         <>
-          <section className="skyweb-dashboard-pulse">
+          <section className="skyweb-dashboard-pulse skyweb-dashboard-pulse-story">
             <div>
               <div className="skyweb-card-kicker">Public data surface</div>
               <h2>Macro layer online</h2>
               <p>
                 {views.length} curated view(s), {indicators.length} active indicator(s), and{' '}
                 {formatNumber(totalRows, { compact: true })} combined public rows are available for
-                exploration.
+                exploration. Start with the freshest updates, the deepest histories, or the
+                cross-border comparison surfaces.
               </p>
             </div>
             <div className="skyweb-pulse-stack">
@@ -176,11 +217,7 @@ export default function MacroOverview() {
               value={summary?.indicatorCount ?? indicators.length}
               detail="Active source series"
             />
-            <StatCard
-              label="Regions"
-              value={Object.keys(groupedViews).length}
-              detail="Coverage groups"
-            />
+            <StatCard label="Regions" value={regionCoverage.length} detail="Coverage groups" />
             <StatCard
               label="Rows"
               value={formatNumber(totalRows, { compact: true })}
@@ -191,8 +228,29 @@ export default function MacroOverview() {
           <section className="skyweb-dashboard-section">
             <div className="skyweb-section-heading">
               <div>
+                <div className="skyweb-card-kicker">Signal board</div>
+                <h2>What to inspect first</h2>
+              </div>
+              <Link className="skyweb-card-link" to="/macro/views">
+                Browse all →
+              </Link>
+            </div>
+            <div className="skyweb-story-grid">
+              {overviewStories.map((story) => (
+                <StoryCard key={story.key} {...story} />
+              ))}
+            </div>
+          </section>
+
+          <section className="skyweb-dashboard-section">
+            <div className="skyweb-section-heading">
+              <div>
                 <div className="skyweb-card-kicker">Featured views</div>
-                <h2>High-coverage macro surfaces</h2>
+                <h2>High-context macro surfaces</h2>
+                <p className="skyweb-section-copy">
+                  Prioritized for comparison value, current data, category importance, and row
+                  coverage.
+                </p>
               </div>
               <Link className="skyweb-card-link" to="/macro/views">
                 Browse all →
@@ -209,28 +267,77 @@ export default function MacroOverview() {
             )}
           </section>
 
+          <section className="skyweb-dashboard-section">
+            <div className="skyweb-section-heading">
+              <div>
+                <div className="skyweb-card-kicker">Decision lanes</div>
+                <h2>Explore by macro question</h2>
+                <p className="skyweb-section-copy">
+                  Categories are now treated like analytical lanes, not just tags.
+                </p>
+              </div>
+            </div>
+            <div className="skyweb-lane-grid">
+              {categoryLanes.map((lane) => (
+                <Link
+                  className="skyweb-lane-card"
+                  key={lane.key}
+                  to={buildViewSearchPath({ category: lane.key })}
+                >
+                  <div className="skyweb-card-kicker">{formatCategory(lane.key)}</div>
+                  <h3>{lane.leadingView?.label || `${formatCategory(lane.key)} surface`}</h3>
+                  <p>{getCategoryDescription(lane.key)}</p>
+                  <dl>
+                    <div>
+                      <dt>Views</dt>
+                      <dd>{lane.viewCount}</dd>
+                    </div>
+                    <div>
+                      <dt>Rows</dt>
+                      <dd>{formatNumber(lane.rows, { compact: true })}</dd>
+                    </div>
+                    <div>
+                      <dt>Latest</dt>
+                      <dd>{lane.latestDate ? formatDate(lane.latestDate) : '—'}</dd>
+                    </div>
+                  </dl>
+                  <span className="skyweb-card-link">Open lane →</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
           <section className="skyweb-dashboard-two-column">
             <article className="skyweb-card">
               <div className="skyweb-card-kicker">Regional coverage</div>
-              <h2>Views by region</h2>
-              <div className="skyweb-coverage-list">
-                {Object.entries(groupedViews).map(([region, regionViews]) => (
-                  <div className="skyweb-coverage-row" key={region}>
-                    <span>{formatRegion(region)}</span>
-                    <strong>{regionViews.length}</strong>
-                  </div>
+              <h2>Where the data lives</h2>
+              <p>Quickly jump into the U.S., Canada, or cross-border comparison surfaces.</p>
+              <div className="skyweb-coverage-list skyweb-coverage-bar-list">
+                {regionCoverage.map((item) => (
+                  <CoverageRow
+                    item={item}
+                    key={item.key}
+                    label={formatRegion(item.key)}
+                    to={buildViewSearchPath({ region: item.key })}
+                  />
                 ))}
               </div>
             </article>
 
             <article className="skyweb-card">
-              <div className="skyweb-card-kicker">Category coverage</div>
-              <h2>Views by category</h2>
-              <div className="skyweb-chip-list">
-                {Object.entries(groupedCategories).map(([category, categoryViews]) => (
-                  <span className="skyweb-chip skyweb-chip-static" key={category}>
-                    {formatCategory(category)} · {categoryViews.length}
-                  </span>
+              <div className="skyweb-card-kicker">Recently refreshed</div>
+              <h2>Fresh public rows</h2>
+              <p>The newest view surfaces currently available through the public macro API.</p>
+              <div className="skyweb-fresh-list">
+                {freshestViews.map((view) => (
+                  <Link
+                    className="skyweb-fresh-row"
+                    key={view.viewKey}
+                    to={`/macro/views/${view.viewKey}`}
+                  >
+                    <span>{view.label}</span>
+                    <strong>{formatDate(view?.stats?.maxDate || view?.maxDate)}</strong>
+                  </Link>
                 ))}
               </div>
             </article>

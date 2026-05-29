@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import ViewCard from '../components/ViewCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import macroService from '../services/macroService.js';
@@ -22,15 +23,30 @@ function getUniqueValues(items, key) {
 }
 
 export default function MacroViews() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [views, setViews] = useState([]);
-  const [filter, setFilter] = useState('');
-  const [region, setRegion] = useState('ALL');
-  const [category, setCategory] = useState('ALL');
+  const [filter, setFilter] = useState(() => searchParams.get('q') || '');
+  const [region, setRegion] = useState(() => searchParams.get('region') || 'ALL');
+  const [category, setCategory] = useState(() => searchParams.get('category') || 'ALL');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const regions = useMemo(() => ['ALL', ...getUniqueValues(views, 'region')], [views]);
   const categories = useMemo(() => ['ALL', ...getUniqueValues(views, 'category')], [views]);
+
+  function updateFilter(key, value, setter) {
+    setter(value);
+
+    const nextParams = new URLSearchParams(searchParams);
+
+    if (!value || value === 'ALL') {
+      nextParams.delete(key);
+    } else {
+      nextParams.set(key, value);
+    }
+
+    setSearchParams(nextParams, { replace: true });
+  }
 
   const filteredViews = useMemo(
     () =>
@@ -47,6 +63,12 @@ export default function MacroViews() {
       }),
     [category, filter, region, views],
   );
+
+  useEffect(() => {
+    setFilter(searchParams.get('q') || '');
+    setRegion(searchParams.get('region') || 'ALL');
+    setCategory(searchParams.get('category') || 'ALL');
+  }, [searchParams]);
 
   useEffect(() => {
     let active = true;
@@ -106,12 +128,12 @@ export default function MacroViews() {
           className="form-control"
           placeholder="Search views..."
           value={filter}
-          onChange={(event) => setFilter(event.target.value)}
+          onChange={(event) => updateFilter('q', event.target.value, setFilter)}
         />
         <select
           className="form-select"
           value={region}
-          onChange={(event) => setRegion(event.target.value)}
+          onChange={(event) => updateFilter('region', event.target.value, setRegion)}
         >
           {regions.map((regionOption) => (
             <option key={regionOption} value={regionOption}>
@@ -122,7 +144,7 @@ export default function MacroViews() {
         <select
           className="form-select"
           value={category}
-          onChange={(event) => setCategory(event.target.value)}
+          onChange={(event) => updateFilter('category', event.target.value, setCategory)}
         >
           {categories.map((categoryOption) => (
             <option key={categoryOption} value={categoryOption}>

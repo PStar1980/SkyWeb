@@ -41,6 +41,7 @@ SkyWeb/
 │           ├── main.jsx
 │           ├── components/
 │           │   ├── ChartPanel.jsx
+│           │   ├── MetricQuickCard.jsx
 │           │   ├── Navbar.jsx
 │           │   ├── PageState.jsx
 │           │   ├── ProtectedRoute.jsx

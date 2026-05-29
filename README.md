@@ -6,9 +6,9 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 5.1 — Chart Foundation**
+**Phase 5.2 — Macro Drilldown UX Upgrade**
 
-SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, now has a first-pass authenticated member shell, and is beginning its dashboard polish phase with reusable chart primitives.
+SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, now has a first-pass authenticated member shell, and is beginning its dashboard polish phase with reusable chart primitives and richer macro drilldown UX.
 
 Implemented foundation pieces:
 
@@ -29,6 +29,8 @@ Implemented foundation pieces:
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
 - Trend metric cards for latest/range/change summaries
+- Metric-selectable chart panels with quick metric cards and chart window controls
+- Drilldown UX refinements for loaded date windows, latest-row emphasis, and chart/table pairing
 
 ## Repository Layout
 
@@ -155,6 +157,15 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 - Add trend metric summary cards
 - Add numeric-series helpers for public macro rows
 - Add first macro view drilldown trend preview
+
+#### 5.2 — Macro Drilldown UX Upgrade
+
+- Add metric quick-select cards for the highest-value numeric series
+- Add chart window controls for 30, 60, 120, or all loaded points
+- Add chart metadata chips for selected metric, plotted points, and date range
+- Add lightweight gridline/zero-line context to the SVG trend chart
+- Rename preview rows as latest rows and highlight the newest table observation
+- Replace unclear earliest-date stat with loaded-window context
 
 #### Coming next
 

@@ -193,6 +193,10 @@
 }
 
 .skyweb-view-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  box-sizing: border-box;
   border: 1px solid rgba(138, 163, 202, 0.16);
   border-radius: 1.1rem;
   background: rgba(11, 19, 35, 0.78);
@@ -2066,6 +2070,11 @@
   grid-template-columns: minmax(0, 1fr) minmax(260px, 0.42fr);
   gap: 1rem;
   align-items: stretch;
+}
+
+.skyweb-saved-view-main {
+  display: flex;
+  min-width: 0;
 }
 
 .skyweb-saved-view-main .skyweb-view-card {

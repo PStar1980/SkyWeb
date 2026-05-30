@@ -127,8 +127,8 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 | ✅ Phase 2 | SkyServer public macro API bridge: safe unauthenticated macro endpoints with public limits                           |
 | ✅ Phase 3 | Macro Dashboard v1: live overview, curated view cards, drilldowns, formatted tables, and indicator explorer          |
 | ✅ Phase 4 | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation |
-| 🔄 Phase 5 | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces             |
-| 🔄 Phase 6 | Profile and preferences UI: editable member profile, saved display preferences, and account settings                 |
+| ✅ Phase 5 | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces             |
+| ✅ Phase 6 | Profile and preferences UI: editable member profile, saved display preferences, and account settings                 |
 | 🔄 Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb dashboard features                                        |
 | 🔜 Phase 8 | Macro alerts foundation: user-tracked indicators, views, threshold metadata, and notification prep                   |
 | 🔜 Phase 9 | Public portfolio polish: screenshots, GitHub/LinkedIn proof assets, and presentation-ready feature storytelling      |

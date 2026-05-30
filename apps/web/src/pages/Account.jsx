@@ -118,6 +118,7 @@ const PREFERENCE_FIELDS = [
       { value: '/macro', label: 'Macro dashboard' },
       { value: '/macro/views', label: 'Macro views' },
       { value: '/macro/indicators', label: 'Indicators' },
+      { value: '/saved', label: 'Saved views' },
       { value: '/account', label: 'Account' },
     ],
   },
@@ -193,6 +194,7 @@ function getPreferenceLabel(fieldName, value) {
 export default function Account() {
   const { permissions, refreshSession, session, user } = useAuth();
   const { setPreferences: setGlobalPreferences } = usePreferences();
+  const { savedViews } = useSavedViews();
   const [profile, setProfile] = useState(null);
   const [profileForm, setProfileForm] = useState(EMPTY_PROFILE_FORM);
   const [initialProfileForm, setInitialProfileForm] = useState(EMPTY_PROFILE_FORM);
@@ -231,6 +233,7 @@ export default function Account() {
   const avatarUrl = profileForm.avatarUrl.trim();
   const avatarInitial = profileDisplayName.trim().charAt(0).toUpperCase() || 'S';
   const preferredLandingPage = preferencesForm.preferredLandingPage || '/macro';
+  const pinnedSavedViews = savedViews.filter((savedView) => savedView.pinned).length;
 
   useEffect(() => {
     let active = true;
@@ -702,18 +705,34 @@ export default function Account() {
           </article>
 
           <article className="skyweb-page-card skyweb-account-wide">
-            <div className="skyweb-card-kicker">Coming next</div>
-            <h2>Saved dashboard layer staged</h2>
+            <div className="skyweb-card-kicker">Saved dashboard layer</div>
+            <h2>Macro watchlist online</h2>
             <p>
-              The account layer now has editable profile data and persisted dashboard defaults. Next
-              comes the first saved-dashboard/watchlist objects that can actually consume these
-              preferences and turn this member layer into a personalized command surface.
+              Your member layer now has the first personalized dashboard object: saved macro views.
+              Use it as a private command shelf while the next SkyWeb phases expand toward saved
+              dashboards, presets, and alert rules.
             </p>
-            <div className="skyweb-chip-list">
-              <span className="skyweb-chip skyweb-chip-static">Saved dashboards</span>
-              <span className="skyweb-chip skyweb-chip-static">Macro watchlists</span>
-              <span className="skyweb-chip skyweb-chip-static">Preference-driven presets</span>
-              <span className="skyweb-chip skyweb-chip-static">Alert surfaces</span>
+            <div className="skyweb-preference-summary-grid" aria-label="Saved view summary">
+              <div>
+                <span>Saved views</span>
+                <strong>{savedViews.length}</strong>
+              </div>
+              <div>
+                <span>Pinned</span>
+                <strong>{pinnedSavedViews}</strong>
+              </div>
+              <div>
+                <span>Entry point</span>
+                <strong>Watchlist</strong>
+              </div>
+            </div>
+            <div className="skyweb-profile-actions">
+              <Link className="btn skyweb-btn-primary" to="/saved">
+                Open saved views
+              </Link>
+              <Link className="btn skyweb-btn-ghost" to="/macro/views">
+                Browse macro views
+              </Link>
             </div>
           </article>
 

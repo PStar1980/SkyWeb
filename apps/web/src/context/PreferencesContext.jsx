@@ -28,7 +28,7 @@ const ALLOWED_PREFERENCE_VALUES = Object.freeze({
   ],
   defaultChartWindow: ['30', '60', '120', 'ALL'],
   dashboardDensity: ['comfortable', 'compact', 'roomy'],
-  preferredLandingPage: ['/', '/macro', '/macro/views', '/macro/indicators', '/account'],
+  preferredLandingPage: ['/', '/macro', '/macro/views', '/macro/indicators', '/saved', '/account'],
 });
 
 const PreferencesContext = createContext(null);

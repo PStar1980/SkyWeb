@@ -3,7 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 import ChartPanel from '../components/ChartPanel.jsx';
 import StatCard from '../components/StatCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import { usePreferences } from '../context/PreferencesContext.jsx';
+import { useSavedViews } from '../context/SavedViewsContext.jsx';
 import macroService from '../services/macroService.js';
 import { getDateRangeFromRows } from '../utils/charting.js';
 import {
@@ -84,13 +86,18 @@ function getPreviewRows(rows = [], limit = PREVIEW_ROW_LIMIT) {
 
 export default function MacroViewDetail() {
   const { viewKey } = useParams();
+  const { isAuthenticated } = useAuth();
   const { preferences } = usePreferences();
+  const { isViewSaved, loadingSavedViews, removeSavedView, saveSavedView } = useSavedViews();
   const [rows, setRows] = useState([]);
   const [view, setView] = useState(null);
   const [latest, setLatest] = useState(null);
   const [columns, setColumns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [saveNotice, setSaveNotice] = useState('');
+  const [saveError, setSaveError] = useState(null);
+  const [savingView, setSavingView] = useState(false);
 
   const displayColumns = useMemo(() => {
     if (columns.length > 0) {
@@ -107,6 +114,31 @@ export default function MacroViewDetail() {
   const totalRows = stats.totalRows !== undefined ? stats.totalRows : rows.length;
   const latestDate = stats.maxDate || latest?.date || loadedRange.maxDate;
   const oldestLoadedDate = loadedRange.minDate;
+  const saved = isViewSaved(viewKey);
+
+  async function handleSaveToggle() {
+    setSavingView(true);
+    setSaveNotice('');
+    setSaveError(null);
+
+    try {
+      if (saved) {
+        await removeSavedView(viewKey);
+        setSaveNotice('Removed from your saved macro views.');
+      } else {
+        await saveSavedView({
+          viewKey,
+          displayLabel: view?.label || viewKey,
+          pinned: true,
+        });
+        setSaveNotice('Saved to your macro view watchlist.');
+      }
+    } catch (actionError) {
+      setSaveError(actionError);
+    } finally {
+      setSavingView(false);
+    }
+  }
 
   useEffect(() => {
     let active = true;
@@ -156,10 +188,33 @@ export default function MacroViewDetail() {
           <h1>{view?.label || viewKey}</h1>
           <p>{view?.description || 'Curated macro data preview.'}</p>
         </div>
-        <Link className="btn skyweb-btn-ghost" to="/macro/views">
-          Back to views
-        </Link>
+        <div className="skyweb-header-actions">
+          <Link className="btn skyweb-btn-ghost" to="/macro/views">
+            Back to views
+          </Link>
+          {isAuthenticated ? (
+            <button
+              className={saved ? 'btn skyweb-btn-ghost' : 'btn skyweb-btn-primary'}
+              disabled={savingView || loadingSavedViews || loading || Boolean(error)}
+              onClick={handleSaveToggle}
+              type="button"
+            >
+              {savingView ? 'Saving...' : saved ? 'Remove saved' : 'Save view'}
+            </button>
+          ) : (
+            <Link className="btn skyweb-btn-primary" to="/login">
+              Sign in to save
+            </Link>
+          )}
+        </div>
       </header>
+
+      {saveNotice && <div className="skyweb-profile-notice skyweb-detail-notice">{saveNotice}</div>}
+      {saveError && (
+        <div className="skyweb-auth-alert skyweb-detail-notice">
+          {saveError.message || 'Unable to update your saved macro views.'}
+        </div>
+      )}
 
       {loading && <LoadingState>Loading view data...</LoadingState>}
       {!loading && error && (

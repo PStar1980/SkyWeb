@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
+import { SavedViewsProvider } from './context/SavedViewsContext.jsx';
 import {
   getDensityClassName,
   PreferencesProvider,
@@ -14,6 +15,7 @@ import MacroOverview from './pages/MacroOverview.jsx';
 import MacroViews from './pages/MacroViews.jsx';
 import MacroViewDetail from './pages/MacroViewDetail.jsx';
 import MacroIndicators from './pages/MacroIndicators.jsx';
+import SavedViews from './pages/SavedViews.jsx';
 import './App.css';
 
 function SkyWebShell() {
@@ -30,6 +32,14 @@ function SkyWebShell() {
           <Route path="/macro/views" element={<MacroViews />} />
           <Route path="/macro/views/:viewKey" element={<MacroViewDetail />} />
           <Route path="/macro/indicators" element={<MacroIndicators />} />
+          <Route
+            path="/saved"
+            element={
+              <ProtectedRoute>
+                <SavedViews />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/login" element={<Login />} />
           <Route
             path="/account"
@@ -51,7 +61,9 @@ export default function App() {
     <BrowserRouter>
       <AuthProvider>
         <PreferencesProvider>
-          <SkyWebShell />
+          <SavedViewsProvider>
+            <SkyWebShell />
+          </SavedViewsProvider>
         </PreferencesProvider>
       </AuthProvider>
     </BrowserRouter>

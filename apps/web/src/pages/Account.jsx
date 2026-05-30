@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ErrorState, LoadingState } from '../components/PageState.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import { useSavedViews } from '../context/SavedViewsContext.jsx';
 import {
   DEFAULT_SKYWEB_PREFERENCES,
   normalizePreferences,

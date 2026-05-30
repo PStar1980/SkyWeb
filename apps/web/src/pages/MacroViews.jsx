@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ViewCard from '../components/ViewCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
+import { usePreferences } from '../context/PreferencesContext.jsx';
 import macroService from '../services/macroService.js';
 import { formatCategory, formatRegion } from '../utils/formatters.js';
 
@@ -22,27 +23,82 @@ function getUniqueValues(items, key) {
   return Array.from(new Set(items.map((item) => item[key]).filter(Boolean))).sort();
 }
 
+function shouldUsePreferenceFilters(searchParams) {
+  return !searchParams.has('region') && !searchParams.has('category');
+}
+
+function getScopedParam(searchParams, key, preferenceValue = 'ALL') {
+  if (searchParams.has(key)) {
+    return searchParams.get(key) || 'ALL';
+  }
+
+  return shouldUsePreferenceFilters(searchParams) ? preferenceValue || 'ALL' : 'ALL';
+}
+
+function getSelectOptions(items, key, selectedValue) {
+  const values = getUniqueValues(items, key).filter((value) => value !== 'ALL');
+
+  if (selectedValue && selectedValue !== 'ALL' && !values.includes(selectedValue)) {
+    values.unshift(selectedValue);
+  }
+
+  return ['ALL', ...values];
+}
+
+function getPreferenceFilterSummary({ region, category }) {
+  const filters = [];
+
+  if (region && region !== 'ALL') {
+    filters.push(`Region: ${formatRegion(region)}`);
+  }
+
+  if (category && category !== 'ALL') {
+    filters.push(`Category: ${formatCategory(category)}`);
+  }
+
+  return filters.join(' · ');
+}
+
 export default function MacroViews() {
+  const { loadingPreferences, preferences } = usePreferences();
   const [searchParams, setSearchParams] = useSearchParams();
+  const preferredRegion = preferences.defaultMacroRegion || 'ALL';
+  const preferredCategory = preferences.defaultMacroCategory || 'ALL';
   const [views, setViews] = useState([]);
   const [filter, setFilter] = useState(() => searchParams.get('q') || '');
-  const [region, setRegion] = useState(() => searchParams.get('region') || 'ALL');
-  const [category, setCategory] = useState(() => searchParams.get('category') || 'ALL');
+  const [region, setRegion] = useState(() =>
+    getScopedParam(searchParams, 'region', preferredRegion),
+  );
+  const [category, setCategory] = useState(() =>
+    getScopedParam(searchParams, 'category', preferredCategory),
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const regions = useMemo(() => ['ALL', ...getUniqueValues(views, 'region')], [views]);
-  const categories = useMemo(() => ['ALL', ...getUniqueValues(views, 'category')], [views]);
+  const regions = useMemo(() => getSelectOptions(views, 'region', region), [region, views]);
+  const categories = useMemo(
+    () => getSelectOptions(views, 'category', category),
+    [category, views],
+  );
+  const usingPreferenceFilters =
+    !searchParams.has('region') &&
+    !searchParams.has('category') &&
+    (region !== 'ALL' || category !== 'ALL');
+  const preferenceFilterSummary = getPreferenceFilterSummary({ region, category });
 
   function updateFilter(key, value, setter) {
     setter(value);
 
     const nextParams = new URLSearchParams(searchParams);
 
-    if (!value || value === 'ALL') {
-      nextParams.delete(key);
+    if (key === 'q') {
+      if (value) {
+        nextParams.set(key, value);
+      } else {
+        nextParams.delete(key);
+      }
     } else {
-      nextParams.set(key, value);
+      nextParams.set(key, value || 'ALL');
     }
 
     setSearchParams(nextParams, { replace: true });
@@ -66,9 +122,9 @@ export default function MacroViews() {
 
   useEffect(() => {
     setFilter(searchParams.get('q') || '');
-    setRegion(searchParams.get('region') || 'ALL');
-    setCategory(searchParams.get('category') || 'ALL');
-  }, [searchParams]);
+    setRegion(getScopedParam(searchParams, 'region', preferredRegion));
+    setCategory(getScopedParam(searchParams, 'category', preferredCategory));
+  }, [preferredCategory, preferredRegion, searchParams]);
 
   useEffect(() => {
     let active = true;
@@ -153,6 +209,13 @@ export default function MacroViews() {
           ))}
         </select>
       </section>
+
+      {usingPreferenceFilters && !loadingPreferences && preferenceFilterSummary && (
+        <div className="skyweb-preference-filter-note">
+          Personal defaults applied · {preferenceFilterSummary}. Change a filter to make the URL
+          selection take over.
+        </div>
+      )}
 
       {loading && <LoadingState>Loading macro views...</LoadingState>}
       {!loading && error && (

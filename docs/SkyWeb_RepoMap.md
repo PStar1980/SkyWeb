@@ -51,7 +51,8 @@ SkyWeb/
 │           │   ├── TrendMetricCard.jsx
 │           │   └── ViewCard.jsx
 │           ├── context/
-│           │   └── AuthContext.jsx
+│           │   ├── AuthContext.jsx
+│           │   └── PreferencesContext.jsx
 │           ├── pages/
 │           │   ├── Account.jsx
 │           │   ├── Home.jsx

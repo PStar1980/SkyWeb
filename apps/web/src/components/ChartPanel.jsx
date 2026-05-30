@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { normalizeChartWindowPreference } from '../context/PreferencesContext.jsx';
 import { getPreferredSeriesKey, getSeriesCatalog, summarizeSeries } from '../utils/charting.js';
 import { formatNumber } from '../utils/formatters.js';
 import MetricQuickCard from './MetricQuickCard.jsx';
@@ -12,12 +13,21 @@ const WINDOW_OPTIONS = [
   { label: 'All loaded', value: 0 },
 ];
 
-export default function ChartPanel({ rows = [], columns = [], title = 'Trend preview' }) {
+export default function ChartPanel({
+  rows = [],
+  columns = [],
+  title = 'Trend preview',
+  defaultWindowSize = '120',
+}) {
+  const initialWindowSize = useMemo(
+    () => normalizeChartWindowPreference(defaultWindowSize),
+    [defaultWindowSize],
+  );
   const catalog = useMemo(() => getSeriesCatalog(rows, columns), [rows, columns]);
   const seriesKeys = useMemo(() => catalog.map((item) => item.key), [catalog]);
   const preferredKey = useMemo(() => getPreferredSeriesKey(seriesKeys), [seriesKeys]);
   const [selectedKey, setSelectedKey] = useState('');
-  const [windowSize, setWindowSize] = useState(120);
+  const [windowSize, setWindowSize] = useState(initialWindowSize);
   const activeKey = seriesKeys.includes(selectedKey) ? selectedKey : preferredKey;
   const activeMetric = catalog.find((item) => item.key === activeKey) || catalog[0] || null;
   const displaySeries = useMemo(() => {
@@ -30,6 +40,10 @@ export default function ChartPanel({ rows = [], columns = [], title = 'Trend pre
   const summary = useMemo(() => summarizeSeries(displaySeries), [displaySeries]);
   const selectedLabel = activeMetric?.label || 'Metric';
   const quickMetrics = catalog.slice(0, 6);
+
+  useEffect(() => {
+    setWindowSize(initialWindowSize);
+  }, [initialWindowSize]);
 
   if (!catalog.length) {
     return null;

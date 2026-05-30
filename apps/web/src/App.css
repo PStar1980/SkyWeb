@@ -1911,3 +1911,115 @@
     width: 100%;
   }
 }
+
+/* Phase 6.3 — preference-aware macro surfaces */
+.skyweb-preference-filter-note {
+  margin: -0.35rem 0 1rem;
+  border: 1px solid rgba(112, 183, 255, 0.24);
+  border-radius: 0.95rem;
+  background: rgba(112, 183, 255, 0.08);
+  color: rgba(220, 232, 255, 0.78);
+  font-size: 0.86rem;
+  font-weight: 750;
+  padding: 0.78rem 0.95rem;
+}
+
+.skyweb-density-compact .skyweb-main {
+  padding: 1.35rem 0 3rem;
+}
+
+.skyweb-density-compact .skyweb-section-grid,
+.skyweb-density-compact .skyweb-view-grid,
+.skyweb-density-compact .skyweb-metric-grid,
+.skyweb-density-compact .skyweb-story-grid,
+.skyweb-density-compact .skyweb-lane-grid,
+.skyweb-density-compact .skyweb-dashboard-two-column,
+.skyweb-density-compact .skyweb-account-grid,
+.skyweb-density-compact .skyweb-latest-grid,
+.skyweb-density-compact .skyweb-trend-grid,
+.skyweb-density-compact .skyweb-coverage-list,
+.skyweb-density-compact .skyweb-fresh-list {
+  gap: 0.72rem;
+}
+
+.skyweb-density-compact .skyweb-card,
+.skyweb-density-compact .skyweb-page-card,
+.skyweb-density-compact .skyweb-table-card,
+.skyweb-density-compact .skyweb-chart-panel,
+.skyweb-density-compact .skyweb-dashboard-pulse,
+.skyweb-density-compact .skyweb-view-card,
+.skyweb-density-compact .skyweb-story-card,
+.skyweb-density-compact .skyweb-lane-card {
+  border-radius: 0.95rem;
+  padding: 0.95rem;
+}
+
+.skyweb-density-compact .skyweb-page-header,
+.skyweb-density-compact .skyweb-section-heading,
+.skyweb-density-compact .skyweb-chart-header {
+  margin-bottom: 0.72rem;
+}
+
+.skyweb-density-compact .skyweb-hero-content,
+.skyweb-density-compact .skyweb-hero-panel {
+  padding: clamp(1.05rem, 2.2vw, 2.25rem);
+}
+
+.skyweb-density-compact .skyweb-table th,
+.skyweb-density-compact .skyweb-table td {
+  padding: 0.62rem 0.72rem;
+}
+
+.skyweb-density-compact .skyweb-sparkline {
+  height: 220px;
+}
+
+.skyweb-density-roomy .skyweb-main {
+  padding: 2.6rem 0 5rem;
+}
+
+.skyweb-density-roomy .skyweb-section-grid,
+.skyweb-density-roomy .skyweb-view-grid,
+.skyweb-density-roomy .skyweb-metric-grid,
+.skyweb-density-roomy .skyweb-story-grid,
+.skyweb-density-roomy .skyweb-lane-grid,
+.skyweb-density-roomy .skyweb-dashboard-two-column,
+.skyweb-density-roomy .skyweb-account-grid,
+.skyweb-density-roomy .skyweb-latest-grid,
+.skyweb-density-roomy .skyweb-trend-grid,
+.skyweb-density-roomy .skyweb-coverage-list,
+.skyweb-density-roomy .skyweb-fresh-list {
+  gap: 1.25rem;
+}
+
+.skyweb-density-roomy .skyweb-card,
+.skyweb-density-roomy .skyweb-page-card,
+.skyweb-density-roomy .skyweb-table-card,
+.skyweb-density-roomy .skyweb-chart-panel,
+.skyweb-density-roomy .skyweb-dashboard-pulse,
+.skyweb-density-roomy .skyweb-view-card,
+.skyweb-density-roomy .skyweb-story-card,
+.skyweb-density-roomy .skyweb-lane-card {
+  border-radius: 1.45rem;
+  padding: 1.55rem;
+}
+
+.skyweb-density-roomy .skyweb-page-header,
+.skyweb-density-roomy .skyweb-section-heading,
+.skyweb-density-roomy .skyweb-chart-header {
+  margin-bottom: 1.25rem;
+}
+
+.skyweb-density-roomy .skyweb-hero-content,
+.skyweb-density-roomy .skyweb-hero-panel {
+  padding: clamp(1.8rem, 3.5vw, 3.5rem);
+}
+
+.skyweb-density-roomy .skyweb-table th,
+.skyweb-density-roomy .skyweb-table td {
+  padding: 1rem 1.1rem;
+}
+
+.skyweb-density-roomy .skyweb-sparkline {
+  height: 300px;
+}

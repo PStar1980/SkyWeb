@@ -2,6 +2,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ErrorState, LoadingState } from '../components/PageState.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import {
+  DEFAULT_SKYWEB_PREFERENCES,
+  normalizePreferences,
+  usePreferences,
+} from '../context/PreferencesContext.jsx';
 import authService from '../services/authService.js';
 import { formatCategory, formatDateTime, formatRegion } from '../utils/formatters.js';
 
@@ -14,13 +19,7 @@ const EMPTY_PROFILE_FORM = {
   avatarUrl: '',
 };
 
-const DEFAULT_PREFERENCES_FORM = {
-  defaultMacroRegion: 'ALL',
-  defaultMacroCategory: 'ALL',
-  defaultChartWindow: '120',
-  dashboardDensity: 'comfortable',
-  preferredLandingPage: '/macro',
-};
+const DEFAULT_PREFERENCES_FORM = DEFAULT_SKYWEB_PREFERENCES;
 
 const PROFILE_FIELD_NAMES = Object.keys(EMPTY_PROFILE_FORM);
 const PREFERENCE_FIELD_NAMES = Object.keys(DEFAULT_PREFERENCES_FORM);
@@ -107,6 +106,7 @@ const PREFERENCE_FIELDS = [
     options: [
       { value: 'comfortable', label: 'Comfortable' },
       { value: 'compact', label: 'Compact' },
+      { value: 'roomy', label: 'Roomy' },
     ],
   },
   {
@@ -192,6 +192,7 @@ function getPreferenceLabel(fieldName, value) {
 
 export default function Account() {
   const { permissions, refreshSession, session, user } = useAuth();
+  const { setPreferences: setGlobalPreferences } = usePreferences();
   const [profile, setProfile] = useState(null);
   const [profileForm, setProfileForm] = useState(EMPTY_PROFILE_FORM);
   const [initialProfileForm, setInitialProfileForm] = useState(EMPTY_PROFILE_FORM);
@@ -254,13 +255,16 @@ export default function Account() {
 
         const nextProfile = profileResult.profile || null;
         const nextProfileForm = profileToForm(nextProfile);
-        const nextPreferences = preferencesResult.preferences || DEFAULT_PREFERENCES_FORM;
+        const nextPreferences = normalizePreferences(
+          preferencesResult.preferences || DEFAULT_PREFERENCES_FORM,
+        );
         const nextPreferencesForm = preferencesToForm(nextPreferences);
 
         setProfile(nextProfile);
         setProfileForm(nextProfileForm);
         setInitialProfileForm(nextProfileForm);
         setPreferences(nextPreferences);
+        setGlobalPreferences(nextPreferences);
         setPreferencesForm(nextPreferencesForm);
         setInitialPreferencesForm(nextPreferencesForm);
       } catch (loadError) {
@@ -281,7 +285,7 @@ export default function Account() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [setGlobalPreferences]);
 
   function handleProfileInputChange(event) {
     const { name, value } = event.target;
@@ -382,10 +386,11 @@ export default function Account() {
 
     try {
       const result = await authService.updatePreferences(buildPreferencesPayload(preferencesForm));
-      const nextPreferences = result.preferences || DEFAULT_PREFERENCES_FORM;
+      const nextPreferences = normalizePreferences(result.preferences || DEFAULT_PREFERENCES_FORM);
       const nextForm = preferencesToForm(nextPreferences);
 
       setPreferences(nextPreferences);
+      setGlobalPreferences(nextPreferences);
       setPreferencesForm(nextForm);
       setInitialPreferencesForm(nextForm);
       setIsEditingPreferences(false);

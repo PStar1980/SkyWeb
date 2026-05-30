@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom';
 import ChartPanel from '../components/ChartPanel.jsx';
 import StatCard from '../components/StatCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
+import { usePreferences } from '../context/PreferencesContext.jsx';
 import macroService from '../services/macroService.js';
 import { getDateRangeFromRows } from '../utils/charting.js';
 import {
@@ -83,6 +84,7 @@ function getPreviewRows(rows = [], limit = PREVIEW_ROW_LIMIT) {
 
 export default function MacroViewDetail() {
   const { viewKey } = useParams();
+  const { preferences } = usePreferences();
   const [rows, setRows] = useState([]);
   const [view, setView] = useState(null);
   const [latest, setLatest] = useState(null);
@@ -187,6 +189,7 @@ export default function MacroViewDetail() {
 
           <ChartPanel
             columns={columns}
+            defaultWindowSize={preferences.defaultChartWindow}
             rows={rows}
             title={`${view?.label || viewKey} trend preview`}
           />

@@ -6,9 +6,9 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 5.4 — Responsive & Portfolio Polish**
+**Phase 6.1 — Editable SkyWeb Profile UI**
 
-SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, now has a first-pass authenticated member shell, and is beginning its dashboard polish phase with reusable chart primitives and richer macro drilldown UX.
+SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, and now includes the first editable private member profile surface backed by SkyServer.
 
 Implemented foundation pieces:
 
@@ -26,6 +26,8 @@ Implemented foundation pieces:
 - Public macro API namespace: `/api/public/macro/*`
 - SkyWeb login/session context using app-scoped `SKYWEB` authentication
 - Protected `/account` route backed by `/api/skyweb/profile`
+- Editable account/profile UI for display name, headline, bio, timezone, locale, and avatar URL
+- Dirty-state detection, edit/cancel/save flow, saving state, and success/error messaging
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
 - Trend metric cards for latest/range/change summaries
@@ -115,7 +117,7 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 | ✅ Phase 3 | Macro Dashboard v1: live overview, curated view cards, drilldowns, formatted tables, and indicator explorer          |
 | ✅ Phase 4 | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation |
 | 🔄 Phase 5 | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces             |
-| 🔜 Phase 6 | Profile and preferences UI: editable member profile, saved display preferences, and account settings                 |
+| 🔄 Phase 6 | Profile and preferences UI: editable member profile, saved display preferences, and account settings                 |
 | 🔜 Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb dashboard features                                        |
 | 🔜 Phase 8 | Macro alerts foundation: user-tracked indicators, views, threshold metadata, and notification prep                   |
 | 🔜 Phase 9 | Public portfolio polish: screenshots, GitHub/LinkedIn proof assets, and presentation-ready feature storytelling      |
@@ -190,12 +192,23 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 - Improve table/chart overflow behavior for narrow screens and screenshot capture
 - Add print-friendly presentation rules for dashboard screenshots and exported views
 
+### Phase 6 — Profile and Preferences UI
+
+#### 6.1 — Editable SkyWeb Profile UI
+
+- Convert the protected `/account` page from read-only profile display into an editable member profile surface
+- Support editing `displayName`, `headline`, `bio`, `timezone`, `locale`, and `avatarUrl`
+- Add edit/cancel/save controls with dirty-state detection
+- Add saving state plus success and error messaging
+- Refresh local profile state after successful save using the SkyServer `/api/skyweb/profile` response
+- Keep identity, session, coming-next, and app-permission cards visible around the editable profile panel
+
 #### Coming next
 
-- More chart/table pairing options
+- Profile preference controls for dashboard defaults
 - Saved dashboard entry points
-- Deeper profile/preferences UI
 - Watchlist and saved dashboard foundations
+- More chart/table pairing options
 
 ## Relationship to SkyServer
 

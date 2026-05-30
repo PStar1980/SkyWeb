@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import api from '../services/api.js';
 import authService from '../services/authService.js';
 
@@ -29,7 +30,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   const handleExpiredSession = useCallback(
-    (message = 'Your SkyWeb session expired. Please sign in again.') => {
+    (message = 'Your SkyWeb Analytics session expired. Please sign in again.') => {
       api.clearSessionToken();
       clearAuthState();
       setLoading(false);
@@ -57,7 +58,9 @@ export function AuthProvider({ children }) {
 
       return result;
     } catch (error) {
-      handleExpiredSession(error.message || 'Your SkyWeb session expired. Please sign in again.');
+      handleExpiredSession(
+        error.message || 'Your SkyWeb Analytics session expired. Please sign in again.',
+      );
       return null;
     } finally {
       setLoading(false);
@@ -66,7 +69,7 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     function onAuthExpired(event) {
-      handleExpiredSession(event.detail?.message || 'Your SkyWeb session expired.');
+      handleExpiredSession(event.detail?.message || 'Your SkyWeb Analytics session expired.');
     }
 
     window.addEventListener(api.AUTH_EXPIRED_EVENT, onAuthExpired);
@@ -84,7 +87,7 @@ export function AuthProvider({ children }) {
     const result = await authService.login({ email, password });
 
     setUser(result.user || null);
-    setSession({ expiresAt: result.expiresAt, appCode: 'SKYWEB', appTitle: 'SkyWeb' });
+    setSession({ expiresAt: result.expiresAt, appCode: 'SKYWEB', appTitle: SKYWEB_PRODUCT_NAME });
     setPermissions(normalizePermissions(result.permissions || []));
     setAuthNotice('');
 

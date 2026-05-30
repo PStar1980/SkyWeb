@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard.jsx';
+import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import ViewCard from '../components/ViewCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import { useSavedViews } from '../context/SavedViewsContext.jsx';
@@ -315,16 +316,19 @@ export default function SavedViews() {
       <header className="skyweb-page-header">
         <div>
           <div className="skyweb-kicker">Member dashboard</div>
-          <h1>Saved macro views</h1>
+          <h1>{SKYWEB_PRODUCT_NAME} saved views</h1>
           <p>
-            Your private SkyWeb watchlist now supports pinning, notes, ordering, filters, and sort
-            controls for the macro views that matter most.
+            Your private SkyWeb Analytics watchlist now supports pinning, notes, ordering, filters,
+            and sort controls for the macro views that matter most.
           </p>
         </div>
         <div className="skyweb-header-actions">
           <button className="btn skyweb-btn-ghost" onClick={refreshSavedViews} type="button">
             Refresh saved views
           </button>
+          <Link className="btn skyweb-btn-ghost" to="/dashboard">
+            Open dashboard
+          </Link>
           <Link className="btn skyweb-btn-primary" to="/macro/views">
             Browse views
           </Link>
@@ -368,7 +372,8 @@ export default function SavedViews() {
               <h2>No saved macro views yet</h2>
               <p>
                 Open a macro view detail page and hit “Save view” to start building your private
-                SkyWeb watchlist. This is the runway for saved dashboards and alert surfaces.
+                SkyWeb Analytics watchlist. This is the runway for saved dashboards and alert
+                surfaces.
               </p>
               <Link className="btn skyweb-btn-primary" to="/macro/views">
                 Choose first view

@@ -1,21 +1,21 @@
-# SkyWeb
+# SkyWeb Analytics
 
-SkyWeb is the public-facing web layer for the Sky ecosystem. It consumes curated SkyServer APIs and presents polished dashboards, macroeconomic views, and future personalized user experiences.
+SkyWeb Analytics is the public-facing analytics layer for the Sky ecosystem. It consumes curated SkyServer APIs and presents polished dashboards, macroeconomic views, and future personalized user experiences.
 
-SkyServer remains the private control plane: ingestion, tools, automation, access control, audit, and operational configuration. SkyWeb is the presentation layer that turns those curated data services into public and user-facing experiences.
+SkyServer Admin remains the private control plane: ingestion, tools, automation, access control, audit, and operational configuration. SkyWeb Analytics is the presentation layer that turns those curated data services into public and user-facing experiences.
 
 ## Current Status
 
-**Phase 7.2 — Saved View Polish + Pinning Controls**
+**Phase 7.3 — Personal Macro Dashboard + SkyWeb Analytics Rebrand**
 
-SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, and now includes a polished personalized saved-view watchlist surface with pinning, notes, ordering, filtering, and sorting controls.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, and now composes pinned saved views into a private `/dashboard` command board.
 
 Implemented foundation pieces:
 
 - Single root `package.json`
 - Root `.env.example`
 - Vite dev proxy to SkyServer API
-- SkyWeb branding and navigation
+- SkyWeb Analytics branding and navigation
 - Shared API client
 - Macro API service layer
 - Public-facing home page
@@ -24,7 +24,7 @@ Implemented foundation pieces:
 - View detail pages with latest-row and preview-table surfaces
 - Indicator explorer with source/frequency filtering
 - Public macro API namespace: `/api/public/macro/*`
-- SkyWeb login/session context using app-scoped `SKYWEB` authentication
+- SkyWeb Analytics login/session context using app-scoped `SKYWEB` authentication
 - Protected `/account` route backed by `/api/skyweb/profile`
 - Editable account/profile UI for display name, headline, bio, timezone, locale, and avatar URL
 - Editable dashboard-preference UI for default macro region, macro category, chart window, dashboard density, and preferred landing page
@@ -38,6 +38,8 @@ Implemented foundation pieces:
 - Saved-view account summary and preferred landing option
 - Saved-view pin/unpin controls, metadata editing, private notes, and display-order support
 - Saved-page search, region/category/status filters, and sort controls
+- Protected `/dashboard` route that composes pinned saved macro views into a personal member dashboard
+- Visible product rebrand from SkyWeb to SkyWeb Analytics while preserving repo/app code names
 - Dirty-state detection, edit/cancel/save flow, saving state, and success/error messaging
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
@@ -78,7 +80,7 @@ Install dependencies from the repository root:
 npm install
 ```
 
-Run SkyWeb locally:
+Run SkyWeb Analytics locally:
 
 ```bash
 npm run web
@@ -119,7 +121,7 @@ During local development, Vite proxies `/api/*` to the SkyServer API using `VITE
 
 ## 🗺️ Roadmap
 
-SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses its own standalone phase numbering so the public application can grow independently.
+SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analytics uses its own standalone phase numbering so the public application can grow independently.
 
 | Phase      | Objective                                                                                                            |
 | ---------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -129,7 +131,7 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 | ✅ Phase 4 | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation |
 | ✅ Phase 5 | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces             |
 | ✅ Phase 6 | Profile and preferences UI: editable member profile, saved display preferences, and account settings                 |
-| 🔄 Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb dashboard features                                        |
+| 🔄 Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb Analytics dashboard features                              |
 | 🔜 Phase 8 | Macro alerts foundation: user-tracked indicators, views, threshold metadata, and notification prep                   |
 | 🔜 Phase 9 | Public portfolio polish: screenshots, GitHub/LinkedIn proof assets, and presentation-ready feature storytelling      |
 
@@ -162,7 +164,7 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 ### Phase 4 — Auth Shell & Member Layer Prep
 
 - Use app-scoped auth with `SKYWEB`
-- Add SkyWeb login/session context
+- Add SkyWeb Analytics login/session context
 - Add protected account page
 - Prepare profile/preferences tables
 - Keep public macro pages unauthenticated
@@ -254,15 +256,23 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 - Add editable saved-view metadata for custom labels, private notes, and display order
 - Improve empty and no-match states for saved-view workflows
 
+#### 7.3 — Personal Macro Dashboard + SkyWeb Analytics Rebrand
+
+- Add protected `/dashboard` route for the authenticated member command board
+- Compose pinned saved macro views into a personal dashboard grid
+- Show saved-view notes and pinned metadata as dashboard context
+- Add `/dashboard` as a preferred landing-page option
+- Rebrand visible product surfaces from SkyWeb to SkyWeb Analytics while preserving the `SkyWeb` repo name and `SKYWEB` app code
+
 #### Coming next
 
 - Saved dashboard builder entry points
-- Pinned-view dashboard composition
+- Configurable dashboard sections and layout presets
 - More chart/table pairing options
 
 ## Relationship to SkyServer
 
-SkyWeb should not duplicate SkyServer administration features. SkyServer owns:
+SkyWeb Analytics should not duplicate SkyServer Admin features. SkyServer owns:
 
 - Tool execution
 - Ingestion management
@@ -272,11 +282,11 @@ SkyWeb should not duplicate SkyServer administration features. SkyServer owns:
 - Repository/system configuration
 - Application membership management
 
-SkyWeb consumes curated APIs exposed by SkyServer and focuses on public presentation, exploration, and future user personalization.
+SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on public presentation, exploration, and future user personalization.
 
 ## Auth Notes
 
-- SkyWeb login posts to `/api/auth/login` with `appCode: SKYWEB`.
+- SkyWeb Analytics login posts to `/api/auth/login` with `appCode: SKYWEB`.
 - Public macro pages remain unauthenticated.
 - `/account` is protected by the SkyWeb AuthContext and reads `/api/skyweb/profile`.
 - SkyWeb profiles and preferences are staged in the `skyweb` database schema.

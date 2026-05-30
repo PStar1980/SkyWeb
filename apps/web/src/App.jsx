@@ -10,6 +10,7 @@ import {
 } from './context/PreferencesContext.jsx';
 import Account from './pages/Account.jsx';
 import Home from './pages/Home.jsx';
+import MemberDashboard from './pages/MemberDashboard.jsx';
 import Login from './pages/Login.jsx';
 import MacroOverview from './pages/MacroOverview.jsx';
 import MacroViews from './pages/MacroViews.jsx';
@@ -32,6 +33,14 @@ function SkyWebShell() {
           <Route path="/macro/views" element={<MacroViews />} />
           <Route path="/macro/views/:viewKey" element={<MacroViewDetail />} />
           <Route path="/macro/indicators" element={<MacroIndicators />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <MemberDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/saved"
             element={

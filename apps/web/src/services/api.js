@@ -28,7 +28,9 @@ function clearSessionToken() {
   localStorage.removeItem(SESSION_TOKEN_KEY);
 }
 
-function notifyAuthExpired(message = 'Your SkyWeb session expired. Please sign in again.') {
+function notifyAuthExpired(
+  message = 'Your SkyWeb Analytics session expired. Please sign in again.',
+) {
   clearSessionToken();
 
   window.dispatchEvent(
@@ -43,7 +45,10 @@ function notifyAuthExpired(message = 'Your SkyWeb session expired. Please sign i
 function normalizeError(error) {
   const response = error?.response;
   const message =
-    response?.data?.error || response?.data?.message || error?.message || 'SkyWeb request failed.';
+    response?.data?.error ||
+    response?.data?.message ||
+    error?.message ||
+    'SkyWeb Analytics request failed.';
 
   const normalized = new Error(message);
   normalized.status = response?.status || null;
@@ -71,7 +76,7 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error?.response?.status === 401 && !error.config?.skipAuth) {
-      notifyAuthExpired(error.response?.data?.error || 'Your SkyWeb session expired.');
+      notifyAuthExpired(error.response?.data?.error || 'Your SkyWeb Analytics session expired.');
     }
 
     return Promise.reject(error);

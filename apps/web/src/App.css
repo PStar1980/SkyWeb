@@ -193,10 +193,6 @@
 }
 
 .skyweb-view-card {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  box-sizing: border-box;
   border: 1px solid rgba(138, 163, 202, 0.16);
   border-radius: 1.1rem;
   background: rgba(11, 19, 35, 0.78);
@@ -2072,11 +2068,6 @@
   align-items: stretch;
 }
 
-.skyweb-saved-view-main {
-  display: flex;
-  min-width: 0;
-}
-
 .skyweb-saved-view-main .skyweb-view-card {
   min-height: 100%;
 }
@@ -2255,5 +2246,87 @@
   .skyweb-saved-actions .btn,
   .skyweb-saved-editor-actions .btn {
     width: 100%;
+  }
+}
+
+/* Phase 7.3 — personal macro dashboard + SkyWeb Analytics rebrand */
+.skyweb-brand-name {
+  white-space: nowrap;
+}
+
+.skyweb-member-dashboard-header p {
+  max-width: 850px;
+}
+
+.skyweb-member-dashboard-pulse {
+  margin-top: 0;
+}
+
+.skyweb-member-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.skyweb-member-dashboard-grid .skyweb-view-card {
+  min-height: 100%;
+}
+
+.skyweb-member-dashboard-lower {
+  align-items: start;
+}
+
+.skyweb-dashboard-note-list {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.skyweb-dashboard-note-card {
+  border: 1px solid rgba(138, 163, 202, 0.14);
+  border-radius: 0.95rem;
+  background: rgba(5, 10, 20, 0.34);
+  padding: 0.9rem;
+}
+
+.skyweb-dashboard-note-card h3 {
+  margin: 0.3rem 0 0.45rem;
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 850;
+  letter-spacing: -0.025em;
+}
+
+.skyweb-dashboard-note-card p {
+  margin-bottom: 0.65rem;
+}
+
+.skyweb-dashboard-detail-list div {
+  grid-template-columns: minmax(120px, 0.45fr) minmax(0, 1fr);
+}
+
+.skyweb-density-compact .skyweb-member-dashboard-grid,
+.skyweb-density-compact .skyweb-dashboard-note-list {
+  gap: 0.72rem;
+}
+
+.skyweb-density-compact .skyweb-dashboard-note-card {
+  border-radius: 0.82rem;
+  padding: 0.72rem;
+}
+
+.skyweb-density-roomy .skyweb-member-dashboard-grid,
+.skyweb-density-roomy .skyweb-dashboard-note-list {
+  gap: 1.25rem;
+}
+
+.skyweb-density-roomy .skyweb-dashboard-note-card {
+  border-radius: 1.15rem;
+  padding: 1.1rem;
+}
+
+@media (max-width: 920px) {
+  .skyweb-member-dashboard-grid {
+    grid-template-columns: 1fr;
   }
 }

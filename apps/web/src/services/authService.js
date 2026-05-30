@@ -46,14 +46,34 @@ async function updatePreferences(payload) {
   return api.patch('/skyweb/preferences', payload);
 }
 
+async function listSavedViews() {
+  return api.get('/skyweb/saved-views');
+}
+
+async function saveSavedView(payload) {
+  return api.post('/skyweb/saved-views', payload);
+}
+
+async function updateSavedView(viewKey, payload) {
+  return api.patch(`/skyweb/saved-views/${encodeURIComponent(viewKey)}`, payload);
+}
+
+async function removeSavedView(viewKey) {
+  return api.delete(`/skyweb/saved-views/${encodeURIComponent(viewKey)}`);
+}
+
 const authService = {
   getCurrentSession,
   getPreferences,
   getProfile,
+  listSavedViews,
   login,
   logout,
+  removeSavedView,
+  saveSavedView,
   updatePreferences,
   updateProfile,
+  updateSavedView,
 };
 
 export default authService;

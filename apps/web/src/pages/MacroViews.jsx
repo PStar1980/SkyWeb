@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import ViewCard from '../components/ViewCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import { usePreferences } from '../context/PreferencesContext.jsx';
+import { useSavedViews } from '../context/SavedViewsContext.jsx';
 import macroService from '../services/macroService.js';
 import { formatCategory, formatRegion } from '../utils/formatters.js';
 
@@ -60,7 +62,9 @@ function getPreferenceFilterSummary({ region, category }) {
 }
 
 export default function MacroViews() {
+  const { isAuthenticated } = useAuth();
   const { loadingPreferences, preferences } = usePreferences();
+  const { isViewSaved } = useSavedViews();
   const [searchParams, setSearchParams] = useSearchParams();
   const preferredRegion = preferences.defaultMacroRegion || 'ALL';
   const preferredCategory = preferences.defaultMacroCategory || 'ALL';
@@ -177,6 +181,13 @@ export default function MacroViews() {
           <h1>Macro Views</h1>
           <p>Browse curated SkyServer macro views by region, category, and purpose.</p>
         </div>
+        {isAuthenticated && (
+          <div className="skyweb-header-actions">
+            <Link className="btn skyweb-btn-ghost" to="/saved">
+              Open saved views
+            </Link>
+          </div>
+        )}
       </header>
 
       <section className="skyweb-toolbar skyweb-toolbar-three">
@@ -233,7 +244,7 @@ export default function MacroViews() {
           </div>
           <section className="skyweb-view-grid">
             {filteredViews.map((view) => (
-              <ViewCard key={view.viewKey} view={view} />
+              <ViewCard key={view.viewKey} saved={isViewSaved(view.viewKey)} view={view} />
             ))}
 
             {filteredViews.length === 0 && <EmptyState>No macro views matched.</EmptyState>}

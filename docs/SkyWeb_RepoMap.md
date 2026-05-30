@@ -52,7 +52,8 @@ SkyWeb/
 │           │   └── ViewCard.jsx
 │           ├── context/
 │           │   ├── AuthContext.jsx
-│           │   └── PreferencesContext.jsx
+│           │   ├── PreferencesContext.jsx
+│           │   └── SavedViewsContext.jsx
 │           ├── pages/
 │           │   ├── Account.jsx
 │           │   ├── Home.jsx
@@ -60,7 +61,8 @@ SkyWeb/
 │           │   ├── MacroIndicators.jsx
 │           │   ├── MacroOverview.jsx
 │           │   ├── MacroViewDetail.jsx
-│           │   └── MacroViews.jsx
+│           │   ├── MacroViews.jsx
+│           │   └── SavedViews.jsx
 │           ├── services/
 │           │   ├── api.js
 │           │   ├── authService.js

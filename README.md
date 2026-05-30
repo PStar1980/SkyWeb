@@ -6,9 +6,9 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 6.3 — Preference-Aware Macro Surfaces**
+**Phase 7.1 — Saved Macro Views Foundation**
 
-SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, and now consumes those preferences across macro catalog, chart, landing, and density surfaces.
+SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, and now includes the first personalized saved-view watchlist surface.
 
 Implemented foundation pieces:
 
@@ -31,6 +31,11 @@ Implemented foundation pieces:
 - Preference-aware macro catalog defaults that respect saved region/category unless URL filters are present
 - Preference-aware chart windows for macro view drilldowns
 - App-level dashboard density classes for comfortable, compact, and roomy layouts
+- Authenticated saved macro view context backed by `/api/skyweb/saved-views`
+- Protected `/saved` route for a private macro view watchlist
+- Save/remove actions on macro view detail pages
+- Saved badges on macro catalog cards
+- Saved-view account summary and preferred landing option
 - Dirty-state detection, edit/cancel/save flow, saving state, and success/error messaging
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
@@ -122,7 +127,7 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 | ✅ Phase 4 | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation |
 | 🔄 Phase 5 | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces             |
 | 🔄 Phase 6 | Profile and preferences UI: editable member profile, saved display preferences, and account settings                 |
-| 🔜 Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb dashboard features                                        |
+| 🔄 Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb dashboard features                                        |
 | 🔜 Phase 8 | Macro alerts foundation: user-tracked indicators, views, threshold metadata, and notification prep                   |
 | 🔜 Phase 9 | Public portfolio polish: screenshots, GitHub/LinkedIn proof assets, and presentation-ready feature storytelling      |
 
@@ -225,10 +230,22 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 - Apply saved dashboard density as an app-level class for comfortable, compact, and roomy layouts
 - Keep `/account` preference saves in sync with the global preferences context
 
+### Phase 7 — Saved Dashboards and Watchlists
+
+#### 7.1 — Saved Macro Views Foundation
+
+- Add a shared saved-views context for authenticated SkyWeb members
+- Add protected `/saved` route for the first private watchlist surface
+- Add save/remove controls to macro view detail pages
+- Add saved badges to macro catalog cards
+- Add saved-view summary on the account page
+- Add `/saved` as a preferred landing-page option
+- Prepare the personalized object layer for saved dashboards, presets, and future alert rules
+
 #### Coming next
 
-- Saved dashboard entry points
-- Watchlist and saved dashboard foundations
+- Saved dashboard builder entry points
+- Watchlist notes and ordering controls
 - More chart/table pairing options
 
 ## Relationship to SkyServer

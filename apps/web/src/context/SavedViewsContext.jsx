@@ -4,6 +4,41 @@ import { useAuth } from './AuthContext.jsx';
 
 const SavedViewsContext = createContext(null);
 
+function getSavedViewLabel(savedView = {}) {
+  return (
+    savedView.displayLabel ||
+    savedView.display_label ||
+    savedView.view?.label ||
+    savedView.viewKey ||
+    ''
+  );
+}
+
+function getComparableDate(value) {
+  const timestamp = Date.parse(value || '');
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
+function compareSavedViews(left, right) {
+  if (left.pinned !== right.pinned) {
+    return left.pinned ? -1 : 1;
+  }
+
+  if (left.sortOrder !== right.sortOrder) {
+    return left.sortOrder - right.sortOrder;
+  }
+
+  const updatedDifference = getComparableDate(right.updatedAt) - getComparableDate(left.updatedAt);
+
+  if (updatedDifference !== 0) {
+    return updatedDifference;
+  }
+
+  return getSavedViewLabel(left).localeCompare(getSavedViewLabel(right), undefined, {
+    sensitivity: 'base',
+  });
+}
+
 function normalizeSavedView(savedView = {}) {
   return {
     ...savedView,
@@ -18,7 +53,10 @@ function normalizeSavedView(savedView = {}) {
 }
 
 function normalizeSavedViews(savedViews = []) {
-  return savedViews.map(normalizeSavedView).filter((savedView) => savedView.viewKey);
+  return savedViews
+    .map(normalizeSavedView)
+    .filter((savedView) => savedView.viewKey)
+    .sort(compareSavedViews);
 }
 
 export function SavedViewsProvider({ children }) {
@@ -73,13 +111,7 @@ export function SavedViewsProvider({ children }) {
         (savedView) => savedView.viewKey !== nextSavedView.viewKey,
       );
 
-      return [nextSavedView, ...remainingSavedViews].sort((left, right) => {
-        if (left.pinned !== right.pinned) {
-          return left.pinned ? -1 : 1;
-        }
-
-        return left.sortOrder - right.sortOrder;
-      });
+      return [nextSavedView, ...remainingSavedViews].sort(compareSavedViews);
     });
     setSavedViewsError(null);
 
@@ -91,9 +123,11 @@ export function SavedViewsProvider({ children }) {
     const nextSavedView = normalizeSavedView(result.item || {});
 
     setSavedViews((currentSavedViews) =>
-      currentSavedViews.map((savedView) =>
-        savedView.viewKey === nextSavedView.viewKey ? nextSavedView : savedView,
-      ),
+      currentSavedViews
+        .map((savedView) =>
+          savedView.viewKey === nextSavedView.viewKey ? nextSavedView : savedView,
+        )
+        .sort(compareSavedViews),
     );
     setSavedViewsError(null);
 

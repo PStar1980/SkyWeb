@@ -2116,3 +2116,135 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Phase 7.2 — saved view pinning, notes, sorting, and filters */
+.skyweb-saved-controls-card {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.skyweb-saved-controls-card h2 {
+  margin: 0.25rem 0 0.35rem;
+  color: #ffffff;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+}
+
+.skyweb-saved-controls-card p {
+  max-width: 860px;
+  margin: 0;
+}
+
+.skyweb-saved-toolbar {
+  display: grid;
+  grid-template-columns: minmax(220px, 1.25fr) repeat(4, minmax(150px, 0.72fr)) auto;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.skyweb-saved-toolbar label,
+.skyweb-saved-editor label {
+  display: grid;
+  gap: 0.38rem;
+}
+
+.skyweb-saved-toolbar label span,
+.skyweb-saved-editor label span {
+  color: rgba(220, 232, 255, 0.66);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.skyweb-saved-toolbar .form-control,
+.skyweb-saved-toolbar .form-select,
+.skyweb-saved-editor .form-control {
+  border-color: rgba(138, 163, 202, 0.2);
+  background-color: rgba(5, 10, 20, 0.72);
+  color: #ffffff;
+}
+
+.skyweb-saved-toolbar .form-control:focus,
+.skyweb-saved-toolbar .form-select:focus,
+.skyweb-saved-editor .form-control:focus {
+  border-color: rgba(112, 183, 255, 0.55);
+  box-shadow: 0 0 0 0.2rem rgba(112, 183, 255, 0.14);
+}
+
+.skyweb-saved-reset-button {
+  min-height: 2.55rem;
+  white-space: nowrap;
+}
+
+.skyweb-saved-sidecar-topline {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.skyweb-saved-pill-muted {
+  border-color: rgba(138, 163, 202, 0.24);
+  background: rgba(255, 255, 255, 0.035);
+  color: rgba(220, 232, 255, 0.7);
+}
+
+.skyweb-saved-actions,
+.skyweb-saved-editor-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.85rem;
+}
+
+.skyweb-saved-actions .btn,
+.skyweb-saved-editor-actions .btn {
+  margin-top: 0;
+}
+
+.skyweb-saved-editor {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  border: 1px solid rgba(112, 183, 255, 0.18);
+  border-radius: 0.95rem;
+  background: rgba(5, 10, 20, 0.34);
+  padding: 0.85rem;
+}
+
+.skyweb-saved-editor textarea.form-control {
+  min-height: 7.5rem;
+  resize: vertical;
+}
+
+.skyweb-saved-note-muted {
+  color: rgba(220, 232, 255, 0.56);
+}
+
+@media (max-width: 1180px) {
+  .skyweb-saved-toolbar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .skyweb-saved-reset-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .skyweb-saved-toolbar,
+  .skyweb-saved-actions,
+  .skyweb-saved-editor-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .skyweb-saved-actions,
+  .skyweb-saved-editor-actions {
+    display: grid;
+  }
+
+  .skyweb-saved-actions .btn,
+  .skyweb-saved-editor-actions .btn {
+    width: 100%;
+  }
+}

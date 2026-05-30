@@ -6,9 +6,9 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 6.1 — Editable SkyWeb Profile UI**
+**Phase 6.2 — Dashboard Preferences UI**
 
-SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, and now includes the first editable private member profile surface backed by SkyServer.
+SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, and now includes editable private member profile and dashboard-preference surfaces backed by SkyServer.
 
 Implemented foundation pieces:
 
@@ -27,6 +27,7 @@ Implemented foundation pieces:
 - SkyWeb login/session context using app-scoped `SKYWEB` authentication
 - Protected `/account` route backed by `/api/skyweb/profile`
 - Editable account/profile UI for display name, headline, bio, timezone, locale, and avatar URL
+- Editable dashboard-preference UI for default macro region, macro category, chart window, dashboard density, and preferred landing page
 - Dirty-state detection, edit/cancel/save flow, saving state, and success/error messaging
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
@@ -203,11 +204,19 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 - Refresh local profile state after successful save using the SkyServer `/api/skyweb/profile` response
 - Keep identity, session, coming-next, and app-permission cards visible around the editable profile panel
 
+#### 6.2 — Dashboard Preferences UI
+
+- Add authenticated SkyWeb preference loading through `/api/skyweb/preferences`
+- Add dashboard-preference save support through `PATCH /api/skyweb/preferences`
+- Support default macro region, default macro category, default chart window, dashboard density, and preferred landing page
+- Add edit/cancel/save/reset-defaults controls with dirty-state detection
+- Keep preference state visible beside profile, identity, session, and permission cards
+
 #### Coming next
 
-- Profile preference controls for dashboard defaults
 - Saved dashboard entry points
 - Watchlist and saved dashboard foundations
+- Preference-aware macro dashboard defaults
 - More chart/table pairing options
 
 ## Relationship to SkyServer

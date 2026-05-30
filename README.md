@@ -6,9 +6,9 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 7.1 — Saved Macro Views Foundation**
+**Phase 7.2 — Saved View Polish + Pinning Controls**
 
-SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, and now includes the first personalized saved-view watchlist surface.
+SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, and now includes a polished personalized saved-view watchlist surface with pinning, notes, ordering, filtering, and sorting controls.
 
 Implemented foundation pieces:
 
@@ -36,6 +36,8 @@ Implemented foundation pieces:
 - Save/remove actions on macro view detail pages
 - Saved badges on macro catalog cards
 - Saved-view account summary and preferred landing option
+- Saved-view pin/unpin controls, metadata editing, private notes, and display-order support
+- Saved-page search, region/category/status filters, and sort controls
 - Dirty-state detection, edit/cancel/save flow, saving state, and success/error messaging
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
@@ -242,10 +244,20 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 - Add `/saved` as a preferred landing-page option
 - Prepare the personalized object layer for saved dashboards, presets, and future alert rules
 
+#### 7.2 — Saved View Polish + Pinning Controls
+
+- Keep saved views sorted globally by pinned state, display order, updated date, and label
+- Add saved-page search across labels, notes, descriptions, regions, categories, and view keys
+- Add region, category, and pinned/unpinned filters for the private saved shelf
+- Add sort controls for priority, recently updated, recently saved, title, region, and category
+- Add pin/unpin controls directly from `/saved`
+- Add editable saved-view metadata for custom labels, private notes, and display order
+- Improve empty and no-match states for saved-view workflows
+
 #### Coming next
 
 - Saved dashboard builder entry points
-- Watchlist notes and ordering controls
+- Pinned-view dashboard composition
 - More chart/table pairing options
 
 ## Relationship to SkyServer

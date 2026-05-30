@@ -6,9 +6,9 @@ SkyServer remains the private control plane: ingestion, tools, automation, acces
 
 ## Current Status
 
-**Phase 6.2 — Dashboard Preferences UI**
+**Phase 6.3 — Preference-Aware Macro Surfaces**
 
-SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, and now includes editable private member profile and dashboard-preference surfaces backed by SkyServer.
+SkyWeb has been converted from its original starter/NeoFinTech placeholder into a dedicated public dashboard shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, and now consumes those preferences across macro catalog, chart, landing, and density surfaces.
 
 Implemented foundation pieces:
 
@@ -28,6 +28,9 @@ Implemented foundation pieces:
 - Protected `/account` route backed by `/api/skyweb/profile`
 - Editable account/profile UI for display name, headline, bio, timezone, locale, and avatar URL
 - Editable dashboard-preference UI for default macro region, macro category, chart window, dashboard density, and preferred landing page
+- Preference-aware macro catalog defaults that respect saved region/category unless URL filters are present
+- Preference-aware chart windows for macro view drilldowns
+- App-level dashboard density classes for comfortable, compact, and roomy layouts
 - Dirty-state detection, edit/cancel/save flow, saving state, and success/error messaging
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
@@ -212,11 +215,20 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb uses i
 - Add edit/cancel/save/reset-defaults controls with dirty-state detection
 - Keep preference state visible beside profile, identity, session, and permission cards
 
+#### 6.3 — Preference-Aware Macro Surfaces
+
+- Add a shared SkyWeb preferences context for authenticated and public routes
+- Load saved preferences once after SkyWeb authentication and expose refresh/update helpers
+- Apply saved macro region/category defaults to `/macro/views` when no URL filters are present
+- Preserve URL filter precedence, including explicit `ALL` selections
+- Apply saved chart-window defaults to macro drilldown chart panels
+- Apply saved dashboard density as an app-level class for comfortable, compact, and roomy layouts
+- Keep `/account` preference saves in sync with the global preferences context
+
 #### Coming next
 
 - Saved dashboard entry points
 - Watchlist and saved dashboard foundations
-- Preference-aware macro dashboard defaults
 - More chart/table pairing options
 
 ## Relationship to SkyServer

@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
 
   if (loading) {
-    return <LoadingState>Checking SkyWeb session...</LoadingState>;
+    return <LoadingState>Checking SkyWeb Analytics session...</LoadingState>;
   }
 
   if (!isAuthenticated) {

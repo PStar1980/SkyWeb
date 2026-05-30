@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom';
+import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 
 export default function Home() {
   return (
     <>
       <section className="skyweb-hero skyweb-home-hero skyweb-screenshot-section">
         <div className="skyweb-hero-content">
-          <div className="skyweb-kicker">Sky ecosystem public layer</div>
-          <h1>Macro dashboards, living data, and public proof of work.</h1>
+          <div className="skyweb-kicker">Sky ecosystem analytics layer</div>
+          <h1>{SKYWEB_PRODUCT_NAME}: living macro data and public proof of work.</h1>
           <p>
-            SkyWeb is the presentation layer for curated SkyServer data. It consumes live public
-            macro APIs and turns the SkyServer data plane into a browsable analytics surface with
-            charts, story cards, drilldowns, and a staged member layer.
+            SkyWeb Analytics is the presentation layer for curated SkyServer data. It consumes live
+            public macro APIs and turns the SkyServer data plane into a browsable analytics surface
+            with charts, story cards, drilldowns, and a staged member layer.
           </p>
           <div className="skyweb-hero-actions">
             <Link className="btn skyweb-btn-primary" to="/macro">
@@ -19,23 +20,26 @@ export default function Home() {
             <Link className="btn skyweb-btn-ghost" to="/macro/views">
               Browse data views
             </Link>
+            <Link className="btn skyweb-btn-ghost" to="/dashboard">
+              Personal dashboard
+            </Link>
           </div>
         </div>
         <div className="skyweb-hero-panel skyweb-status-panel">
-          <div className="skyweb-panel-label">SkyWeb Phase 5.4</div>
-          <h2>Presentation layer polished</h2>
+          <div className="skyweb-panel-label">SkyWeb Analytics Phase 7.3</div>
+          <h2>Personal analytics layer online</h2>
           <ul>
             <li>Public macro dashboard is live and screenshot-ready</li>
             <li>Metric-selectable chart drilldowns are online</li>
             <li>Macro overview now guides visitors through data stories</li>
-            <li>SkyWeb auth shell and account surface are staged</li>
+            <li>Saved views now compose a private member dashboard</li>
           </ul>
         </div>
       </section>
 
       <section
         className="skyweb-proof-strip skyweb-screenshot-section"
-        aria-label="SkyWeb proof points"
+        aria-label="SkyWeb Analytics proof points"
       >
         <article>
           <span>Control plane</span>
@@ -52,7 +56,9 @@ export default function Home() {
         <article>
           <span>Member runway</span>
           <strong>Auth prepared</strong>
-          <p>App-scoped SkyWeb login is ready for saved dashboards, preferences, and watchlists.</p>
+          <p>
+            App-scoped SkyWeb Analytics login powers saved dashboards, preferences, and watchlists.
+          </p>
         </article>
       </section>
 
@@ -81,9 +87,9 @@ export default function Home() {
         </article>
         <article className="skyweb-card">
           <div className="skyweb-card-kicker">Future auth</div>
-          <h2>Prepared for SKYWEB users</h2>
+          <h2>Prepared for SkyWeb Analytics users</h2>
           <p>
-            SkyServer now supports application-scoped auth, giving SkyWeb a clean future boundary
+            SkyServer now supports application-scoped auth, giving SkyWeb Analytics a clean boundary
             for user profiles, personalization, alerts, and saved views.
           </p>
           <Link className="skyweb-card-link" to="/account">

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard.jsx';
+import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import StoryCard from '../components/StoryCard.jsx';
 import ViewCard from '../components/ViewCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
@@ -165,7 +166,7 @@ export default function MacroOverview() {
       <header className="skyweb-page-header skyweb-dashboard-header">
         <div>
           <div className="skyweb-kicker">Macro dashboards</div>
-          <h1>SkyWeb Macro Dashboard</h1>
+          <h1>{SKYWEB_PRODUCT_NAME} Macro Dashboard</h1>
           <p>
             A public-facing command center for curated macroeconomic views powered by SkyServer
             public APIs.
@@ -349,8 +350,8 @@ export default function MacroOverview() {
                 <div className="skyweb-card-kicker">Portfolio proof</div>
                 <h2>Built as a public evidence surface</h2>
                 <p className="skyweb-section-copy">
-                  SkyWeb now gives the Sky ecosystem a visible layer: live data, curated macro
-                  stories, chart previews, route-driven catalogs, and a private member runway.
+                  SkyWeb Analytics now gives the Sky ecosystem a visible layer: live data, curated
+                  macro stories, chart previews, route-driven catalogs, and a private member runway.
                 </p>
               </div>
               <Link className="skyweb-card-link" to="/account">

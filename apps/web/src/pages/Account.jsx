@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ErrorState, LoadingState } from '../components/PageState.jsx';
+import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useSavedViews } from '../context/SavedViewsContext.jsx';
 import {
@@ -29,7 +30,7 @@ const PROFILE_FIELDS = [
   {
     name: 'displayName',
     label: 'Display name',
-    placeholder: 'How SkyWeb should display you',
+    placeholder: `How ${SKYWEB_PRODUCT_NAME} should display you`,
     autoComplete: 'name',
   },
   {
@@ -73,7 +74,7 @@ const PREFERENCE_FIELDS = [
   {
     name: 'defaultMacroCategory',
     label: 'Default macro category',
-    helper: 'The first category lane SkyWeb should prioritize for you.',
+    helper: `${SKYWEB_PRODUCT_NAME} uses this as your first category lane.`,
     options: [
       { value: 'ALL', label: 'All categories' },
       { value: 'inflation', label: 'Inflation' },
@@ -116,6 +117,7 @@ const PREFERENCE_FIELDS = [
     helper: 'Where future personalized entry points should send you first.',
     options: [
       { value: '/', label: 'Home' },
+      { value: '/dashboard', label: 'Personal dashboard' },
       { value: '/macro', label: 'Macro dashboard' },
       { value: '/macro/views', label: 'Macro views' },
       { value: '/macro/indicators', label: 'Indicators' },
@@ -229,7 +231,11 @@ export default function Account() {
   );
 
   const profileDisplayName =
-    profile?.displayName || user?.displayName || user?.username || user?.email || 'SkyWeb member';
+    profile?.displayName ||
+    user?.displayName ||
+    user?.username ||
+    user?.email ||
+    `${SKYWEB_PRODUCT_NAME} member`;
 
   const avatarUrl = profileForm.avatarUrl.trim();
   const avatarInitial = profileDisplayName.trim().charAt(0).toUpperCase() || 'S';
@@ -411,10 +417,10 @@ export default function Account() {
       <header className="skyweb-page-header">
         <div>
           <div className="skyweb-kicker">Member layer</div>
-          <h1>SkyWeb account</h1>
+          <h1>{SKYWEB_PRODUCT_NAME} account</h1>
           <p>
-            Your SkyWeb session is app-scoped separately from SkyServer Admin. This private surface
-            now supports editable profile details and dashboard preferences for future saved
+            {SKYWEB_PRODUCT_NAME} is app-scoped separately from SkyServer Admin. This private
+            surface now supports editable profile details and dashboard preferences for future saved
             dashboards, watchlists, alerts, and personalized defaults.
           </p>
         </div>
@@ -428,11 +434,11 @@ export default function Account() {
         </div>
       </header>
 
-      {loadingAccount && <LoadingState>Loading SkyWeb account...</LoadingState>}
+      {loadingAccount && <LoadingState>Loading SkyWeb Analytics account...</LoadingState>}
 
       {!loadingAccount && error && (
         <ErrorState title="Account unavailable.">
-          {error.message || 'Unable to load your SkyWeb account.'}
+          {error.message || 'Unable to load your SkyWeb Analytics account.'}
         </ErrorState>
       )}
 
@@ -476,7 +482,7 @@ export default function Account() {
             {profileSaveNotice && <div className="skyweb-profile-notice">{profileSaveNotice}</div>}
             {profileSaveError && (
               <div className="skyweb-auth-alert">
-                {profileSaveError.message || 'Unable to save your SkyWeb profile.'}
+                {profileSaveError.message || 'Unable to save your SkyWeb Analytics profile.'}
               </div>
             )}
 
@@ -548,8 +554,8 @@ export default function Account() {
                 <div className="skyweb-card-kicker">Dashboard preferences</div>
                 <h2>Personal defaults</h2>
                 <p>
-                  Store the first set of SkyWeb member preferences: macro lens, chart window,
-                  display density, and landing behavior.
+                  Store the first set of SkyWeb Analytics member preferences: macro lens, chart
+                  window, display density, and landing behavior.
                 </p>
               </div>
 
@@ -594,7 +600,8 @@ export default function Account() {
             )}
             {preferencesSaveError && (
               <div className="skyweb-auth-alert">
-                {preferencesSaveError.message || 'Unable to save your SkyWeb preferences.'}
+                {preferencesSaveError.message ||
+                  'Unable to save your SkyWeb Analytics preferences.'}
               </div>
             )}
 
@@ -684,7 +691,7 @@ export default function Account() {
 
           <article className="skyweb-page-card">
             <div className="skyweb-card-kicker">Session</div>
-            <h2>{session?.appTitle || 'SkyWeb'}</h2>
+            <h2>{SKYWEB_PRODUCT_NAME}</h2>
             <dl className="skyweb-detail-list">
               <div>
                 <dt>Application</dt>
@@ -710,8 +717,8 @@ export default function Account() {
             <h2>Macro watchlist online</h2>
             <p>
               Your member layer now has the first personalized dashboard object: saved macro views.
-              Use it as a private command shelf while the next SkyWeb phases expand toward saved
-              dashboards, presets, and alert rules.
+              Use it as a private command shelf while the next SkyWeb Analytics phases expand toward
+              saved dashboards, presets, and alert rules.
             </p>
             <div className="skyweb-preference-summary-grid" aria-label="Saved view summary">
               <div>
@@ -728,8 +735,11 @@ export default function Account() {
               </div>
             </div>
             <div className="skyweb-profile-actions">
-              <Link className="btn skyweb-btn-primary" to="/saved">
-                Open saved views
+              <Link className="btn skyweb-btn-primary" to="/dashboard">
+                Open personal dashboard
+              </Link>
+              <Link className="btn skyweb-btn-ghost" to="/saved">
+                Manage saved views
               </Link>
               <Link className="btn skyweb-btn-ghost" to="/macro/views">
                 Browse macro views

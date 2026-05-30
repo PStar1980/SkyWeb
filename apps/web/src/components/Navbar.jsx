@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import { useAuth } from '../context/AuthContext.jsx';
 
 function getNavLinkClass({ isActive }) {
@@ -18,7 +19,7 @@ export default function Navbar() {
     <header className="skyweb-navbar">
       <NavLink className="skyweb-brand" to="/">
         <span className="skyweb-brand-mark">⌁</span>
-        <span>SkyWeb</span>
+        <span className="skyweb-brand-name">{SKYWEB_PRODUCT_NAME}</span>
       </NavLink>
 
       <nav className="skyweb-nav" aria-label="Primary navigation">
@@ -28,6 +29,11 @@ export default function Navbar() {
         <NavLink className={getNavLinkClass} end to="/macro">
           Macro
         </NavLink>
+        {!loading && isAuthenticated && (
+          <NavLink className={getNavLinkClass} to="/dashboard">
+            Dashboard
+          </NavLink>
+        )}
         <NavLink className={getNavLinkClass} to="/macro/views">
           Views
         </NavLink>

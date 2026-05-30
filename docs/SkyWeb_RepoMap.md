@@ -50,6 +50,8 @@ SkyWeb/
 │           │   ├── StoryCard.jsx
 │           │   ├── TrendMetricCard.jsx
 │           │   └── ViewCard.jsx
+│           ├── constants/
+│           │   └── branding.js
 │           ├── context/
 │           │   ├── AuthContext.jsx
 │           │   ├── PreferencesContext.jsx
@@ -62,6 +64,7 @@ SkyWeb/
 │           │   ├── MacroOverview.jsx
 │           │   ├── MacroViewDetail.jsx
 │           │   ├── MacroViews.jsx
+│           │   ├── MemberDashboard.jsx
 │           │   └── SavedViews.jsx
 │           ├── services/
 │           │   ├── api.js

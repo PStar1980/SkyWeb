@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import { useAuth } from '../context/AuthContext.jsx';
 
 export default function Login() {
@@ -12,7 +13,7 @@ export default function Login() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
-  const redirectPath = location.state?.from?.pathname || '/account';
+  const redirectPath = location.state?.from?.pathname || '/dashboard';
 
   useEffect(() => {
     return () => {
@@ -37,16 +38,16 @@ export default function Login() {
   }
 
   if (!loading && isAuthenticated) {
-    return <Navigate replace to="/account" />;
+    return <Navigate replace to="/dashboard" />;
   }
 
   return (
     <section className="skyweb-auth-shell">
       <div className="skyweb-page-card skyweb-auth-card">
-        <div className="skyweb-kicker">SkyWeb access</div>
+        <div className="skyweb-kicker">SkyWeb Analytics access</div>
         <h1>Sign in</h1>
         <p>
-          Use your SkyWeb-enabled account to unlock the member layer for saved dashboards,
+          Use your SkyWeb Analytics-enabled account to unlock the member layer for saved dashboards,
           preferences, and future macro alerts. Public macro dashboards remain available without
           signing in.
         </p>
@@ -84,7 +85,7 @@ export default function Login() {
           />
 
           <button className="btn skyweb-btn-primary" disabled={submitting} type="submit">
-            {submitting ? 'Opening SkyWeb...' : 'Login'}
+            {submitting ? `Opening ${SKYWEB_PRODUCT_NAME}...` : 'Login'}
           </button>
         </form>
 

@@ -1,9 +1,13 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard.jsx';
-import ViewCard from '../components/ViewCard.jsx';
+import DashboardItemVisualization from '../components/DashboardItemVisualization.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
+import {
+  DASHBOARD_ITEM_MODE_OPTIONS,
+  getDashboardItemModeLabel,
+} from '../constants/dashboardModes.js';
 import { useDashboards } from '../context/DashboardsContext.jsx';
 import { useSavedViews } from '../context/SavedViewsContext.jsx';
 import { formatCategory, formatDateTime, formatRegion } from '../utils/formatters.js';
@@ -24,12 +28,6 @@ const LAYOUT_OPTIONS = [
     label: 'Compact',
     description: 'Dense board for quick scanning and many views.',
   },
-];
-
-const ITEM_MODE_OPTIONS = [
-  { value: 'view_card', label: 'View card' },
-  { value: 'wide_card', label: 'Wide card' },
-  { value: 'compact_card', label: 'Compact card' },
 ];
 
 const DEFAULT_DASHBOARD_DRAFT = {
@@ -66,10 +64,6 @@ function getTotalDashboardItems(dashboards = []) {
 
 function getLayoutLabel(layoutPreset = '') {
   return LAYOUT_OPTIONS.find((option) => option.value === layoutPreset)?.label || layoutPreset;
-}
-
-function getItemModeLabel(itemMode = '') {
-  return ITEM_MODE_OPTIONS.find((option) => option.value === itemMode)?.label || itemMode;
 }
 
 function normalizeNumberDraft(value, fallback = '0') {
@@ -288,7 +282,7 @@ function DashboardItemEditor({ dashboard, item, onCancel }) {
             onChange={(event) => updateDraft('itemMode', event.target.value)}
             value={draft.itemMode}
           >
-            {ITEM_MODE_OPTIONS.map((option) => (
+            {DASHBOARD_ITEM_MODE_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -368,19 +362,7 @@ function DashboardItemRow({ dashboard, item }) {
   return (
     <article className="skyweb-dashboard-builder-item-row">
       <div className="skyweb-dashboard-builder-item-main">
-        {item.view ? (
-          <ViewCard
-            compact={item.itemMode === 'compact_card'}
-            saved
-            view={{ ...item.view, label: getDashboardItemLabel(item) }}
-          />
-        ) : (
-          <div className="skyweb-page-card">
-            <div className="skyweb-card-kicker">Dashboard item</div>
-            <h3>{getDashboardItemLabel(item)}</h3>
-            <p>Macro view metadata is not currently available from SkyServer.</p>
-          </div>
-        )}
+        <DashboardItemVisualization item={item} />
       </div>
       <aside className="skyweb-dashboard-builder-item-sidecar">
         <div className="skyweb-card-kicker">Item metadata</div>
@@ -388,7 +370,7 @@ function DashboardItemRow({ dashboard, item }) {
         <dl className="skyweb-detail-list skyweb-dashboard-builder-detail-list">
           <div>
             <dt>Mode</dt>
-            <dd>{getItemModeLabel(item.itemMode)}</dd>
+            <dd>{getDashboardItemModeLabel(item.itemMode)}</dd>
           </div>
           <div>
             <dt>Order</dt>
@@ -758,7 +740,7 @@ function DashboardCard({ dashboard, savedViews }) {
                 onChange={(event) => updateItemDraft('itemMode', event.target.value)}
                 value={itemDraft.itemMode}
               >
-                {ITEM_MODE_OPTIONS.map((option) => (
+                {DASHBOARD_ITEM_MODE_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>

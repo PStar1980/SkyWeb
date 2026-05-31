@@ -31,6 +31,7 @@ const ALLOWED_PREFERENCE_VALUES = Object.freeze({
   preferredLandingPage: [
     '/',
     '/dashboard',
+    '/dashboards',
     '/macro',
     '/macro/views',
     '/macro/indicators',

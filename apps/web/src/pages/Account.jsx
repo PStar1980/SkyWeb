@@ -118,6 +118,7 @@ const PREFERENCE_FIELDS = [
     options: [
       { value: '/', label: 'Home' },
       { value: '/dashboard', label: 'Personal dashboard' },
+      { value: '/dashboards', label: 'Dashboard builder' },
       { value: '/macro', label: 'Macro dashboard' },
       { value: '/macro/views', label: 'Macro views' },
       { value: '/macro/indicators', label: 'Indicators' },
@@ -716,9 +717,9 @@ export default function Account() {
             <div className="skyweb-card-kicker">Saved dashboard layer</div>
             <h2>Macro watchlist online</h2>
             <p>
-              Your member layer now has the first personalized dashboard object: saved macro views.
-              Use it as a private command shelf while the next SkyWeb Analytics phases expand toward
-              saved dashboards, presets, and alert rules.
+              Your member layer now has saved macro views plus first-class dashboard builder
+              objects. Use saved views as the private command shelf, then compose them into reusable
+              dashboards, presets, and future alert-ready boards.
             </p>
             <div className="skyweb-preference-summary-grid" aria-label="Saved view summary">
               <div>
@@ -731,12 +732,15 @@ export default function Account() {
               </div>
               <div>
                 <span>Entry point</span>
-                <strong>Watchlist</strong>
+                <strong>Builder ready</strong>
               </div>
             </div>
             <div className="skyweb-profile-actions">
               <Link className="btn skyweb-btn-primary" to="/dashboard">
                 Open personal dashboard
+              </Link>
+              <Link className="btn skyweb-btn-ghost" to="/dashboards">
+                Build dashboards
               </Link>
               <Link className="btn skyweb-btn-ghost" to="/saved">
                 Manage saved views

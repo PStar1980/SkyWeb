@@ -30,9 +30,14 @@ export default function Navbar() {
           Macro
         </NavLink>
         {!loading && isAuthenticated && (
-          <NavLink className={getNavLinkClass} to="/dashboard">
-            Dashboard
-          </NavLink>
+          <>
+            <NavLink className={getNavLinkClass} to="/dashboard">
+              Dashboard
+            </NavLink>
+            <NavLink className={getNavLinkClass} to="/dashboards">
+              Dashboards
+            </NavLink>
+          </>
         )}
         <NavLink className={getNavLinkClass} to="/macro/views">
           Views

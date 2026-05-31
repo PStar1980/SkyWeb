@@ -98,6 +98,9 @@ export default function MemberDashboard() {
           <Link className="btn skyweb-btn-ghost" to="/saved">
             Manage saved views
           </Link>
+          <Link className="btn skyweb-btn-ghost" to="/dashboards">
+            Dashboard builder
+          </Link>
           <Link className="btn skyweb-btn-primary" to="/macro/views">
             Browse views
           </Link>
@@ -231,11 +234,11 @@ export default function MemberDashboard() {
 
                 <article className="skyweb-card">
                   <div className="skyweb-card-kicker">Next move</div>
-                  <h2>From watchlist to dashboard composer</h2>
+                  <h2>From watchlist to dashboard builder</h2>
                   <p>
                     This member dashboard is intentionally composed from pinned saved views. The
-                    next larger step can promote this into configurable dashboard sections, saved
-                    layouts, and alert-ready macro tiles.
+                    next builder layer now promotes saved views into configurable dashboards,
+                    reusable layout presets, and editable dashboard items.
                   </p>
                   <dl className="skyweb-detail-list skyweb-dashboard-detail-list">
                     <div>
@@ -254,7 +257,10 @@ export default function MemberDashboard() {
                     </div>
                   </dl>
                   <div className="skyweb-profile-actions">
-                    <Link className="btn skyweb-btn-primary" to="/saved">
+                    <Link className="btn skyweb-btn-primary" to="/dashboards">
+                      Open dashboard builder
+                    </Link>
+                    <Link className="btn skyweb-btn-ghost" to="/saved">
                       Edit dashboard inputs
                     </Link>
                     <Link className="btn skyweb-btn-ghost" to="/account">

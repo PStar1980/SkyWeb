@@ -62,7 +62,52 @@ async function removeSavedView(viewKey) {
   return api.delete(`/skyweb/saved-views/${encodeURIComponent(viewKey)}`);
 }
 
+async function listDashboards() {
+  return api.get('/skyweb/dashboards');
+}
+
+async function createDashboard(payload) {
+  return api.post('/skyweb/dashboards', payload);
+}
+
+async function getDashboard(dashboardKey) {
+  return api.get(`/skyweb/dashboards/${encodeURIComponent(dashboardKey)}`);
+}
+
+async function updateDashboard(dashboardKey, payload) {
+  return api.patch(`/skyweb/dashboards/${encodeURIComponent(dashboardKey)}`, payload);
+}
+
+async function removeDashboard(dashboardKey) {
+  return api.delete(`/skyweb/dashboards/${encodeURIComponent(dashboardKey)}`);
+}
+
+async function addDashboardItem(dashboardKey, payload) {
+  return api.post(`/skyweb/dashboards/${encodeURIComponent(dashboardKey)}/items`, payload);
+}
+
+async function updateDashboardItem(dashboardKey, itemId, payload) {
+  return api.patch(
+    `/skyweb/dashboards/${encodeURIComponent(dashboardKey)}/items/${encodeURIComponent(itemId)}`,
+    payload,
+  );
+}
+
+async function removeDashboardItem(dashboardKey, itemId) {
+  return api.delete(
+    `/skyweb/dashboards/${encodeURIComponent(dashboardKey)}/items/${encodeURIComponent(itemId)}`,
+  );
+}
+
 const authService = {
+  updateDashboardItem,
+  updateDashboard,
+  removeDashboardItem,
+  removeDashboard,
+  listDashboards,
+  getDashboard,
+  createDashboard,
+  addDashboardItem,
   getCurrentSession,
   getPreferences,
   getProfile,

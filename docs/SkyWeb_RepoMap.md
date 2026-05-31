@@ -54,10 +54,12 @@ SkyWeb/
 │           │   └── branding.js
 │           ├── context/
 │           │   ├── AuthContext.jsx
+│           │   ├── DashboardsContext.jsx
 │           │   ├── PreferencesContext.jsx
 │           │   └── SavedViewsContext.jsx
 │           ├── pages/
 │           │   ├── Account.jsx
+│           │   ├── DashboardBuilder.jsx
 │           │   ├── Home.jsx
 │           │   ├── Login.jsx
 │           │   ├── MacroIndicators.jsx

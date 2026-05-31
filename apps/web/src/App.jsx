@@ -2,6 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
+import { DashboardsProvider } from './context/DashboardsContext.jsx';
 import { SavedViewsProvider } from './context/SavedViewsContext.jsx';
 import {
   getDensityClassName,
@@ -11,6 +12,7 @@ import {
 import Account from './pages/Account.jsx';
 import Home from './pages/Home.jsx';
 import MemberDashboard from './pages/MemberDashboard.jsx';
+import DashboardBuilder from './pages/DashboardBuilder.jsx';
 import Login from './pages/Login.jsx';
 import MacroOverview from './pages/MacroOverview.jsx';
 import MacroViews from './pages/MacroViews.jsx';
@@ -38,6 +40,14 @@ function SkyWebShell() {
             element={
               <ProtectedRoute>
                 <MemberDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboards"
+            element={
+              <ProtectedRoute>
+                <DashboardBuilder />
               </ProtectedRoute>
             }
           />
@@ -71,7 +81,9 @@ export default function App() {
       <AuthProvider>
         <PreferencesProvider>
           <SavedViewsProvider>
-            <SkyWebShell />
+            <DashboardsProvider>
+              <SkyWebShell />
+            </DashboardsProvider>
           </SavedViewsProvider>
         </PreferencesProvider>
       </AuthProvider>

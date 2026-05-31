@@ -6,9 +6,9 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 ## Current Status
 
-**Phase 7.4 — Dashboard Builder Foundation**
+**Phase 7.5 — Default Dashboard + Dashboard Viewer**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, and now supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, and now promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes.
 
 Implemented foundation pieces:
 
@@ -46,6 +46,10 @@ Implemented foundation pieces:
 - Add saved macro views as dashboard items with item title, note, mode, order, and size metadata
 - Edit/remove dashboard items from the builder surface
 - `/dashboards` preferred landing-page option for builder-focused workflows
+- Default-dashboard selection from the dashboard builder
+- Protected `/dashboards/:dashboardKey` viewer route for clean dashboard presentation
+- `/dashboard` now renders the default custom dashboard when one exists, with pinned saved-view fallback
+- Dashboard viewer rendering that respects dashboard item order, mode, notes, and size metadata
 - Dirty-state detection, edit/cancel/save flow, saving state, and success/error messaging
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
@@ -281,11 +285,18 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 - Remove dashboard items from a dashboard
 - Add `/dashboards` as a preferred landing-page option
 
+#### 7.5 — Default Dashboard + Dashboard Viewer
+
+- Add default-dashboard selection from the dashboard builder
+- Add protected `/dashboards/:dashboardKey` viewer route for clean dashboard display
+- Make `/dashboard` render the default custom dashboard when one exists
+- Preserve the pinned saved-view command board as the fallback dashboard surface
+- Render dashboard items from saved dashboard definitions using item order, mode, note, and size metadata
+
 #### Coming next
 
-- Default dashboard selection and landing behavior
-- Dashboard rendering from saved dashboard definitions
 - Dashboard item visualization modes and richer chart/table pairing options
+- Default-dashboard polish for empty states and multi-dashboard workflows
 
 ## Relationship to SkyServer
 

@@ -156,9 +156,13 @@ export function DashboardsProvider({ children }) {
     }
 
     setDashboards((currentDashboards) => {
-      const remainingDashboards = currentDashboards.filter(
+      let remainingDashboards = currentDashboards.filter(
         (item) => item.dashboardKey !== nextDashboard.dashboardKey,
       );
+
+      if (nextDashboard.isDefault) {
+        remainingDashboards = remainingDashboards.map((item) => ({ ...item, isDefault: false }));
+      }
 
       return [nextDashboard, ...remainingDashboards].sort(compareDashboards);
     });
@@ -234,6 +238,16 @@ export function DashboardsProvider({ children }) {
     [dashboards],
   );
 
+  const defaultDashboard = useMemo(
+    () => dashboards.find((dashboard) => dashboard.isDefault) || null,
+    [dashboards],
+  );
+
+  const setDefaultDashboard = useCallback(
+    async (dashboardKey) => updateDashboard(dashboardKey, { isDefault: true }),
+    [updateDashboard],
+  );
+
   useEffect(() => {
     let active = true;
 
@@ -280,12 +294,14 @@ export function DashboardsProvider({ children }) {
       createDashboard,
       dashboards,
       dashboardsError,
+      defaultDashboard,
       getDashboard,
       loadingDashboards,
       refreshDashboards,
       removeDashboard,
       removeDashboardItem,
       resetDashboards,
+      setDefaultDashboard,
       updateDashboard,
       updateDashboardItem,
     }),
@@ -294,12 +310,14 @@ export function DashboardsProvider({ children }) {
       createDashboard,
       dashboards,
       dashboardsError,
+      defaultDashboard,
       getDashboard,
       loadingDashboards,
       refreshDashboards,
       removeDashboard,
       removeDashboardItem,
       resetDashboards,
+      setDefaultDashboard,
       updateDashboard,
       updateDashboardItem,
     ],

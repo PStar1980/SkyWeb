@@ -41,6 +41,7 @@ SkyWeb/
 │           ├── main.jsx
 │           ├── components/
 │           │   ├── ChartPanel.jsx
+│           │   ├── DashboardSurface.jsx
 │           │   ├── MetricQuickCard.jsx
 │           │   ├── Navbar.jsx
 │           │   ├── PageState.jsx
@@ -60,6 +61,7 @@ SkyWeb/
 │           ├── pages/
 │           │   ├── Account.jsx
 │           │   ├── DashboardBuilder.jsx
+│           │   ├── DashboardViewer.jsx
 │           │   ├── Home.jsx
 │           │   ├── Login.jsx
 │           │   ├── MacroIndicators.jsx

@@ -41,6 +41,7 @@ SkyWeb/
 │           ├── main.jsx
 │           ├── components/
 │           │   ├── ChartPanel.jsx
+│           │   ├── DashboardItemVisualization.jsx
 │           │   ├── DashboardSurface.jsx
 │           │   ├── MetricQuickCard.jsx
 │           │   ├── Navbar.jsx
@@ -52,7 +53,8 @@ SkyWeb/
 │           │   ├── TrendMetricCard.jsx
 │           │   └── ViewCard.jsx
 │           ├── constants/
-│           │   └── branding.js
+│           │   ├── branding.js
+│           │   └── dashboardModes.js
 │           ├── context/
 │           │   ├── AuthContext.jsx
 │           │   ├── DashboardsContext.jsx

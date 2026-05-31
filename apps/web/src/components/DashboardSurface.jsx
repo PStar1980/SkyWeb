@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import StatCard from './StatCard.jsx';
-import ViewCard from './ViewCard.jsx';
+import DashboardItemVisualization from './DashboardItemVisualization.jsx';
 import { EmptyState } from './PageState.jsx';
+import { getDashboardItemModeLabel, isRichDashboardItemMode } from '../constants/dashboardModes.js';
 import { formatCategory, formatDateTime, formatRegion } from '../utils/formatters.js';
 
 function countUniqueValues(items = [], getter) {
@@ -40,16 +41,6 @@ function getLayoutLabel(layoutPreset = '') {
   return labels[layoutPreset] || layoutPreset || 'Dashboard';
 }
 
-function getItemModeLabel(itemMode = '') {
-  const labels = {
-    view_card: 'View card',
-    wide_card: 'Wide card',
-    compact_card: 'Compact card',
-  };
-
-  return labels[itemMode] || itemMode || 'View card';
-}
-
 export function getDashboardItemLabel(item = {}) {
   return (
     item.itemTitle || item.savedDisplayLabel || item.view?.label || item.viewKey || 'Dashboard item'
@@ -63,6 +54,7 @@ function getDashboardItemClassName(item = {}) {
   return [
     'skyweb-dashboard-viewer-item',
     `skyweb-dashboard-viewer-item-${mode}`,
+    isRichDashboardItemMode(mode) ? 'skyweb-dashboard-viewer-item-rich' : '',
     mode === 'wide_card' || width >= 2 ? 'skyweb-dashboard-viewer-item-wide' : '',
     width >= 3 ? 'skyweb-dashboard-viewer-item-full' : '',
   ]
@@ -79,19 +71,7 @@ function DashboardSurfaceItem({ item }) {
   return (
     <article className={getDashboardItemClassName(item)}>
       <div className="skyweb-dashboard-viewer-item-main">
-        {item.view ? (
-          <ViewCard
-            compact={item.itemMode === 'compact_card'}
-            saved
-            view={{ ...item.view, label }}
-          />
-        ) : (
-          <div className="skyweb-page-card skyweb-dashboard-viewer-missing-card">
-            <div className="skyweb-card-kicker">Dashboard item</div>
-            <h3>{label}</h3>
-            <p>Macro view metadata is not currently available from SkyServer.</p>
-          </div>
-        )}
+        <DashboardItemVisualization item={item} />
       </div>
 
       <aside className="skyweb-dashboard-viewer-item-meta">
@@ -108,7 +88,7 @@ function DashboardSurfaceItem({ item }) {
           </div>
           <div>
             <dt>Mode</dt>
-            <dd>{getItemModeLabel(item.itemMode)}</dd>
+            <dd>{getDashboardItemModeLabel(item.itemMode)}</dd>
           </div>
           <div>
             <dt>Order</dt>

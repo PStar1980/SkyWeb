@@ -37,6 +37,7 @@ const DEFAULT_DASHBOARD_DRAFT = {
   description: '',
   layoutPreset: 'executive',
   sortOrder: '0',
+  isDefault: false,
 };
 
 const DEFAULT_ITEM_DRAFT = {
@@ -133,6 +134,7 @@ function DashboardCreateCard() {
         description: draft.description,
         layoutPreset: draft.layoutPreset,
         sortOrder: Number(normalizeNumberDraft(draft.sortOrder)),
+        isDefault: draft.isDefault,
       });
 
       setDraft(DEFAULT_DASHBOARD_DRAFT);
@@ -190,6 +192,14 @@ function DashboardCreateCard() {
             type="number"
             value={draft.sortOrder}
           />
+        </label>
+        <label className="skyweb-dashboard-builder-check-field">
+          <input
+            checked={draft.isDefault}
+            onChange={(event) => updateDraft('isDefault', event.target.checked)}
+            type="checkbox"
+          />
+          <span>Make default dashboard</span>
         </label>
         <label className="skyweb-dashboard-builder-wide-field">
           <span>Description</span>
@@ -438,13 +448,15 @@ function DashboardItemRow({ dashboard, item }) {
 }
 
 function DashboardCard({ dashboard, savedViews }) {
-  const { addDashboardItem, removeDashboard, updateDashboard } = useDashboards();
+  const { addDashboardItem, removeDashboard, setDefaultDashboard, updateDashboard } =
+    useDashboards();
   const [editingDashboard, setEditingDashboard] = useState(false);
   const [dashboardDraft, setDashboardDraft] = useState(getDashboardDraft(dashboard));
   const [itemDraft, setItemDraft] = useState(DEFAULT_ITEM_DRAFT);
   const [savingDashboard, setSavingDashboard] = useState(false);
   const [addingItem, setAddingItem] = useState(false);
   const [removingDashboard, setRemovingDashboard] = useState(false);
+  const [settingDefault, setSettingDefault] = useState(false);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -531,6 +543,21 @@ function DashboardCard({ dashboard, savedViews }) {
       setError(addError.message || 'Unable to add dashboard item.');
     } finally {
       setAddingItem(false);
+    }
+  }
+
+  async function handleSetDefaultDashboard() {
+    setSettingDefault(true);
+    setMessage('');
+    setError('');
+
+    try {
+      await setDefaultDashboard(dashboard.dashboardKey);
+      setMessage(`${dashboard.title} is now the default dashboard.`);
+    } catch (defaultError) {
+      setError(defaultError.message || 'Unable to set default dashboard.');
+    } finally {
+      setSettingDefault(false);
     }
   }
 
@@ -651,6 +678,19 @@ function DashboardCard({ dashboard, savedViews }) {
         </div>
       ) : (
         <div className="skyweb-dashboard-builder-actions">
+          <Link className="btn skyweb-btn-primary" to={`/dashboards/${dashboard.dashboardKey}`}>
+            View dashboard
+          </Link>
+          {!dashboard.isDefault && (
+            <button
+              className="btn skyweb-btn-ghost"
+              disabled={settingDefault}
+              onClick={handleSetDefaultDashboard}
+              type="button"
+            >
+              {settingDefault ? 'Setting...' : 'Set as default'}
+            </button>
+          )}
           <button className="btn skyweb-btn-ghost" onClick={handleEditDashboard} type="button">
             Edit dashboard
           </button>
@@ -791,8 +831,8 @@ export default function DashboardBuilder() {
           <div className="skyweb-kicker">Dashboard builder</div>
           <h1>Build dashboard surfaces</h1>
           <p>
-            Phase 7.4 gives {SKYWEB_PRODUCT_NAME} a real dashboard object model: dashboards,
-            dashboard items, layout presets, and saved-view composition.
+            Phase 7.5 turns dashboard definitions into usable cockpit surfaces: set a default
+            dashboard, open individual dashboard viewers, and keep the builder as the control room.
           </p>
         </div>
         <div className="skyweb-header-actions">
@@ -803,7 +843,7 @@ export default function DashboardBuilder() {
             Manage saved views
           </Link>
           <Link className="btn skyweb-btn-primary" to="/dashboard">
-            Open command board
+            Open default dashboard
           </Link>
         </div>
       </header>

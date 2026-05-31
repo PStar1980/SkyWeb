@@ -13,6 +13,7 @@ import Account from './pages/Account.jsx';
 import Home from './pages/Home.jsx';
 import MemberDashboard from './pages/MemberDashboard.jsx';
 import DashboardBuilder from './pages/DashboardBuilder.jsx';
+import DashboardViewer from './pages/DashboardViewer.jsx';
 import Login from './pages/Login.jsx';
 import MacroOverview from './pages/MacroOverview.jsx';
 import MacroViews from './pages/MacroViews.jsx';
@@ -48,6 +49,14 @@ function SkyWebShell() {
             element={
               <ProtectedRoute>
                 <DashboardBuilder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboards/:dashboardKey"
+            element={
+              <ProtectedRoute>
+                <DashboardViewer />
               </ProtectedRoute>
             }
           />

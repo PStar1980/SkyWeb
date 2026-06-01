@@ -6,9 +6,9 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 ## Current Status
 
-**Phase 7.6 — Dashboard Item Visualization Modes**
+**Phase 7.7 — Dashboard Layout Engine**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, and now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, and applies dashboard item width/height metadata through a responsive grid layout engine.
 
 Implemented foundation pieces:
 
@@ -51,6 +51,8 @@ Implemented foundation pieces:
 - `/dashboard` now renders the default custom dashboard when one exists, with pinned saved-view fallback
 - Dashboard viewer rendering that respects dashboard item order, mode, notes, and size metadata
 - Dashboard item visualization modes for metric cards, mini charts, latest rows, and table previews
+- Dashboard layout engine that applies item width/height spans across executive, research, and compact presets
+- Dashboard builder size presets and size guidance for shaping custom dashboard blocks
 - Dirty-state detection, edit/cancel/save flow, saving state, and success/error messaging
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
@@ -302,10 +304,18 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 - Add builder support for choosing the richer item modes when adding or editing dashboard blocks
 - Keep item order, size, note, and saved-view metadata visible around richer visualization blocks
 
+#### 7.7 — Dashboard Layout Engine
+
+- Apply dashboard item width/height metadata as responsive grid spans in dashboard viewer surfaces
+- Tune executive, research, and compact layout presets so they shape the available dashboard grid
+- Add builder size presets for common 1 × 1, 2 × 1, 2 × 2, 3 × 1, and 4 × 2 dashboard blocks
+- Add size guidance beside dashboard item editing controls so layout metadata is easier to understand
+- Preserve mobile responsiveness by collapsing dashboard blocks safely on narrower screens
+
 #### Coming next
 
-- Default-dashboard polish for empty states and multi-dashboard workflows
-- Dashboard-level layout refinements for richer chart/table blocks
+- Dashboard presentation polish for screenshot-ready custom dashboards
+- Dashboard export/portfolio preparation before the next Phase 7 requirements pass
 
 ## Relationship to SkyServer
 

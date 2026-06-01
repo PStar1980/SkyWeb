@@ -76,6 +76,12 @@ function DefaultDashboardBoard({ dashboard, displayName, refreshDashboards }) {
           <Link className="btn skyweb-btn-ghost" to={`/dashboards/${dashboard.dashboardKey}`}>
             Open viewer
           </Link>
+          <Link
+            className="btn skyweb-btn-ghost"
+            to={`/dashboards/${dashboard.dashboardKey}/presentation`}
+          >
+            Presentation view
+          </Link>
           <Link className="btn skyweb-btn-ghost" to="/dashboards">
             Dashboard builder
           </Link>

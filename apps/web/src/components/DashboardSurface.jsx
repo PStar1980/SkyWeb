@@ -204,7 +204,11 @@ function DashboardSurfaceItem({ item, layoutPreset }) {
   );
 }
 
-export default function DashboardSurface({ dashboard, emptyAction = null }) {
+export default function DashboardSurface({
+  dashboard,
+  emptyAction = null,
+  presentationMode = false,
+}) {
   const items = Array.isArray(dashboard?.items) ? dashboard.items : [];
   const rows = getTotalRows(items);
   const regionCount = countUniqueValues(items, getViewRegion);
@@ -217,8 +221,16 @@ export default function DashboardSurface({ dashboard, emptyAction = null }) {
     return null;
   }
 
+  const surfaceClassName = [
+    'skyweb-dashboard-viewer-surface',
+    `skyweb-dashboard-layout-${layoutPreset}`,
+    presentationMode ? 'skyweb-dashboard-presentation-surface' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <section className={`skyweb-dashboard-viewer-surface skyweb-dashboard-layout-${layoutPreset}`}>
+    <section className={surfaceClassName}>
       <div className="skyweb-dashboard-viewer-hero">
         <div>
           <div className="skyweb-card-kicker">{layoutLabel} dashboard</div>
@@ -242,7 +254,40 @@ export default function DashboardSurface({ dashboard, emptyAction = null }) {
         />
       </section>
 
-      <section className="skyweb-dashboard-viewer-summary">
+      {presentationMode && (
+        <section className="skyweb-dashboard-presentation-cover">
+          <div>
+            <div className="skyweb-card-kicker">Presentation canvas</div>
+            <h3>{dashboard.title}</h3>
+            <p>
+              Screenshot-ready dashboard surface generated from saved macro views, dashboard item
+              modes, and layout metadata.
+            </p>
+          </div>
+          <dl className="skyweb-presentation-facts">
+            <div>
+              <dt>Layout</dt>
+              <dd>{layoutLabel}</dd>
+            </div>
+            <div>
+              <dt>Blocks</dt>
+              <dd>{items.length}</dd>
+            </div>
+            <div>
+              <dt>Rows</dt>
+              <dd>{formatCompactNumber(rows)}</dd>
+            </div>
+          </dl>
+        </section>
+      )}
+
+      <section
+        className={
+          presentationMode
+            ? 'skyweb-dashboard-viewer-summary skyweb-dashboard-presentation-summary'
+            : 'skyweb-dashboard-viewer-summary'
+        }
+      >
         <dl className="skyweb-detail-list skyweb-dashboard-detail-list">
           <div>
             <dt>Dashboard key</dt>
@@ -288,6 +333,18 @@ export default function DashboardSurface({ dashboard, emptyAction = null }) {
           </div>
         )}
       </section>
+
+      {presentationMode && (
+        <footer className="skyweb-dashboard-presentation-footer">
+          <span>SkyWeb Analytics</span>
+          <span>{dashboard.dashboardKey}</span>
+          <span>
+            {dashboard.updatedAt
+              ? `Updated ${formatDateTime(dashboard.updatedAt)}`
+              : 'Live dashboard surface'}
+          </span>
+        </footer>
+      )}
     </section>
   );
 }

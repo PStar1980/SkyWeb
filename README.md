@@ -6,9 +6,9 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 ## Current Status
 
-**Phase 7.7 — Dashboard Layout Engine**
+**Phase 7.8 — Dashboard Presentation Mode**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, and applies dashboard item width/height metadata through a responsive grid layout engine.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, and now includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output.
 
 Implemented foundation pieces:
 
@@ -53,6 +53,9 @@ Implemented foundation pieces:
 - Dashboard item visualization modes for metric cards, mini charts, latest rows, and table previews
 - Dashboard layout engine that applies item width/height spans across executive, research, and compact presets
 - Dashboard builder size presets and size guidance for shaping custom dashboard blocks
+- Protected `/dashboards/:dashboardKey/presentation` route for screenshot-ready dashboard canvases
+- Presentation toolbar with copy-link and print/save-PDF actions
+- Print rules that preserve dashboard colors while hiding workspace controls
 - Dirty-state detection, edit/cancel/save flow, saving state, and success/error messaging
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
@@ -312,10 +315,19 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 - Add size guidance beside dashboard item editing controls so layout metadata is easier to understand
 - Preserve mobile responsiveness by collapsing dashboard blocks safely on narrower screens
 
+#### 7.8 — Dashboard Presentation Mode
+
+- Add protected `/dashboards/:dashboardKey/presentation` route for screenshot-ready dashboard viewing
+- Hide the normal navigation shell in presentation mode while preserving a focused dashboard toolbar
+- Add presentation metadata, canvas summary, and footer branding around rendered dashboard surfaces
+- Add copy-link and print/save-PDF actions to the presentation toolbar
+- Add presentation-view entry points from dashboard builder, dashboard viewer, and default dashboard surfaces
+- Add print CSS that hides workspace controls and preserves dashboard colors for portfolio captures
+
 #### Coming next
 
-- Dashboard presentation polish for screenshot-ready custom dashboards
-- Dashboard export/portfolio preparation before the next Phase 7 requirements pass
+- Additional Phase 7 requirements from hands-on dashboard testing
+- Dashboard export/portfolio preparation before Phase 8 alerts begin
 
 ## Relationship to SkyServer
 

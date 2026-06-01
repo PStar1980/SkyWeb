@@ -846,6 +846,12 @@ function DashboardCard({ dashboard, savedViews }) {
           <Link className="btn skyweb-btn-primary" to={`/dashboards/${dashboard.dashboardKey}`}>
             View dashboard
           </Link>
+          <Link
+            className="btn skyweb-btn-ghost"
+            to={`/dashboards/${dashboard.dashboardKey}/presentation`}
+          >
+            Presentation view
+          </Link>
           {!dashboard.isDefault && (
             <button
               className="btn skyweb-btn-ghost"
@@ -1023,8 +1029,8 @@ export default function DashboardBuilder() {
           <div className="skyweb-kicker">Dashboard builder</div>
           <h1>Build dashboard surfaces</h1>
           <p>
-            Phase 7.7 turns dashboard size metadata into a real layout engine: tune width, height,
-            mode, and order so every dashboard surface lands with deliberate shape.
+            Phase 7.8 gives dashboard surfaces a screenshot-ready presentation mode for clean
+            portfolio captures, PDF saves, and polished analytics storytelling.
           </p>
         </div>
         <div className="skyweb-header-actions">

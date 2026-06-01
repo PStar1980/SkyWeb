@@ -3092,3 +3092,212 @@
     display: grid;
   }
 }
+
+/* Phase 7.8 — screenshot-ready dashboard presentation mode */
+.skyweb-presentation-mode {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(112, 183, 255, 0.12), transparent 30rem),
+    radial-gradient(circle at top right, rgba(127, 92, 255, 0.12), transparent 34rem), #050a14;
+}
+
+.skyweb-presentation-mode .skyweb-navbar {
+  display: none;
+}
+
+.skyweb-presentation-mode .skyweb-main {
+  width: min(1440px, calc(100vw - 3rem));
+  padding: 1.5rem 0 3rem;
+}
+
+.skyweb-dashboard-presentation-header {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(112, 183, 255, 0.16);
+  border-radius: 1.35rem;
+  background:
+    radial-gradient(circle at top right, rgba(127, 92, 255, 0.18), transparent 28rem),
+    linear-gradient(135deg, rgba(11, 26, 48, 0.86), rgba(7, 12, 24, 0.92));
+  padding: clamp(1rem, 2.2vw, 1.55rem);
+}
+
+.skyweb-dashboard-presentation-header h1 {
+  max-width: 1040px;
+}
+
+.skyweb-dashboard-presentation-actions {
+  align-content: start;
+  min-width: min(330px, 100%);
+}
+
+.skyweb-toolbar-message {
+  width: 100%;
+  margin: 0;
+  border: 1px solid rgba(112, 183, 255, 0.16);
+  border-radius: 0.8rem;
+  background: rgba(5, 10, 20, 0.32);
+  color: rgba(220, 232, 255, 0.72);
+  font-size: 0.82rem;
+  font-weight: 750;
+  padding: 0.58rem 0.72rem;
+}
+
+.skyweb-presentation-meta-strip,
+.skyweb-dashboard-presentation-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.skyweb-presentation-meta-strip span,
+.skyweb-dashboard-presentation-footer span {
+  border: 1px solid rgba(138, 163, 202, 0.14);
+  border-radius: 999px;
+  background: rgba(5, 10, 20, 0.32);
+  color: rgba(220, 232, 255, 0.72);
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 0.28rem 0.6rem;
+}
+
+.skyweb-dashboard-presentation-surface {
+  position: relative;
+  border: 1px solid rgba(112, 183, 255, 0.16);
+  border-radius: 1.45rem;
+  background:
+    radial-gradient(circle at top right, rgba(127, 92, 255, 0.1), transparent 30rem),
+    rgba(7, 12, 24, 0.42);
+  padding: clamp(0.8rem, 1.8vw, 1.25rem);
+}
+
+.skyweb-dashboard-presentation-surface .skyweb-dashboard-viewer-hero {
+  padding: clamp(1rem, 2vw, 1.45rem);
+}
+
+.skyweb-dashboard-presentation-cover {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.48fr);
+  gap: 1rem;
+  align-items: stretch;
+  border: 1px solid rgba(112, 183, 255, 0.16);
+  border-radius: 1.15rem;
+  background:
+    linear-gradient(135deg, rgba(112, 183, 255, 0.08), rgba(127, 92, 255, 0.06)),
+    rgba(11, 19, 35, 0.66);
+  padding: 1rem;
+}
+
+.skyweb-dashboard-presentation-cover h3 {
+  margin: 0.25rem 0 0.35rem;
+  color: #ffffff;
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  font-weight: 930;
+  letter-spacing: -0.045em;
+}
+
+.skyweb-dashboard-presentation-cover p {
+  margin: 0;
+  max-width: 760px;
+}
+
+.skyweb-presentation-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+}
+
+.skyweb-presentation-facts div {
+  border: 1px solid rgba(138, 163, 202, 0.14);
+  border-radius: 0.9rem;
+  background: rgba(5, 10, 20, 0.28);
+  padding: 0.72rem;
+}
+
+.skyweb-presentation-facts dt {
+  color: rgba(220, 232, 255, 0.62);
+  font-size: 0.72rem;
+  font-weight: 850;
+}
+
+.skyweb-presentation-facts dd {
+  margin: 0.16rem 0 0;
+  color: #ffffff;
+  font-size: 1.08rem;
+  font-weight: 920;
+}
+
+.skyweb-dashboard-presentation-summary {
+  background: rgba(5, 10, 20, 0.2);
+}
+
+.skyweb-dashboard-presentation-surface .skyweb-section-heading {
+  border-bottom: 1px solid rgba(138, 163, 202, 0.1);
+  padding-bottom: 0.35rem;
+}
+
+.skyweb-dashboard-presentation-surface .skyweb-dashboard-viewer-item {
+  break-inside: avoid;
+}
+
+.skyweb-dashboard-presentation-footer {
+  justify-content: space-between;
+  border-top: 1px solid rgba(138, 163, 202, 0.12);
+  margin-top: 0.35rem;
+  padding-top: 0.85rem;
+}
+
+@media (max-width: 920px) {
+  .skyweb-presentation-mode .skyweb-main {
+    width: min(100%, calc(100vw - 1rem));
+    padding-top: 0.5rem;
+  }
+
+  .skyweb-dashboard-presentation-cover,
+  .skyweb-presentation-facts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  body {
+    background: #050a14 !important;
+  }
+
+  .skyweb-presentation-mode .skyweb-main {
+    width: 100% !important;
+    padding: 0 !important;
+  }
+
+  .skyweb-dashboard-presentation-actions,
+  .skyweb-dashboard-presentation-summary .skyweb-card-link,
+  .skyweb-dashboard-viewer-item-meta .skyweb-card-link {
+    display: none !important;
+  }
+
+  .skyweb-dashboard-presentation-header,
+  .skyweb-dashboard-presentation-surface,
+  .skyweb-dashboard-viewer-hero,
+  .skyweb-dashboard-presentation-cover,
+  .skyweb-dashboard-viewer-item-main,
+  .skyweb-dashboard-viewer-item-meta,
+  .skyweb-dashboard-visual-card {
+    box-shadow: none !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .skyweb-dashboard-viewer-grid,
+  .skyweb-dashboard-layout-executive .skyweb-dashboard-viewer-grid,
+  .skyweb-dashboard-layout-research .skyweb-dashboard-viewer-grid,
+  .skyweb-dashboard-layout-compact .skyweb-dashboard-viewer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .skyweb-dashboard-viewer-item {
+    grid-column: span 1 !important;
+    grid-row: auto !important;
+    page-break-inside: avoid;
+  }
+}

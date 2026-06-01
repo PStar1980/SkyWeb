@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
@@ -24,10 +24,19 @@ import './App.css';
 
 function SkyWebShell() {
   const { preferences } = usePreferences();
+  const location = useLocation();
   const densityClassName = getDensityClassName(preferences);
+  const presentationMode = location.pathname.endsWith('/presentation');
+  const appClassName = [
+    'skyweb-app',
+    densityClassName,
+    presentationMode ? 'skyweb-presentation-mode' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <div className={`skyweb-app ${densityClassName}`}>
+    <div className={appClassName}>
       <Navbar />
       <main className="skyweb-main">
         <Routes>
@@ -57,6 +66,14 @@ function SkyWebShell() {
             element={
               <ProtectedRoute>
                 <DashboardViewer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboards/:dashboardKey/presentation"
+            element={
+              <ProtectedRoute>
+                <DashboardViewer presentationMode />
               </ProtectedRoute>
             }
           />

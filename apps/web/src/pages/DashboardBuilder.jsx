@@ -48,6 +48,49 @@ const DEFAULT_ITEM_DRAFT = {
   heightUnits: '1',
 };
 
+const SIZE_PRESETS = [
+  {
+    label: '1 × 1',
+    widthUnits: '1',
+    heightUnits: '1',
+    description: 'Single tile',
+  },
+  {
+    label: '2 × 1',
+    widthUnits: '2',
+    heightUnits: '1',
+    description: 'Wide strip',
+  },
+  {
+    label: '2 × 2',
+    widthUnits: '2',
+    heightUnits: '2',
+    description: 'Chart block',
+  },
+  {
+    label: '3 × 1',
+    widthUnits: '3',
+    heightUnits: '1',
+    description: 'Executive lane',
+  },
+  {
+    label: '4 × 2',
+    widthUnits: '4',
+    heightUnits: '2',
+    description: 'Full board panel',
+  },
+];
+
+const MODE_RECOMMENDED_SIZE = {
+  view_card: { widthUnits: '1', heightUnits: '1' },
+  wide_card: { widthUnits: '2', heightUnits: '1' },
+  compact_card: { widthUnits: '1', heightUnits: '1' },
+  metric_card: { widthUnits: '1', heightUnits: '1' },
+  mini_chart: { widthUnits: '2', heightUnits: '2' },
+  latest_row: { widthUnits: '2', heightUnits: '1' },
+  table_preview: { widthUnits: '2', heightUnits: '2' },
+};
+
 function getSavedViewLabel(savedView = {}) {
   return savedView.displayLabel || savedView.view?.label || savedView.viewKey || 'Saved view';
 }
@@ -69,6 +112,82 @@ function getLayoutLabel(layoutPreset = '') {
 function normalizeNumberDraft(value, fallback = '0') {
   const normalized = String(value ?? '').trim();
   return normalized === '' ? fallback : normalized;
+}
+
+function clampUnitDraft(value, fallback = '1') {
+  const numericValue = Number(normalizeNumberDraft(value, fallback));
+
+  if (!Number.isFinite(numericValue)) {
+    return fallback;
+  }
+
+  return String(Math.max(1, Math.min(4, Math.round(numericValue))));
+}
+
+function getRecommendedSizeForMode(itemMode = 'view_card') {
+  return MODE_RECOMMENDED_SIZE[itemMode] || MODE_RECOMMENDED_SIZE.view_card;
+}
+
+function getSizeDescription(widthUnits, heightUnits) {
+  const width = clampUnitDraft(widthUnits);
+  const height = clampUnitDraft(heightUnits);
+
+  if (width === '1' && height === '1') {
+    return 'Small monitoring tile for compact metrics or simple saved-view cards.';
+  }
+
+  if (width === '2' && height === '1') {
+    return 'Wide strip for row panels, wide cards, or compact cross-view context.';
+  }
+
+  if (width === '2' && height === '2') {
+    return 'Roomy chart/table block for richer visual modes.';
+  }
+
+  if (width === '3' && height === '1') {
+    return 'Executive lane that stretches across most of the board.';
+  }
+
+  if (width === '4' && height === '2') {
+    return 'Full-width presentation panel for headline dashboard blocks.';
+  }
+
+  return `${width} column(s) × ${height} row(s) in the dashboard grid.`;
+}
+
+function SizePresetControls({ heightUnits, onSelect, widthUnits }) {
+  const activeKey = `${clampUnitDraft(widthUnits)}x${clampUnitDraft(heightUnits)}`;
+
+  return (
+    <div className="skyweb-dashboard-size-helper">
+      <div>
+        <strong>
+          Size: {clampUnitDraft(widthUnits)} × {clampUnitDraft(heightUnits)}
+        </strong>
+        <span>{getSizeDescription(widthUnits, heightUnits)}</span>
+      </div>
+      <div className="skyweb-dashboard-size-preset-list" aria-label="Dashboard item size presets">
+        {SIZE_PRESETS.map((preset) => {
+          const presetKey = `${preset.widthUnits}x${preset.heightUnits}`;
+          return (
+            <button
+              className={
+                presetKey === activeKey
+                  ? 'skyweb-dashboard-size-preset skyweb-dashboard-size-preset-active'
+                  : 'skyweb-dashboard-size-preset'
+              }
+              key={presetKey}
+              onClick={() => onSelect(preset)}
+              type="button"
+            >
+              <span>{preset.label}</span>
+              <small>{preset.description}</small>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 function getDashboardDraft(dashboard = {}) {
@@ -227,7 +346,34 @@ function DashboardItemEditor({ dashboard, item, onCancel }) {
   const [error, setError] = useState('');
 
   function updateDraft(fieldName, value) {
-    setDraft((currentDraft) => ({ ...currentDraft, [fieldName]: value }));
+    setDraft((currentDraft) => {
+      if (fieldName === 'itemMode') {
+        const recommendedSize = getRecommendedSizeForMode(value);
+        const shouldApplyRecommendedSize =
+          currentDraft.widthUnits === '1' && currentDraft.heightUnits === '1';
+
+        return {
+          ...currentDraft,
+          itemMode: value,
+          ...(shouldApplyRecommendedSize ? recommendedSize : {}),
+        };
+      }
+
+      if (fieldName === 'widthUnits' || fieldName === 'heightUnits') {
+        return { ...currentDraft, [fieldName]: clampUnitDraft(value) };
+      }
+
+      return { ...currentDraft, [fieldName]: value };
+    });
+    setError('');
+  }
+
+  function applySizePreset(preset) {
+    setDraft((currentDraft) => ({
+      ...currentDraft,
+      widthUnits: preset.widthUnits,
+      heightUnits: preset.heightUnits,
+    }));
     setError('');
   }
 
@@ -241,8 +387,8 @@ function DashboardItemEditor({ dashboard, item, onCancel }) {
         itemNote: draft.itemNote,
         itemMode: draft.itemMode,
         sortOrder: Number(normalizeNumberDraft(draft.sortOrder)),
-        widthUnits: Number(normalizeNumberDraft(draft.widthUnits, '1')),
-        heightUnits: Number(normalizeNumberDraft(draft.heightUnits, '1')),
+        widthUnits: Number(clampUnitDraft(draft.widthUnits)),
+        heightUnits: Number(clampUnitDraft(draft.heightUnits)),
       });
       onCancel();
     } catch (saveError) {
@@ -300,7 +446,7 @@ function DashboardItemEditor({ dashboard, item, onCancel }) {
           />
         </label>
         <label>
-          <span>Width</span>
+          <span>Width units</span>
           <input
             className="form-control"
             max="4"
@@ -311,7 +457,7 @@ function DashboardItemEditor({ dashboard, item, onCancel }) {
           />
         </label>
         <label>
-          <span>Height</span>
+          <span>Height units</span>
           <input
             className="form-control"
             max="4"
@@ -322,6 +468,11 @@ function DashboardItemEditor({ dashboard, item, onCancel }) {
           />
         </label>
       </div>
+      <SizePresetControls
+        heightUnits={draft.heightUnits}
+        onSelect={applySizePreset}
+        widthUnits={draft.widthUnits}
+      />
       <div className="skyweb-dashboard-builder-actions">
         <button className="btn skyweb-btn-ghost" disabled={saving} onClick={onCancel} type="button">
           Cancel
@@ -387,6 +538,10 @@ function DashboardItemRow({ dashboard, item }) {
             <dd>{item.updatedAt ? formatDateTime(item.updatedAt) : '—'}</dd>
           </div>
         </dl>
+        <p className="skyweb-dashboard-size-hint-card">
+          Viewer span: {item.widthUnits ?? 1} column(s) × {item.heightUnits ?? 1} row(s). Layout
+          presets use this to shape the final dashboard grid.
+        </p>
 
         {editing ? (
           <DashboardItemEditor
@@ -463,7 +618,35 @@ function DashboardCard({ dashboard, savedViews }) {
   }
 
   function updateItemDraft(fieldName, value) {
-    setItemDraft((currentDraft) => ({ ...currentDraft, [fieldName]: value }));
+    setItemDraft((currentDraft) => {
+      if (fieldName === 'itemMode') {
+        const recommendedSize = getRecommendedSizeForMode(value);
+        const shouldApplyRecommendedSize =
+          currentDraft.widthUnits === '1' && currentDraft.heightUnits === '1';
+
+        return {
+          ...currentDraft,
+          itemMode: value,
+          ...(shouldApplyRecommendedSize ? recommendedSize : {}),
+        };
+      }
+
+      if (fieldName === 'widthUnits' || fieldName === 'heightUnits') {
+        return { ...currentDraft, [fieldName]: clampUnitDraft(value) };
+      }
+
+      return { ...currentDraft, [fieldName]: value };
+    });
+    setMessage('');
+    setError('');
+  }
+
+  function applyItemSizePreset(preset) {
+    setItemDraft((currentDraft) => ({
+      ...currentDraft,
+      widthUnits: preset.widthUnits,
+      heightUnits: preset.heightUnits,
+    }));
     setMessage('');
     setError('');
   }
@@ -516,8 +699,8 @@ function DashboardCard({ dashboard, savedViews }) {
         itemNote: itemDraft.itemNote,
         itemMode: itemDraft.itemMode,
         sortOrder: Number(normalizeNumberDraft(itemDraft.sortOrder)),
-        widthUnits: Number(normalizeNumberDraft(itemDraft.widthUnits, '1')),
-        heightUnits: Number(normalizeNumberDraft(itemDraft.heightUnits, '1')),
+        widthUnits: Number(clampUnitDraft(itemDraft.widthUnits)),
+        heightUnits: Number(clampUnitDraft(itemDraft.heightUnits)),
       });
       setItemDraft(DEFAULT_ITEM_DRAFT);
       setMessage('Dashboard item added.');
@@ -757,6 +940,28 @@ function DashboardCard({ dashboard, savedViews }) {
                 value={itemDraft.sortOrder}
               />
             </label>
+            <label>
+              <span>Width units</span>
+              <input
+                className="form-control"
+                max="4"
+                min="1"
+                onChange={(event) => updateItemDraft('widthUnits', event.target.value)}
+                type="number"
+                value={itemDraft.widthUnits}
+              />
+            </label>
+            <label>
+              <span>Height units</span>
+              <input
+                className="form-control"
+                max="4"
+                min="1"
+                onChange={(event) => updateItemDraft('heightUnits', event.target.value)}
+                type="number"
+                value={itemDraft.heightUnits}
+              />
+            </label>
             <label className="skyweb-dashboard-builder-wide-field">
               <span>Item note</span>
               <textarea
@@ -767,6 +972,11 @@ function DashboardCard({ dashboard, savedViews }) {
                 value={itemDraft.itemNote}
               />
             </label>
+            <SizePresetControls
+              heightUnits={itemDraft.heightUnits}
+              onSelect={applyItemSizePreset}
+              widthUnits={itemDraft.widthUnits}
+            />
             <div className="skyweb-dashboard-builder-actions">
               <button className="btn skyweb-btn-primary" disabled={addingItem} type="submit">
                 {addingItem ? 'Adding...' : 'Add item'}
@@ -813,8 +1023,8 @@ export default function DashboardBuilder() {
           <div className="skyweb-kicker">Dashboard builder</div>
           <h1>Build dashboard surfaces</h1>
           <p>
-            Phase 7.5 turns dashboard definitions into usable cockpit surfaces: set a default
-            dashboard, open individual dashboard viewers, and keep the builder as the control room.
+            Phase 7.7 turns dashboard size metadata into a real layout engine: tune width, height,
+            mode, and order so every dashboard surface lands with deliberate shape.
           </p>
         </div>
         <div className="skyweb-header-actions">

@@ -9,6 +9,16 @@ function getComparableDate(value) {
   return Number.isFinite(timestamp) ? timestamp : 0;
 }
 
+function clampDashboardUnit(value, fallback = 1) {
+  const numericValue = Number(value);
+
+  if (!Number.isFinite(numericValue)) {
+    return fallback;
+  }
+
+  return Math.max(1, Math.min(4, Math.round(numericValue)));
+}
+
 function normalizeDashboardItem(item = {}) {
   return {
     ...item,
@@ -27,12 +37,8 @@ function normalizeDashboardItem(item = {}) {
     positionCol: Number.isFinite(Number(item.positionCol ?? item.position_col))
       ? Number(item.positionCol ?? item.position_col)
       : 0,
-    widthUnits: Number.isFinite(Number(item.widthUnits ?? item.width_units))
-      ? Number(item.widthUnits ?? item.width_units)
-      : 1,
-    heightUnits: Number.isFinite(Number(item.heightUnits ?? item.height_units))
-      ? Number(item.heightUnits ?? item.height_units)
-      : 1,
+    widthUnits: clampDashboardUnit(item.widthUnits ?? item.width_units),
+    heightUnits: clampDashboardUnit(item.heightUnits ?? item.height_units),
   };
 }
 

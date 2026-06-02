@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardSurface from '../components/DashboardSurface.jsx';
 import StatCard from '../components/StatCard.jsx';
@@ -27,9 +27,26 @@ function getViewCategory(savedView = {}) {
   return savedView.view?.category || '';
 }
 
-function getTotalRows(savedViews = []) {
+function getDashboardItemRegion(item = {}) {
+  return item.view?.region || '';
+}
+
+function getDashboardItemCategory(item = {}) {
+  return item.view?.category || '';
+}
+
+function getSavedViewRows(savedViews = []) {
   return savedViews.reduce((sum, savedView) => {
     const rows = Number(savedView.view?.stats?.totalRows ?? savedView.view?.totalRows ?? 0);
+    return Number.isFinite(rows) ? sum + rows : sum;
+  }, 0);
+}
+
+function getDashboardRows(dashboard = {}) {
+  const items = Array.isArray(dashboard.items) ? dashboard.items : [];
+
+  return items.reduce((sum, item) => {
+    const rows = Number(item.view?.stats?.totalRows ?? item.view?.totalRows ?? 0);
     return Number.isFinite(rows) ? sum + rows : sum;
   }, 0);
 }
@@ -39,6 +56,25 @@ function formatCompactNumber(value) {
     notation: 'compact',
     maximumFractionDigits: 1,
   }).format(value || 0);
+}
+
+function getLayoutLabel(layoutPreset = '') {
+  const labels = {
+    executive: 'Executive',
+    research: 'Research',
+    compact: 'Compact',
+  };
+
+  return labels[layoutPreset] || layoutPreset || 'Dashboard';
+}
+
+function getDashboardOptionLabel(dashboard = {}) {
+  const itemCount = Number.isFinite(Number(dashboard.itemCount))
+    ? Number(dashboard.itemCount)
+    : dashboard.items?.length || 0;
+  const defaultText = dashboard.isDefault ? ' · default' : '';
+
+  return `${dashboard.title || dashboard.dashboardKey} (${itemCount} item${itemCount === 1 ? '' : 's'}${defaultText})`;
 }
 
 function SavedViewNote({ savedView }) {
@@ -56,20 +92,60 @@ function SavedViewNote({ savedView }) {
   );
 }
 
-function DefaultDashboardBoard({ dashboard, displayName, refreshDashboards }) {
+function DashboardSwitcher({ dashboards, onChange, selectedDashboardKey }) {
+  if (dashboards.length <= 1) {
+    return null;
+  }
+
+  return (
+    <label className="skyweb-dashboard-switcher">
+      <span>Active dashboard</span>
+      <select
+        className="form-control"
+        onChange={(event) => onChange(event.target.value)}
+        value={selectedDashboardKey}
+      >
+        {dashboards.map((dashboard) => (
+          <option key={dashboard.dashboardKey} value={dashboard.dashboardKey}>
+            {getDashboardOptionLabel(dashboard)}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function DefaultDashboardBoard({
+  dashboard,
+  dashboards,
+  displayName,
+  refreshDashboards,
+  selectedDashboardKey,
+  setSelectedDashboardKey,
+}) {
+  const items = Array.isArray(dashboard.items) ? dashboard.items : [];
+  const rows = getDashboardRows(dashboard);
+  const regionCount = countUniqueValues(items, getDashboardItemRegion);
+  const categoryCount = countUniqueValues(items, getDashboardItemCategory);
+  const layoutLabel = getLayoutLabel(dashboard.layoutPreset);
+
   return (
     <>
       <header className="skyweb-page-header skyweb-member-dashboard-header">
         <div>
-          <div className="skyweb-kicker">Personal command board</div>
+          <div className="skyweb-kicker">Macro dashboard</div>
           <h1>{dashboard.title}</h1>
           <p>
-            {displayName}, your default custom dashboard is now the primary cockpit. It renders from
-            the dashboard builder definition, so saved views become reusable analytics blocks
-            instead of a loose watchlist.
+            {dashboard.description ||
+              `${displayName}, this custom dashboard is built from saved macro views and reusable analytics blocks.`}
           </p>
         </div>
         <div className="skyweb-header-actions">
+          <DashboardSwitcher
+            dashboards={dashboards}
+            onChange={setSelectedDashboardKey}
+            selectedDashboardKey={selectedDashboardKey}
+          />
           <button className="btn skyweb-btn-ghost" onClick={refreshDashboards} type="button">
             Refresh dashboard
           </button>
@@ -91,19 +167,15 @@ function DefaultDashboardBoard({ dashboard, displayName, refreshDashboards }) {
         </div>
       </header>
 
-      <section className="skyweb-dashboard-pulse skyweb-member-dashboard-pulse">
-        <div>
-          <div className="skyweb-card-kicker">Default dashboard live</div>
-          <h2>Custom dashboard is driving `/dashboard`</h2>
-          <p>
-            Phase 7.5 promotes dashboard definitions into the default landing surface. Change the
-            default from the dashboard builder whenever you want a different cockpit in command.
-          </p>
-        </div>
-        <div className="skyweb-pulse-stack">
-          <span>Default board</span>
-          <strong>{dashboard.dashboardKey}</strong>
-        </div>
+      <section className="skyweb-metric-grid skyweb-member-dashboard-summary">
+        <StatCard label="Layout" value={layoutLabel} detail="Dashboard preset" />
+        <StatCard label="Items" value={items.length} detail="Dashboard blocks" />
+        <StatCard label="Rows" value={formatCompactNumber(rows)} detail="Covered history" />
+        <StatCard
+          label="Lanes"
+          value={`${regionCount}/${categoryCount}`}
+          detail="Regions / categories"
+        />
       </section>
 
       <DashboardSurface
@@ -113,6 +185,9 @@ function DefaultDashboardBoard({ dashboard, displayName, refreshDashboards }) {
             Add dashboard items →
           </Link>
         }
+        hideHero
+        hideMetrics
+        hideSummary
       />
     </>
   );
@@ -121,9 +196,10 @@ function DefaultDashboardBoard({ dashboard, displayName, refreshDashboards }) {
 export default function MemberDashboard() {
   const { user } = useAuth();
   const { preferences } = usePreferences();
-  const { dashboardsError, defaultDashboard, loadingDashboards, refreshDashboards } =
+  const { dashboards, dashboardsError, defaultDashboard, loadingDashboards, refreshDashboards } =
     useDashboards();
   const { loadingSavedViews, refreshSavedViews, savedViews, savedViewsError } = useSavedViews();
+  const [selectedDashboardKey, setSelectedDashboardKey] = useState('');
 
   const pinnedSavedViews = useMemo(
     () => savedViews.filter((savedView) => savedView.pinned && savedView.view),
@@ -140,12 +216,31 @@ export default function MemberDashboard() {
   );
   const regionCount = countUniqueValues(pinnedSavedViews, getViewRegion);
   const categoryCount = countUniqueValues(pinnedSavedViews, getViewCategory);
-  const pinnedRows = getTotalRows(pinnedSavedViews);
+  const pinnedRows = getSavedViewRows(pinnedSavedViews);
   const displayName = user?.displayName || user?.username || 'SkyWeb Analytics member';
   const defaultRegion = preferences?.defaultMacroRegion || 'ALL';
   const defaultCategory = preferences?.defaultMacroCategory || 'ALL';
-  const loading = loadingDashboards || (!defaultDashboard && loadingSavedViews);
-  const error = dashboardsError || (!defaultDashboard ? savedViewsError : null);
+  const activeDashboard = useMemo(
+    () =>
+      dashboards.find((dashboard) => dashboard.dashboardKey === selectedDashboardKey) ||
+      defaultDashboard ||
+      dashboards[0] ||
+      null,
+    [dashboards, defaultDashboard, selectedDashboardKey],
+  );
+  const loading = loadingDashboards || (!activeDashboard && loadingSavedViews);
+  const error = dashboardsError || (!activeDashboard ? savedViewsError : null);
+
+  useEffect(() => {
+    if (
+      selectedDashboardKey &&
+      dashboards.some((dashboard) => dashboard.dashboardKey === selectedDashboardKey)
+    ) {
+      return;
+    }
+
+    setSelectedDashboardKey(defaultDashboard?.dashboardKey || dashboards[0]?.dashboardKey || '');
+  }, [dashboards, defaultDashboard, selectedDashboardKey]);
 
   if (loading) {
     return <LoadingState>Loading your dashboard...</LoadingState>;
@@ -159,12 +254,15 @@ export default function MemberDashboard() {
     );
   }
 
-  if (defaultDashboard) {
+  if (activeDashboard) {
     return (
       <DefaultDashboardBoard
-        dashboard={defaultDashboard}
+        dashboard={activeDashboard}
+        dashboards={dashboards}
         displayName={displayName}
         refreshDashboards={refreshDashboards}
+        selectedDashboardKey={activeDashboard.dashboardKey}
+        setSelectedDashboardKey={setSelectedDashboardKey}
       />
     );
   }
@@ -173,11 +271,11 @@ export default function MemberDashboard() {
     <>
       <header className="skyweb-page-header skyweb-member-dashboard-header">
         <div>
-          <div className="skyweb-kicker">Personal command board</div>
+          <div className="skyweb-kicker">Macro dashboard</div>
           <h1>{SKYWEB_PRODUCT_NAME} Dashboard</h1>
           <p>
             {displayName}, your pinned macro views now roll up into a private dashboard. This is the
-            fallback command board until you mark a custom dashboard as the default cockpit.
+            fallback command board until you create a custom dashboard cockpit.
           </p>
         </div>
         <div className="skyweb-header-actions">
@@ -202,11 +300,11 @@ export default function MemberDashboard() {
           <h2>
             {pinnedSavedViews.length > 0
               ? 'Pinned views are live'
-              : 'Pin views or set a default dashboard'}
+              : 'Pin views or create a custom dashboard'}
           </h2>
           <p>
-            Your pinned saved views still work as a fallback command board. For the full Phase 7.5
-            cockpit, create a custom dashboard and mark it as default from the builder.
+            Your pinned saved views still work as a fallback command board. Create a custom
+            dashboard in the builder whenever you want a richer macro cockpit.
           </p>
         </div>
         <div className="skyweb-pulse-stack">
@@ -249,10 +347,10 @@ export default function MemberDashboard() {
         <>
           {pinnedSavedViews.length === 0 && (
             <section className="skyweb-alert skyweb-detail-notice">
-              <strong>No pinned views or default dashboard yet.</strong>
+              <strong>No pinned views or custom dashboard yet.</strong>
               <p>
-                Showing your saved shelf as a preview. Pin saved views or set a custom dashboard as
-                default to promote it into this route.
+                Showing your saved shelf as a preview. Pin saved views or build a custom dashboard
+                to promote it into this route.
               </p>
             </section>
           )}
@@ -268,7 +366,7 @@ export default function MemberDashboard() {
                 </p>
               </div>
               <Link className="skyweb-card-link" to="/dashboards">
-                Set default dashboard →
+                Open dashboard builder →
               </Link>
             </div>
 
@@ -303,10 +401,11 @@ export default function MemberDashboard() {
 
             <article className="skyweb-card">
               <div className="skyweb-card-kicker">Next move</div>
-              <h2>Promote a custom dashboard</h2>
+              <h2>Build a custom dashboard</h2>
               <p>
-                Phase 7.5 lets `/dashboard` render a default custom dashboard. Use the builder to
-                mark one board as default and this fallback surface will hand over the wheel.
+                Use the builder to group saved macro views into named dashboards. Once a custom
+                dashboard exists, this Macro Dashboard page lets you switch across them from the
+                top.
               </p>
               <dl className="skyweb-detail-list skyweb-dashboard-detail-list">
                 <div>

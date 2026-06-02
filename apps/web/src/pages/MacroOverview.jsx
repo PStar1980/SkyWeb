@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard.jsx';
-import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import StoryCard from '../components/StoryCard.jsx';
 import ViewCard from '../components/ViewCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
@@ -165,8 +164,8 @@ export default function MacroOverview() {
     <>
       <header className="skyweb-page-header skyweb-dashboard-header">
         <div>
-          <div className="skyweb-kicker">Macro dashboards</div>
-          <h1>{SKYWEB_PRODUCT_NAME} Macro Dashboard</h1>
+          <div className="skyweb-kicker">Macro overview</div>
+          <h1>Macro Overview</h1>
           <p>
             A public-facing command center for curated macroeconomic views powered by SkyServer
             public APIs.
@@ -182,7 +181,7 @@ export default function MacroOverview() {
         </div>
       </header>
 
-      {loading && <LoadingState>Loading macro dashboard...</LoadingState>}
+      {loading && <LoadingState>Loading macro overview...</LoadingState>}
 
       {!loading && error && (
         <ErrorState title="Macro API unavailable.">{getErrorMessage(error)}</ErrorState>

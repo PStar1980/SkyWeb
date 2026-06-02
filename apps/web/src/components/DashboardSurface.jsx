@@ -207,6 +207,9 @@ function DashboardSurfaceItem({ item, layoutPreset }) {
 export default function DashboardSurface({
   dashboard,
   emptyAction = null,
+  hideHero = false,
+  hideMetrics = false,
+  hideSummary = false,
   presentationMode = false,
 }) {
   const items = Array.isArray(dashboard?.items) ? dashboard.items : [];
@@ -231,28 +234,38 @@ export default function DashboardSurface({
 
   return (
     <section className={surfaceClassName}>
-      <div className="skyweb-dashboard-viewer-hero">
-        <div>
-          <div className="skyweb-card-kicker">{layoutLabel} dashboard</div>
-          <h2>{dashboard.title}</h2>
-          <p>{dashboard.description || 'No dashboard description yet.'}</p>
+      {!hideHero && (
+        <div className="skyweb-dashboard-viewer-hero">
+          <div>
+            <div className="skyweb-card-kicker">{layoutLabel} dashboard</div>
+            <h2>{dashboard.title}</h2>
+            <p>{dashboard.description || 'No dashboard description yet.'}</p>
+          </div>
+          <div className="skyweb-dashboard-viewer-badges">
+            {dashboard.isDefault && <span className="skyweb-saved-pill">Default</span>}
+            <span className="skyweb-saved-pill skyweb-saved-pill-muted">
+              {items.length} item(s)
+            </span>
+          </div>
         </div>
-        <div className="skyweb-dashboard-viewer-badges">
-          {dashboard.isDefault && <span className="skyweb-saved-pill">Default</span>}
-          <span className="skyweb-saved-pill skyweb-saved-pill-muted">{items.length} item(s)</span>
-        </div>
-      </div>
+      )}
 
-      <section className="skyweb-metric-grid skyweb-dashboard-viewer-metrics">
-        <StatCard label="Items" value={items.length} detail="Dashboard blocks" />
-        <StatCard label="Pinned" value={dashboard.pinnedItemCount || 0} detail="From saved shelf" />
-        <StatCard label="Rows" value={formatCompactNumber(rows)} detail="Covered history" />
-        <StatCard
-          label="Lanes"
-          value={`${regionCount}/${categoryCount}`}
-          detail="Regions / categories"
-        />
-      </section>
+      {!hideMetrics && (
+        <section className="skyweb-metric-grid skyweb-dashboard-viewer-metrics">
+          <StatCard label="Items" value={items.length} detail="Dashboard blocks" />
+          <StatCard
+            label="Pinned"
+            value={dashboard.pinnedItemCount || 0}
+            detail="From saved shelf"
+          />
+          <StatCard label="Rows" value={formatCompactNumber(rows)} detail="Covered history" />
+          <StatCard
+            label="Lanes"
+            value={`${regionCount}/${categoryCount}`}
+            detail="Regions / categories"
+          />
+        </section>
+      )}
 
       {presentationMode && (
         <section className="skyweb-dashboard-presentation-cover">
@@ -281,32 +294,34 @@ export default function DashboardSurface({
         </section>
       )}
 
-      <section
-        className={
-          presentationMode
-            ? 'skyweb-dashboard-viewer-summary skyweb-dashboard-presentation-summary'
-            : 'skyweb-dashboard-viewer-summary'
-        }
-      >
-        <dl className="skyweb-detail-list skyweb-dashboard-detail-list">
-          <div>
-            <dt>Dashboard key</dt>
-            <dd>{dashboard.dashboardKey}</dd>
-          </div>
-          <div>
-            <dt>Layout</dt>
-            <dd>{layoutLabel}</dd>
-          </div>
-          <div>
-            <dt>Notes</dt>
-            <dd>{noteCount}</dd>
-          </div>
-          <div>
-            <dt>Updated</dt>
-            <dd>{dashboard.updatedAt ? formatDateTime(dashboard.updatedAt) : '—'}</dd>
-          </div>
-        </dl>
-      </section>
+      {!hideSummary && (
+        <section
+          className={
+            presentationMode
+              ? 'skyweb-dashboard-viewer-summary skyweb-dashboard-presentation-summary'
+              : 'skyweb-dashboard-viewer-summary'
+          }
+        >
+          <dl className="skyweb-detail-list skyweb-dashboard-detail-list">
+            <div>
+              <dt>Dashboard key</dt>
+              <dd>{dashboard.dashboardKey}</dd>
+            </div>
+            <div>
+              <dt>Layout</dt>
+              <dd>{layoutLabel}</dd>
+            </div>
+            <div>
+              <dt>Notes</dt>
+              <dd>{noteCount}</dd>
+            </div>
+            <div>
+              <dt>Updated</dt>
+              <dd>{dashboard.updatedAt ? formatDateTime(dashboard.updatedAt) : '—'}</dd>
+            </div>
+          </dl>
+        </section>
+      )}
 
       <section className="skyweb-dashboard-viewer-items">
         <div className="skyweb-section-heading">

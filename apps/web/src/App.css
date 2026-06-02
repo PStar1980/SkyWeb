@@ -3446,3 +3446,115 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Phase 7 revision — Macro dropdown and dashboard switcher polish */
+.skyweb-nav-dropdown {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.skyweb-nav-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  cursor: default;
+}
+
+.skyweb-nav-dropdown-trigger:focus-visible,
+.skyweb-nav-menu .skyweb-nav-link:focus-visible,
+.skyweb-dashboard-switcher select:focus-visible {
+  outline: 2px solid rgba(112, 183, 255, 0.72);
+  outline-offset: 2px;
+}
+
+.skyweb-nav-caret {
+  color: rgba(220, 232, 255, 0.58);
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
+.skyweb-nav-menu {
+  position: absolute;
+  top: calc(100% + 0.45rem);
+  left: 0;
+  z-index: 45;
+  display: grid;
+  min-width: 12rem;
+  gap: 0.2rem;
+  border: 1px solid rgba(138, 163, 202, 0.2);
+  border-radius: 0.9rem;
+  background: rgba(7, 13, 25, 0.98);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  padding: 0.45rem;
+  pointer-events: none;
+  transform: translateY(-0.25rem);
+  transition:
+    opacity 140ms ease,
+    transform 140ms ease;
+}
+
+.skyweb-nav-dropdown:hover .skyweb-nav-menu,
+.skyweb-nav-dropdown:focus-within .skyweb-nav-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.skyweb-nav-menu .skyweb-nav-link {
+  display: block;
+  padding-block: 0.5rem !important;
+}
+
+.skyweb-dashboard-switcher {
+  display: grid;
+  gap: 0.3rem;
+  min-width: min(100%, 18rem);
+  text-align: left;
+}
+
+.skyweb-dashboard-switcher span {
+  color: rgba(220, 232, 255, 0.62);
+  font-size: 0.74rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.skyweb-dashboard-switcher .form-control {
+  min-height: 2.45rem;
+  border-radius: 999px;
+  background: rgba(5, 10, 20, 0.68);
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.skyweb-member-dashboard-summary {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 640px) {
+  .skyweb-nav-dropdown {
+    width: 100%;
+  }
+
+  .skyweb-nav-menu {
+    position: static;
+    display: none;
+    width: 100%;
+    margin-top: 0.35rem;
+    box-shadow: none;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+  }
+
+  .skyweb-nav-dropdown:hover .skyweb-nav-menu,
+  .skyweb-nav-dropdown:focus-within .skyweb-nav-menu {
+    display: grid;
+  }
+}

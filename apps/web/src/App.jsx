@@ -19,6 +19,7 @@ import MacroOverview from './pages/MacroOverview.jsx';
 import MacroViews from './pages/MacroViews.jsx';
 import MacroViewDetail from './pages/MacroViewDetail.jsx';
 import MacroIndicators from './pages/MacroIndicators.jsx';
+import MacroIndicatorDetail from './pages/MacroIndicatorDetail.jsx';
 import './App.css';
 
 function SkyWebShell() {
@@ -44,6 +45,7 @@ function SkyWebShell() {
           <Route path="/macro/views" element={<MacroViews />} />
           <Route path="/macro/views/:viewKey" element={<MacroViewDetail />} />
           <Route path="/macro/indicators" element={<MacroIndicators />} />
+          <Route path="/macro/indicators/:indicatorCode" element={<MacroIndicatorDetail />} />
           <Route
             path="/dashboard"
             element={

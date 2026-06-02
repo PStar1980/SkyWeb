@@ -3577,3 +3577,51 @@
     display: grid;
   }
 }
+
+.skyweb-table-link,
+.skyweb-table-action {
+  color: #70b7ff;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.skyweb-table-link:hover,
+.skyweb-table-action:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.skyweb-table-action {
+  white-space: nowrap;
+}
+
+.skyweb-indicator-context-panel {
+  background: linear-gradient(135deg, rgba(20, 42, 76, 0.92), rgba(23, 25, 57, 0.94));
+}
+
+.skyweb-indicator-context-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.9fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.skyweb-indicator-context-grid h2 {
+  margin-bottom: 0.55rem;
+}
+
+.skyweb-indicator-context-grid p {
+  max-width: 58rem;
+  margin: 0;
+  color: rgba(220, 232, 255, 0.78);
+}
+
+.skyweb-indicator-detail-list {
+  margin: 0;
+}
+
+@media (max-width: 992px) {
+  .skyweb-indicator-context-grid {
+    grid-template-columns: 1fr;
+  }
+}

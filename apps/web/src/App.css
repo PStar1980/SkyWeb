@@ -1369,8 +1369,8 @@
 .skyweb-navbar {
   position: sticky;
   top: 0;
-  z-index: 30;
-  overflow-x: auto;
+  z-index: 80;
+  overflow: visible;
   scrollbar-width: thin;
 }
 
@@ -3450,8 +3450,18 @@
 /* Phase 7 revision — Macro dropdown and dashboard switcher polish */
 .skyweb-nav-dropdown {
   position: relative;
+  z-index: 90;
   display: inline-flex;
   align-items: center;
+}
+
+.skyweb-nav-dropdown::after {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 0.45rem;
+  content: '';
 }
 
 .skyweb-nav-dropdown-trigger {
@@ -3461,7 +3471,7 @@
   border: 0;
   background: transparent;
   font: inherit;
-  cursor: default;
+  cursor: pointer;
 }
 
 .skyweb-nav-dropdown-trigger:focus-visible,
@@ -3481,7 +3491,7 @@
   position: absolute;
   top: calc(100% + 0.45rem);
   left: 0;
-  z-index: 45;
+  z-index: 100;
   display: grid;
   min-width: 12rem;
   gap: 0.2rem;
@@ -3538,8 +3548,17 @@
 }
 
 @media (max-width: 640px) {
+  .skyweb-navbar {
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
   .skyweb-nav-dropdown {
     width: 100%;
+  }
+
+  .skyweb-nav-dropdown::after {
+    display: none;
   }
 
   .skyweb-nav-menu {

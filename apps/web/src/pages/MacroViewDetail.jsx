@@ -186,9 +186,9 @@ export default function MacroViewDetail() {
     <>
       <header className="skyweb-page-header">
         <div>
-          <div className="skyweb-kicker">Macro view detail</div>
+          <div className="skyweb-kicker">Analytical lens detail</div>
           <h1>{view?.label || viewKey}</h1>
-          <p>{view?.description || 'Curated macro data preview.'}</p>
+          <p>{view?.description || 'Grouped macro dataset for multi-series analysis.'}</p>
         </div>
         <div className="skyweb-header-actions">
           <Link className="btn skyweb-btn-ghost" to="/macro/views">
@@ -241,7 +241,7 @@ export default function MacroViewDetail() {
               value={oldestLoadedDate ? formatDate(oldestLoadedDate) : '—'}
               detail={`Oldest of ${formatNumber(rows.length)} loaded row(s)`}
             />
-            <StatCard label="Fields" value={displayColumns.length} detail="Preview columns" />
+            <StatCard label="Fields" value={displayColumns.length} detail="Grouped columns" />
           </section>
 
           {isAuthenticated && saved && (
@@ -251,8 +251,8 @@ export default function MacroViewDetail() {
                 <div>
                   <h2>View-level context</h2>
                   <p>
-                    Save, pin, unpin, and reorder this view from the Macro Views catalog. Keep the
-                    longer private note here beside the actual data surface.
+                    Save, pin, unpin, and reorder this analytical lens from the Macro Views catalog.
+                    Keep the longer private note here beside the grouped data surface.
                   </p>
                   <dl className="skyweb-detail-list skyweb-saved-detail-list">
                     <div>
@@ -297,12 +297,13 @@ export default function MacroViewDetail() {
           <ChartPanel
             columns={columns}
             defaultWindowSize={preferences.defaultChartWindow}
+            multiSeries
             rows={rows}
-            title={`${view?.label || viewKey} trend preview`}
+            title={`${view?.label || viewKey} multi-series analysis`}
           />
 
           <section className="skyweb-card mb-4">
-            <div className="skyweb-card-kicker">Latest row</div>
+            <div className="skyweb-card-kicker">Latest grouped row</div>
             {latestFields.length > 0 ? (
               <div className="skyweb-latest-grid">
                 {latestFields.map(([key, value]) => (
@@ -320,11 +321,11 @@ export default function MacroViewDetail() {
           <section className="skyweb-table-card">
             <div className="skyweb-table-header">
               <div>
-                <div className="skyweb-card-kicker">Preview rows</div>
+                <div className="skyweb-card-kicker">Analytical table</div>
                 <h2>Latest {previewRows.length} row(s)</h2>
                 <p>
-                  Showing the newest public records from the loaded chart window. The first row is
-                  the latest observation.
+                  Showing the newest records from this grouped macro view. Use the table to inspect
+                  the full analytical lens behind the selected chart series.
                 </p>
               </div>
             </div>

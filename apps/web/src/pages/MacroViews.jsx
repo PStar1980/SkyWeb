@@ -352,8 +352,8 @@ export default function MacroViews() {
           <div className="skyweb-kicker">Macro catalog</div>
           <h1>Macro Views</h1>
           <p>
-            Browse every curated macro surface and manage saved, pinned, and ordered views directly
-            from the catalog cards.
+            Browse grouped macro datasets and analytical lenses. Save, pin, and order the lenses you
+            use for deeper multi-series exploration.
           </p>
         </div>
       </header>
@@ -429,7 +429,7 @@ export default function MacroViews() {
         </div>
       )}
 
-      {loading && <LoadingState>Loading macro views...</LoadingState>}
+      {loading && <LoadingState>Loading analytical lenses...</LoadingState>}
       {!loading && error && (
         <ErrorState title="Views unavailable.">
           {error.status === 401 || error.status === 403
@@ -441,7 +441,7 @@ export default function MacroViews() {
       {!loading && !error && (
         <>
           <div className="skyweb-results-summary">
-            Showing {filteredViews.length} of {views.length} macro view(s).
+            Showing {filteredViews.length} of {views.length} analytical lens/lenses.
             {loadingSavedViews && isAuthenticated ? ' Syncing saved controls...' : ''}
           </div>
           <section className="skyweb-view-grid">
@@ -471,7 +471,7 @@ export default function MacroViews() {
               );
             })}
 
-            {filteredViews.length === 0 && <EmptyState>No macro views matched.</EmptyState>}
+            {filteredViews.length === 0 && <EmptyState>No analytical lenses matched.</EmptyState>}
           </section>
         </>
       )}

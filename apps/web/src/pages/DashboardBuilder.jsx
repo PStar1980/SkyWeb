@@ -31,6 +31,43 @@ const LAYOUT_OPTIONS = [
   },
 ];
 
+const INDICATOR_DASHBOARD_ITEM_MODES = new Set([
+  'view_card',
+  'wide_card',
+  'compact_card',
+  'metric_card',
+  'mini_chart',
+  'latest_row',
+  'table_preview',
+]);
+
+const VIEW_DASHBOARD_ITEM_MODES = new Set([
+  'view_card',
+  'wide_card',
+  'compact_card',
+  'latest_row',
+  'table_preview',
+]);
+
+function getModeOptionsForSource(itemSource = 'indicator', currentMode = '') {
+  const allowedModes =
+    itemSource === 'view' ? VIEW_DASHBOARD_ITEM_MODES : INDICATOR_DASHBOARD_ITEM_MODES;
+  const options = DASHBOARD_ITEM_MODE_OPTIONS.filter((option) => allowedModes.has(option.value));
+
+  if (currentMode && !allowedModes.has(currentMode)) {
+    const legacyOption = DASHBOARD_ITEM_MODE_OPTIONS.find((option) => option.value === currentMode);
+
+    if (legacyOption) {
+      return [
+        ...options,
+        { ...legacyOption, label: `${legacyOption.label} (legacy lens summary)` },
+      ];
+    }
+  }
+
+  return options;
+}
+
 const DEFAULT_DASHBOARD_DRAFT = {
   title: '',
   description: '',
@@ -443,7 +480,7 @@ function DashboardItemEditor({ dashboard, item, onCancel }) {
             onChange={(event) => updateDraft('itemMode', event.target.value)}
             value={draft.itemMode}
           >
-            {DASHBOARD_ITEM_MODE_OPTIONS.map((option) => (
+            {getModeOptionsForSource(item.itemSource, draft.itemMode).map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
               </option>
@@ -1053,7 +1090,7 @@ function DashboardCard({ dashboard, indicators, savedViews }) {
                 onChange={(event) => updateItemDraft('itemMode', event.target.value)}
                 value={itemDraft.itemMode}
               >
-                {DASHBOARD_ITEM_MODE_OPTIONS.map((option) => (
+                {getModeOptionsForSource(itemDraft.itemSource, itemDraft.itemMode).map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
                   </option>

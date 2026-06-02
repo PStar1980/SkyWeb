@@ -19,7 +19,6 @@ import MacroOverview from './pages/MacroOverview.jsx';
 import MacroViews from './pages/MacroViews.jsx';
 import MacroViewDetail from './pages/MacroViewDetail.jsx';
 import MacroIndicators from './pages/MacroIndicators.jsx';
-import SavedViews from './pages/SavedViews.jsx';
 import './App.css';
 
 function SkyWebShell() {
@@ -81,7 +80,7 @@ function SkyWebShell() {
             path="/saved"
             element={
               <ProtectedRoute>
-                <SavedViews />
+                <Navigate to="/macro/views?status=SAVED" replace />
               </ProtectedRoute>
             }
           />

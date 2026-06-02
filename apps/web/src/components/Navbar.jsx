@@ -45,11 +45,6 @@ export default function Navbar() {
         <NavLink className={getNavLinkClass} to="/macro/indicators">
           Indicators
         </NavLink>
-        {!loading && isAuthenticated && (
-          <NavLink className={getNavLinkClass} to="/saved">
-            Saved
-          </NavLink>
-        )}
       </nav>
 
       <div className="skyweb-nav-account">

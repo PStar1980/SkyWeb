@@ -3301,3 +3301,128 @@
     page-break-inside: avoid;
   }
 }
+
+/* Phase 7 revision — combined macro catalog and saved-view controls */
+.skyweb-toolbar-four {
+  grid-template-columns: minmax(0, 1fr) 190px 190px 190px;
+}
+
+.skyweb-catalog-saved-metrics {
+  margin-bottom: 1rem;
+}
+
+.skyweb-view-card-actionable {
+  gap: 0.15rem;
+}
+
+.skyweb-view-card-actionable:hover {
+  transform: none;
+}
+
+.skyweb-view-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.35rem;
+}
+
+.skyweb-view-card-original {
+  min-height: auto !important;
+  margin: -0.15rem 0 0.45rem;
+  color: rgba(220, 232, 255, 0.56);
+  font-size: 0.86rem;
+}
+
+.skyweb-view-card-actionable .skyweb-view-meta {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.skyweb-catalog-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+  margin-top: auto;
+}
+
+.skyweb-catalog-primary-actions {
+  padding-top: 0.25rem;
+}
+
+.skyweb-catalog-action-row .btn {
+  min-height: 2.35rem;
+}
+
+.skyweb-catalog-metadata-editor {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0.25rem 0 0.9rem;
+  border: 1px solid rgba(112, 183, 255, 0.18);
+  border-radius: 0.95rem;
+  background: rgba(5, 10, 20, 0.34);
+  padding: 0.85rem;
+}
+
+.skyweb-catalog-metadata-editor label,
+.skyweb-saved-note-edit {
+  display: grid;
+  gap: 0.38rem;
+}
+
+.skyweb-catalog-metadata-editor label span,
+.skyweb-saved-note-edit span {
+  color: rgba(220, 232, 255, 0.66);
+  font-size: 0.82rem;
+  font-weight: 850;
+}
+
+.skyweb-catalog-note-hint {
+  min-height: auto !important;
+  margin: 0;
+  color: rgba(220, 232, 255, 0.62);
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.skyweb-saved-note-panel {
+  border-color: rgba(112, 183, 255, 0.2);
+  background:
+    linear-gradient(135deg, rgba(112, 183, 255, 0.08), rgba(127, 92, 255, 0.05)),
+    rgba(11, 19, 35, 0.78);
+}
+
+.skyweb-saved-note-panel-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(320px, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.skyweb-saved-note-panel h2 {
+  margin: 0.3rem 0 0.4rem;
+  color: #ffffff;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+}
+
+.skyweb-saved-note-edit textarea.form-control {
+  min-height: 9rem;
+  resize: vertical;
+}
+
+.skyweb-saved-note-edit .btn {
+  justify-self: start;
+}
+
+@media (max-width: 1080px) {
+  .skyweb-toolbar-four,
+  .skyweb-saved-note-panel-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .skyweb-view-card-actionable .skyweb-view-meta {
+    grid-template-columns: 1fr;
+  }
+}

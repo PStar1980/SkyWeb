@@ -1037,7 +1037,7 @@ export default function DashboardBuilder() {
           <button className="btn skyweb-btn-ghost" onClick={refreshDashboards} type="button">
             Refresh dashboards
           </button>
-          <Link className="btn skyweb-btn-ghost" to="/saved">
+          <Link className="btn skyweb-btn-ghost" to="/macro/views?status=SAVED">
             Manage saved views
           </Link>
           <Link className="btn skyweb-btn-primary" to="/dashboard">

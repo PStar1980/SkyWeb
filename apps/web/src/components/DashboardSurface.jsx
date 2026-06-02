@@ -38,17 +38,31 @@ function formatCompactNumber(value) {
   }).format(value || 0);
 }
 
-function getViewRegion(item = {}) {
-  return item.view?.region || '';
+function getItemRegion(item = {}) {
+  if (item.view?.region) {
+    return item.view.region;
+  }
+
+  return item.indicator?.source || '';
 }
 
-function getViewCategory(item = {}) {
-  return item.view?.category || '';
+function getItemCategory(item = {}) {
+  if (item.view?.category) {
+    return item.view.category;
+  }
+
+  return item.indicator?.frequency || '';
 }
 
 function getTotalRows(items = []) {
   return items.reduce((sum, item) => {
-    const rows = Number(item.view?.stats?.totalRows ?? item.view?.totalRows ?? 0);
+    const rows = Number(
+      item.view?.stats?.totalRows ??
+        item.view?.totalRows ??
+        item.indicator?.stats?.totalRows ??
+        item.indicator?.totalRows ??
+        0,
+    );
     return Number.isFinite(rows) ? sum + rows : sum;
   }, 0);
 }
@@ -112,7 +126,13 @@ function getDashboardItemStyle(item = {}, layoutPreset = 'executive') {
 
 export function getDashboardItemLabel(item = {}) {
   return (
-    item.itemTitle || item.savedDisplayLabel || item.view?.label || item.viewKey || 'Dashboard item'
+    item.itemTitle ||
+    item.savedDisplayLabel ||
+    item.view?.label ||
+    item.indicator?.description ||
+    item.indicatorCode ||
+    item.viewKey ||
+    'Dashboard item'
   );
 }
 
@@ -140,8 +160,14 @@ function getDashboardItemClassName(item = {}, layoutPreset = 'executive') {
 
 function DashboardSurfaceItem({ item, layoutPreset }) {
   const label = getDashboardItemLabel(item);
-  const region = item.view?.region ? formatRegion(item.view.region) : 'Unknown region';
-  const category = item.view?.category ? formatCategory(item.view.category) : 'Unknown category';
+  const isIndicator =
+    item.itemSource === 'indicator' || Boolean(item.indicatorCode && !item.viewKey);
+  const region = item.view?.region
+    ? formatRegion(item.view.region)
+    : item.indicator?.source || 'Unknown source';
+  const category = item.view?.category
+    ? formatCategory(item.view.category)
+    : item.indicator?.frequency || 'Unknown frequency';
   const note = item.itemNote || item.savedNote || '';
   const mode = item.itemMode || 'view_card';
   const size = getDashboardItemSize(item, layoutPreset);
@@ -164,11 +190,11 @@ function DashboardSurfaceItem({ item, layoutPreset }) {
           <h3>{label}</h3>
           <dl className="skyweb-detail-list skyweb-dashboard-builder-detail-list">
             <div>
-              <dt>Region</dt>
+              <dt>{isIndicator ? 'Source' : 'Region'}</dt>
               <dd>{region}</dd>
             </div>
             <div>
-              <dt>Category</dt>
+              <dt>{isIndicator ? 'Frequency' : 'Category'}</dt>
               <dd>{category}</dd>
             </div>
             <div>
@@ -193,10 +219,16 @@ function DashboardSurfaceItem({ item, layoutPreset }) {
               No dashboard-specific note yet.
             </p>
           )}
-          {item.viewKey && (
-            <Link className="skyweb-card-link" to={`/macro/views/${item.viewKey}`}>
-              Open macro view →
+          {isIndicator && item.indicatorCode ? (
+            <Link className="skyweb-card-link" to={`/macro/indicators/${item.indicatorCode}`}>
+              Open indicator →
             </Link>
+          ) : (
+            item.viewKey && (
+              <Link className="skyweb-card-link" to={`/macro/views/${item.viewKey}`}>
+                Open macro view →
+              </Link>
+            )
           )}
         </aside>
       )}
@@ -214,8 +246,8 @@ export default function DashboardSurface({
 }) {
   const items = Array.isArray(dashboard?.items) ? dashboard.items : [];
   const rows = getTotalRows(items);
-  const regionCount = countUniqueValues(items, getViewRegion);
-  const categoryCount = countUniqueValues(items, getViewCategory);
+  const regionCount = countUniqueValues(items, getItemRegion);
+  const categoryCount = countUniqueValues(items, getItemCategory);
   const noteCount = items.filter((item) => item.itemNote || item.savedNote).length;
   const layoutLabel = getLayoutLabel(dashboard?.layoutPreset);
   const layoutPreset = dashboard?.layoutPreset || 'executive';
@@ -273,8 +305,8 @@ export default function DashboardSurface({
             <div className="skyweb-card-kicker">Presentation canvas</div>
             <h3>{dashboard.title}</h3>
             <p>
-              Screenshot-ready dashboard surface generated from saved macro views, dashboard item
-              modes, and layout metadata.
+              Screenshot-ready dashboard surface generated from direct indicators, optional saved
+              macro views, dashboard item modes, and layout metadata.
             </p>
           </div>
           <dl className="skyweb-presentation-facts">
@@ -337,7 +369,8 @@ export default function DashboardSurface({
 
         {items.length === 0 ? (
           <EmptyState>
-            This dashboard has no items yet. Add saved macro views from the builder to make it live.
+            This dashboard has no items yet. Add direct indicators or saved macro views from the
+            builder to make it live.
             {emptyAction}
           </EmptyState>
         ) : (

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard.jsx';
 import DashboardItemVisualization from '../components/DashboardItemVisualization.jsx';
@@ -10,6 +10,7 @@ import {
 } from '../constants/dashboardModes.js';
 import { useDashboards } from '../context/DashboardsContext.jsx';
 import { useSavedViews } from '../context/SavedViewsContext.jsx';
+import macroService from '../services/macroService.js';
 import { formatCategory, formatDateTime, formatRegion } from '../utils/formatters.js';
 
 const LAYOUT_OPTIONS = [
@@ -39,13 +40,15 @@ const DEFAULT_DASHBOARD_DRAFT = {
 };
 
 const DEFAULT_ITEM_DRAFT = {
+  itemSource: 'indicator',
   viewKey: '',
+  indicatorCode: '',
   itemTitle: '',
   itemNote: '',
-  itemMode: 'view_card',
+  itemMode: 'mini_chart',
   sortOrder: '0',
-  widthUnits: '1',
-  heightUnits: '1',
+  widthUnits: '2',
+  heightUnits: '2',
 };
 
 const SIZE_PRESETS = [
@@ -95,9 +98,19 @@ function getSavedViewLabel(savedView = {}) {
   return savedView.displayLabel || savedView.view?.label || savedView.viewKey || 'Saved view';
 }
 
+function getIndicatorLabel(indicator = {}) {
+  return indicator.description || indicator.indicatorCode || 'Indicator';
+}
+
 function getDashboardItemLabel(item = {}) {
   return (
-    item.itemTitle || item.savedDisplayLabel || item.view?.label || item.viewKey || 'Dashboard item'
+    item.itemTitle ||
+    item.savedDisplayLabel ||
+    item.view?.label ||
+    item.indicator?.description ||
+    item.indicatorCode ||
+    item.viewKey ||
+    'Dashboard item'
   );
 }
 
@@ -406,7 +419,9 @@ function DashboardItemEditor({ dashboard, item, onCancel }) {
           className="form-control"
           maxLength={160}
           onChange={(event) => updateDraft('itemTitle', event.target.value)}
-          placeholder={item.view?.label || item.viewKey}
+          placeholder={
+            item.view?.label || item.indicator?.description || item.indicatorCode || item.viewKey
+          }
           value={draft.itemTitle}
         />
       </label>
@@ -491,6 +506,12 @@ function DashboardItemEditor({ dashboard, item, onCancel }) {
   );
 }
 
+function getDashboardItemSourceLabel(item = {}) {
+  return item.itemSource === 'indicator' || Boolean(item.indicatorCode && !item.viewKey)
+    ? 'Indicator'
+    : 'Saved view';
+}
+
 function DashboardItemRow({ dashboard, item }) {
   const { removeDashboardItem } = useDashboards();
   const [editing, setEditing] = useState(false);
@@ -519,6 +540,10 @@ function DashboardItemRow({ dashboard, item }) {
         <div className="skyweb-card-kicker">Item metadata</div>
         <h3>{getDashboardItemLabel(item)}</h3>
         <dl className="skyweb-detail-list skyweb-dashboard-builder-detail-list">
+          <div>
+            <dt>Source</dt>
+            <dd>{getDashboardItemSourceLabel(item)}</dd>
+          </div>
           <div>
             <dt>Mode</dt>
             <dd>{getDashboardItemModeLabel(item.itemMode)}</dd>
@@ -584,7 +609,7 @@ function DashboardItemRow({ dashboard, item }) {
   );
 }
 
-function DashboardCard({ dashboard, savedViews }) {
+function DashboardCard({ dashboard, indicators, savedViews }) {
   const { addDashboardItem, removeDashboard, setDefaultDashboard, updateDashboard } =
     useDashboards();
   const [editingDashboard, setEditingDashboard] = useState(false);
@@ -598,7 +623,22 @@ function DashboardCard({ dashboard, savedViews }) {
   const [error, setError] = useState('');
 
   const existingViewKeys = useMemo(
-    () => new Set((dashboard.items || []).map((item) => item.viewKey)),
+    () =>
+      new Set(
+        (dashboard.items || [])
+          .filter((item) => item.itemSource !== 'indicator')
+          .map((item) => item.viewKey),
+      ),
+    [dashboard.items],
+  );
+
+  const existingIndicatorCodes = useMemo(
+    () =>
+      new Set(
+        (dashboard.items || [])
+          .filter((item) => item.itemSource === 'indicator' || item.indicatorCode)
+          .map((item) => item.indicatorCode),
+      ),
     [dashboard.items],
   );
 
@@ -607,8 +647,16 @@ function DashboardCard({ dashboard, savedViews }) {
     [existingViewKeys, savedViews],
   );
 
+  const availableIndicators = useMemo(
+    () => indicators.filter((indicator) => !existingIndicatorCodes.has(indicator.indicatorCode)),
+    [existingIndicatorCodes, indicators],
+  );
+
   const selectedSavedView = availableSavedViews.find(
     (savedView) => savedView.viewKey === itemDraft.viewKey,
+  );
+  const selectedIndicator = availableIndicators.find(
+    (indicator) => indicator.indicatorCode === itemDraft.indicatorCode,
   );
 
   function updateDashboardDraft(fieldName, value) {
@@ -619,6 +667,21 @@ function DashboardCard({ dashboard, savedViews }) {
 
   function updateItemDraft(fieldName, value) {
     setItemDraft((currentDraft) => {
+      if (fieldName === 'itemSource') {
+        const nextSource = value === 'view' ? 'view' : 'indicator';
+        const nextMode = nextSource === 'indicator' ? 'mini_chart' : 'view_card';
+        const recommendedSize = getRecommendedSizeForMode(nextMode);
+
+        return {
+          ...currentDraft,
+          itemSource: nextSource,
+          viewKey: '',
+          indicatorCode: '',
+          itemMode: nextMode,
+          ...recommendedSize,
+        };
+      }
+
       if (fieldName === 'itemMode') {
         const recommendedSize = getRecommendedSizeForMode(value);
         const shouldApplyRecommendedSize =
@@ -681,10 +744,21 @@ function DashboardCard({ dashboard, savedViews }) {
 
   async function handleAddItem(event) {
     event.preventDefault();
-    const viewKey = itemDraft.viewKey || availableSavedViews[0]?.viewKey || '';
+    const itemSource = itemDraft.itemSource === 'view' ? 'view' : 'indicator';
+    const viewKey =
+      itemSource === 'view' ? itemDraft.viewKey || availableSavedViews[0]?.viewKey || '' : '';
+    const indicatorCode =
+      itemSource === 'indicator'
+        ? itemDraft.indicatorCode || availableIndicators[0]?.indicatorCode || ''
+        : '';
 
-    if (!viewKey) {
-      setError('Save a macro view before adding dashboard items.');
+    if (itemSource === 'view' && !viewKey) {
+      setError('Save a macro view before adding a saved-view dashboard item.');
+      return;
+    }
+
+    if (itemSource === 'indicator' && !indicatorCode) {
+      setError('Select an indicator before adding an indicator dashboard item.');
       return;
     }
 
@@ -694,7 +768,9 @@ function DashboardCard({ dashboard, savedViews }) {
 
     try {
       await addDashboardItem(dashboard.dashboardKey, {
-        viewKey,
+        itemSource,
+        viewKey: itemSource === 'view' ? viewKey : undefined,
+        indicatorCode: itemSource === 'indicator' ? indicatorCode : undefined,
         itemTitle: itemDraft.itemTitle,
         itemNote: itemDraft.itemNote,
         itemMode: itemDraft.itemMode,
@@ -880,36 +956,78 @@ function DashboardCard({ dashboard, savedViews }) {
 
       <section className="skyweb-dashboard-builder-add-card">
         <div>
-          <div className="skyweb-card-kicker">Add saved view</div>
-          <h3>Attach a saved macro surface</h3>
+          <div className="skyweb-card-kicker">Add dashboard item</div>
+          <h3>Attach an indicator or saved macro surface</h3>
           <p>
-            Dashboard items are built from saved macro views. This keeps the builder tied to your
-            curated shelf instead of a loose pile of random widgets.
+            Standard chart cards now bind directly to one indicator time series. Saved macro views
+            still work for broader context cards, but they are no longer required for simple chart
+            dashboard items.
           </p>
         </div>
-        {savedViews.length === 0 ? (
-          <EmptyState>
-            Save macro views first, then return here to compose them into dashboards.
-          </EmptyState>
-        ) : availableSavedViews.length === 0 ? (
-          <EmptyState>Every saved view is already attached to this dashboard.</EmptyState>
+        {indicators.length === 0 && savedViews.length === 0 ? (
+          <EmptyState>Macro indicators are not available yet.</EmptyState>
         ) : (
           <form className="skyweb-dashboard-builder-form" onSubmit={handleAddItem}>
-            <label className="skyweb-dashboard-builder-wide-field">
-              <span>Saved view</span>
+            <label>
+              <span>Source type</span>
               <select
                 className="form-select"
-                onChange={(event) => updateItemDraft('viewKey', event.target.value)}
-                value={itemDraft.viewKey || availableSavedViews[0]?.viewKey || ''}
+                onChange={(event) => updateItemDraft('itemSource', event.target.value)}
+                value={itemDraft.itemSource}
               >
-                {availableSavedViews.map((savedView) => (
-                  <option key={savedView.viewKey} value={savedView.viewKey}>
-                    {getSavedViewLabel(savedView)} · {formatRegion(savedView.view?.region)} ·{' '}
-                    {formatCategory(savedView.view?.category)}
-                  </option>
-                ))}
+                <option value="indicator">Indicator time series</option>
+                <option value="view">Saved macro view</option>
               </select>
             </label>
+            {itemDraft.itemSource === 'indicator' ? (
+              availableIndicators.length === 0 ? (
+                <div className="skyweb-dashboard-builder-wide-field">
+                  <EmptyState>Every indicator is already attached to this dashboard.</EmptyState>
+                </div>
+              ) : (
+                <label className="skyweb-dashboard-builder-wide-field">
+                  <span>Indicator</span>
+                  <select
+                    className="form-select"
+                    onChange={(event) => updateItemDraft('indicatorCode', event.target.value)}
+                    value={itemDraft.indicatorCode || availableIndicators[0]?.indicatorCode || ''}
+                  >
+                    {availableIndicators.map((indicator) => (
+                      <option key={indicator.indicatorCode} value={indicator.indicatorCode}>
+                        {indicator.indicatorCode} · {getIndicatorLabel(indicator)} ·{' '}
+                        {indicator.source} · {indicator.frequency}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )
+            ) : savedViews.length === 0 ? (
+              <div className="skyweb-dashboard-builder-wide-field">
+                <EmptyState>
+                  Save macro views first, then return here to compose them into dashboards.
+                </EmptyState>
+              </div>
+            ) : availableSavedViews.length === 0 ? (
+              <div className="skyweb-dashboard-builder-wide-field">
+                <EmptyState>Every saved view is already attached to this dashboard.</EmptyState>
+              </div>
+            ) : (
+              <label className="skyweb-dashboard-builder-wide-field">
+                <span>Saved view</span>
+                <select
+                  className="form-select"
+                  onChange={(event) => updateItemDraft('viewKey', event.target.value)}
+                  value={itemDraft.viewKey || availableSavedViews[0]?.viewKey || ''}
+                >
+                  {availableSavedViews.map((savedView) => (
+                    <option key={savedView.viewKey} value={savedView.viewKey}>
+                      {getSavedViewLabel(savedView)} · {formatRegion(savedView.view?.region)} ·{' '}
+                      {formatCategory(savedView.view?.category)}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
             <label>
               <span>Item title</span>
               <input
@@ -917,7 +1035,13 @@ function DashboardCard({ dashboard, savedViews }) {
                 maxLength={160}
                 onChange={(event) => updateItemDraft('itemTitle', event.target.value)}
                 placeholder={
-                  selectedSavedView ? getSavedViewLabel(selectedSavedView) : 'Optional title'
+                  itemDraft.itemSource === 'indicator'
+                    ? selectedIndicator
+                      ? getIndicatorLabel(selectedIndicator)
+                      : 'Optional indicator title'
+                    : selectedSavedView
+                      ? getSavedViewLabel(selectedSavedView)
+                      : 'Optional title'
                 }
                 value={itemDraft.itemTitle}
               />
@@ -984,7 +1108,15 @@ function DashboardCard({ dashboard, savedViews }) {
               widthUnits={itemDraft.widthUnits}
             />
             <div className="skyweb-dashboard-builder-actions">
-              <button className="btn skyweb-btn-primary" disabled={addingItem} type="submit">
+              <button
+                className="btn skyweb-btn-primary"
+                disabled={
+                  addingItem ||
+                  (itemDraft.itemSource === 'indicator' && availableIndicators.length === 0) ||
+                  (itemDraft.itemSource === 'view' && availableSavedViews.length === 0)
+                }
+                type="submit"
+              >
                 {addingItem ? 'Adding...' : 'Add item'}
               </button>
             </div>
@@ -1006,7 +1138,9 @@ function DashboardCard({ dashboard, savedViews }) {
             ))}
           </div>
         ) : (
-          <EmptyState>Add a saved macro view to give this dashboard its first tile.</EmptyState>
+          <EmptyState>
+            Add an indicator or saved macro view to give this dashboard its first tile.
+          </EmptyState>
         )}
       </section>
     </article>
@@ -1016,11 +1150,45 @@ function DashboardCard({ dashboard, savedViews }) {
 export default function DashboardBuilder() {
   const { dashboards, dashboardsError, loadingDashboards, refreshDashboards } = useDashboards();
   const { loadingSavedViews, savedViews, savedViewsError } = useSavedViews();
+  const [indicators, setIndicators] = useState([]);
+  const [loadingIndicators, setLoadingIndicators] = useState(false);
+  const [indicatorsError, setIndicatorsError] = useState(null);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadIndicators() {
+      setLoadingIndicators(true);
+      setIndicatorsError(null);
+
+      try {
+        const payload = await macroService.listIndicators({ limit: 500 });
+
+        if (active) {
+          setIndicators(payload.items || []);
+        }
+      } catch (error) {
+        if (active) {
+          setIndicatorsError(error);
+        }
+      } finally {
+        if (active) {
+          setLoadingIndicators(false);
+        }
+      }
+    }
+
+    loadIndicators();
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const totalItems = getTotalDashboardItems(dashboards);
   const layoutCount = new Set(dashboards.map((dashboard) => dashboard.layoutPreset)).size;
-  const loading = loadingDashboards || loadingSavedViews;
-  const error = dashboardsError || savedViewsError;
+  const loading = loadingDashboards || loadingSavedViews || loadingIndicators;
+  const error = dashboardsError || savedViewsError || indicatorsError;
 
   return (
     <>
@@ -1029,8 +1197,8 @@ export default function DashboardBuilder() {
           <div className="skyweb-kicker">Dashboard builder</div>
           <h1>Build dashboard surfaces</h1>
           <p>
-            Phase 7.8 gives dashboard surfaces a screenshot-ready presentation mode for clean
-            portfolio captures, PDF saves, and polished analytics storytelling.
+            Build reusable dashboard definitions from direct indicator time series first, then add
+            saved macro views when you want broader context cards.
           </p>
         </div>
         <div className="skyweb-header-actions">
@@ -1058,8 +1226,8 @@ export default function DashboardBuilder() {
         <>
           <section className="skyweb-metric-grid skyweb-dashboard-builder-metrics">
             <StatCard label="Dashboards" value={dashboards.length} detail="Owned boards" />
-            <StatCard label="Items" value={totalItems} detail="Saved-view blocks" />
-            <StatCard label="Saved views" value={savedViews.length} detail="Available shelf" />
+            <StatCard label="Items" value={totalItems} detail="Dashboard blocks" />
+            <StatCard label="Indicators" value={indicators.length} detail="Available series" />
             <StatCard label="Layouts" value={layoutCount || 0} detail="Presets in use" />
           </section>
 
@@ -1071,13 +1239,11 @@ export default function DashboardBuilder() {
               <h2>Create the first dashboard object</h2>
               <p>
                 Your pinned command board is live already. This builder creates reusable dashboard
-                definitions on top of that saved-view shelf.
+                definitions from direct indicators and optional saved-view context cards.
               </p>
-              {savedViews.length === 0 && (
-                <Link className="btn skyweb-btn-primary" to="/macro/views">
-                  Save first macro view
-                </Link>
-              )}
+              <Link className="btn skyweb-btn-primary" to="/macro/indicators">
+                Browse indicators
+              </Link>
             </section>
           ) : (
             <section className="skyweb-dashboard-builder-stack">
@@ -1085,6 +1251,7 @@ export default function DashboardBuilder() {
                 <DashboardCard
                   dashboard={dashboard}
                   key={dashboard.dashboardKey}
+                  indicators={indicators}
                   savedViews={savedViews}
                 />
               ))}

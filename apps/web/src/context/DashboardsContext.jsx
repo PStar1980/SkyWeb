@@ -20,11 +20,18 @@ function clampDashboardUnit(value, fallback = 1) {
 }
 
 function normalizeDashboardItem(item = {}) {
+  const itemSource =
+    item.itemSource ||
+    item.item_source ||
+    (item.indicatorCode || item.indicator_code ? 'indicator' : 'view');
+
   return {
     ...item,
     itemId: item.itemId || item.item_id || '',
     dashboardKey: item.dashboardKey || item.dashboard_key || '',
+    itemSource,
     viewKey: item.viewKey || item.view_key || item.view?.viewKey || '',
+    indicatorCode: item.indicatorCode || item.indicator_code || item.indicator?.indicatorCode || '',
     itemTitle: item.itemTitle || item.item_title || '',
     itemNote: item.itemNote || item.item_note || '',
     itemMode: item.itemMode || item.item_mode || 'view_card',
@@ -53,8 +60,14 @@ function compareDashboardItems(left, right) {
     return updatedDifference;
   }
 
-  return (left.view?.label || left.viewKey || '').localeCompare(
-    right.view?.label || right.viewKey || '',
+  return (
+    left.view?.label ||
+    left.indicator?.description ||
+    left.viewKey ||
+    left.indicatorCode ||
+    ''
+  ).localeCompare(
+    right.view?.label || right.indicator?.description || right.viewKey || right.indicatorCode || '',
     undefined,
     { sensitivity: 'base' },
   );

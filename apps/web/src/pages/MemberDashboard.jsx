@@ -28,11 +28,11 @@ function getViewCategory(savedView = {}) {
 }
 
 function getDashboardItemRegion(item = {}) {
-  return item.view?.region || '';
+  return item.view?.region || item.indicator?.source || '';
 }
 
 function getDashboardItemCategory(item = {}) {
-  return item.view?.category || '';
+  return item.view?.category || item.indicator?.frequency || '';
 }
 
 function getSavedViewRows(savedViews = []) {
@@ -46,7 +46,13 @@ function getDashboardRows(dashboard = {}) {
   const items = Array.isArray(dashboard.items) ? dashboard.items : [];
 
   return items.reduce((sum, item) => {
-    const rows = Number(item.view?.stats?.totalRows ?? item.view?.totalRows ?? 0);
+    const rows = Number(
+      item.view?.stats?.totalRows ??
+        item.view?.totalRows ??
+        item.indicator?.stats?.totalRows ??
+        item.indicator?.totalRows ??
+        0,
+    );
     return Number.isFinite(rows) ? sum + rows : sum;
   }, 0);
 }
@@ -137,7 +143,7 @@ function DefaultDashboardBoard({
           <h1>{dashboard.title}</h1>
           <p>
             {dashboard.description ||
-              `${displayName}, this custom dashboard is built from saved macro views and reusable analytics blocks.`}
+              `${displayName}, this custom dashboard is built from direct indicators, saved macro views, and reusable analytics blocks.`}
           </p>
         </div>
         <div className="skyweb-header-actions">

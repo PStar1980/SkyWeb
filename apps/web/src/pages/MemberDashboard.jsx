@@ -184,7 +184,7 @@ export default function MemberDashboard() {
           <button className="btn skyweb-btn-ghost" onClick={refreshSavedViews} type="button">
             Refresh dashboard
           </button>
-          <Link className="btn skyweb-btn-ghost" to="/saved">
+          <Link className="btn skyweb-btn-ghost" to="/macro/views?status=SAVED">
             Manage saved views
           </Link>
           <Link className="btn skyweb-btn-ghost" to="/dashboards">
@@ -296,7 +296,7 @@ export default function MemberDashboard() {
                 </div>
               ) : (
                 <EmptyState>
-                  Add notes to pinned views on the saved page, and they will appear here.
+                  Add notes on individual macro view detail pages, and they will appear here.
                 </EmptyState>
               )}
             </article>

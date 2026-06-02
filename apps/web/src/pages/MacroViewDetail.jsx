@@ -88,16 +88,17 @@ export default function MacroViewDetail() {
   const { viewKey } = useParams();
   const { isAuthenticated } = useAuth();
   const { preferences } = usePreferences();
-  const { isViewSaved, loadingSavedViews, removeSavedView, saveSavedView } = useSavedViews();
+  const { getSavedView, isViewSaved, loadingSavedViews, updateSavedView } = useSavedViews();
   const [rows, setRows] = useState([]);
   const [view, setView] = useState(null);
   const [latest, setLatest] = useState(null);
   const [columns, setColumns] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [saveNotice, setSaveNotice] = useState('');
-  const [saveError, setSaveError] = useState(null);
-  const [savingView, setSavingView] = useState(false);
+  const [noteNotice, setNoteNotice] = useState('');
+  const [noteError, setNoteError] = useState(null);
+  const [noteDraft, setNoteDraft] = useState('');
+  const [savingNote, setSavingNote] = useState(false);
 
   const displayColumns = useMemo(() => {
     if (columns.length > 0) {
@@ -115,30 +116,31 @@ export default function MacroViewDetail() {
   const latestDate = stats.maxDate || latest?.date || loadedRange.maxDate;
   const oldestLoadedDate = loadedRange.minDate;
   const saved = isViewSaved(viewKey);
+  const savedView = getSavedView(viewKey);
+  const noteDirty = noteDraft !== (savedView?.note || '');
 
-  async function handleSaveToggle() {
-    setSavingView(true);
-    setSaveNotice('');
-    setSaveError(null);
+  async function handleSaveNote() {
+    if (!savedView) {
+      return;
+    }
+
+    setSavingNote(true);
+    setNoteNotice('');
+    setNoteError(null);
 
     try {
-      if (saved) {
-        await removeSavedView(viewKey);
-        setSaveNotice('Removed from your saved macro views.');
-      } else {
-        await saveSavedView({
-          viewKey,
-          displayLabel: view?.label || viewKey,
-          pinned: true,
-        });
-        setSaveNotice('Saved to your macro view watchlist.');
-      }
+      await updateSavedView(viewKey, { note: noteDraft || null });
+      setNoteNotice('Saved view note updated.');
     } catch (actionError) {
-      setSaveError(actionError);
+      setNoteError(actionError);
     } finally {
-      setSavingView(false);
+      setSavingNote(false);
     }
   }
+
+  useEffect(() => {
+    setNoteDraft(savedView?.note || '');
+  }, [savedView?.note, viewKey]);
 
   useEffect(() => {
     let active = true;
@@ -192,16 +194,16 @@ export default function MacroViewDetail() {
           <Link className="btn skyweb-btn-ghost" to="/macro/views">
             Back to views
           </Link>
-          {isAuthenticated ? (
-            <button
-              className={saved ? 'btn skyweb-btn-ghost' : 'btn skyweb-btn-primary'}
-              disabled={savingView || loadingSavedViews || loading || Boolean(error)}
-              onClick={handleSaveToggle}
-              type="button"
+          {isAuthenticated && saved && <span className="skyweb-saved-pill">Saved</span>}
+          {isAuthenticated && !saved && (
+            <Link
+              className="btn skyweb-btn-primary"
+              to={`/macro/views?q=${encodeURIComponent(view?.label || viewKey)}`}
             >
-              {savingView ? 'Saving...' : saved ? 'Remove saved' : 'Save view'}
-            </button>
-          ) : (
+              Save from views
+            </Link>
+          )}
+          {!isAuthenticated && (
             <Link className="btn skyweb-btn-primary" to="/login">
               Sign in to save
             </Link>
@@ -209,10 +211,10 @@ export default function MacroViewDetail() {
         </div>
       </header>
 
-      {saveNotice && <div className="skyweb-profile-notice skyweb-detail-notice">{saveNotice}</div>}
-      {saveError && (
+      {noteNotice && <div className="skyweb-profile-notice skyweb-detail-notice">{noteNotice}</div>}
+      {noteError && (
         <div className="skyweb-auth-alert skyweb-detail-notice">
-          {saveError.message || 'Unable to update your saved macro views.'}
+          {noteError.message || 'Unable to update your saved view note.'}
         </div>
       )}
 
@@ -241,6 +243,54 @@ export default function MacroViewDetail() {
             />
             <StatCard label="Fields" value={displayColumns.length} detail="Preview columns" />
           </section>
+
+          {isAuthenticated && saved && (
+            <section className="skyweb-card skyweb-saved-note-panel mb-4">
+              <div className="skyweb-card-kicker">Saved view note</div>
+              <div className="skyweb-saved-note-panel-layout">
+                <div>
+                  <h2>View-level context</h2>
+                  <p>
+                    Save, pin, unpin, and reorder this view from the Macro Views catalog. Keep the
+                    longer private note here beside the actual data surface.
+                  </p>
+                  <dl className="skyweb-detail-list skyweb-saved-detail-list">
+                    <div>
+                      <dt>Status</dt>
+                      <dd>{savedView?.pinned ? 'Pinned' : 'Saved'}</dd>
+                    </div>
+                    <div>
+                      <dt>Display label</dt>
+                      <dd>{savedView?.displayLabel || view?.label || viewKey}</dd>
+                    </div>
+                    <div>
+                      <dt>Order</dt>
+                      <dd>{savedView?.sortOrder ?? 0}</dd>
+                    </div>
+                  </dl>
+                </div>
+                <label className="skyweb-saved-note-edit">
+                  <span>Private note</span>
+                  <textarea
+                    className="form-control"
+                    maxLength={2000}
+                    onChange={(event) => setNoteDraft(event.target.value)}
+                    placeholder="Why does this macro surface matter? What should future-you remember here?"
+                    rows={6}
+                    value={noteDraft}
+                  />
+                  <button
+                    className="btn skyweb-btn-primary"
+                    disabled={savingNote || loadingSavedViews || !noteDirty}
+                    onClick={handleSaveNote}
+                    type="button"
+                  >
+                    {savingNote ? 'Saving note...' : 'Save note'}
+                  </button>
+                </label>
+              </div>
+            </section>
+          )}
 
           <ChartPanel
             columns={columns}

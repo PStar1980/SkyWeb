@@ -35,7 +35,6 @@ const ALLOWED_PREFERENCE_VALUES = Object.freeze({
     '/macro',
     '/macro/views',
     '/macro/indicators',
-    '/saved',
     '/account',
   ],
 });
@@ -44,6 +43,11 @@ const PreferencesContext = createContext(null);
 
 function normalizePreferenceValue(fieldName, value) {
   const candidateValue = String(value || '').trim();
+
+  if (fieldName === 'preferredLandingPage' && candidateValue === '/saved') {
+    return '/macro/views';
+  }
+
   const allowedValues = ALLOWED_PREFERENCE_VALUES[fieldName] || [];
 
   return allowedValues.includes(candidateValue)

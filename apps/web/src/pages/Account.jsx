@@ -122,7 +122,6 @@ const PREFERENCE_FIELDS = [
       { value: '/macro', label: 'Macro dashboard' },
       { value: '/macro/views', label: 'Macro views' },
       { value: '/macro/indicators', label: 'Indicators' },
-      { value: '/saved', label: 'Saved views' },
       { value: '/account', label: 'Account' },
     ],
   },
@@ -742,7 +741,7 @@ export default function Account() {
               <Link className="btn skyweb-btn-ghost" to="/dashboards">
                 Build dashboards
               </Link>
-              <Link className="btn skyweb-btn-ghost" to="/saved">
+              <Link className="btn skyweb-btn-ghost" to="/macro/views?status=SAVED">
                 Manage saved views
               </Link>
               <Link className="btn skyweb-btn-ghost" to="/macro/views">

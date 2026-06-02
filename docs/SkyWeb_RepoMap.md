@@ -43,6 +43,7 @@ SkyWeb/
 │           │   ├── ChartPanel.jsx
 │           │   ├── DashboardItemVisualization.jsx
 │           │   ├── DashboardSurface.jsx
+│           │   ├── MacroViewCatalogCard.jsx
 │           │   ├── MetricQuickCard.jsx
 │           │   ├── Navbar.jsx
 │           │   ├── PageState.jsx
@@ -80,5 +81,7 @@ SkyWeb/
 │               ├── charting.js
 │               ├── formatters.js
 │               └── macroStory.js
-└── docs/
-    └── SkyWeb_RepoMap.md
+├── docs/
+│   └── SkyWeb_RepoMap.md
+└── tests/
+    └── e2e/

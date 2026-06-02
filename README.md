@@ -6,9 +6,9 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 ## Current Status
 
-**Phase 7.8 — Dashboard Presentation Mode**
+**Phase 7 Revision — Combined Views and Saved Controls**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, and now includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, and now consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer.
 
 Implemented foundation pieces:
 
@@ -32,12 +32,12 @@ Implemented foundation pieces:
 - Preference-aware chart windows for macro view drilldowns
 - App-level dashboard density classes for comfortable, compact, and roomy layouts
 - Authenticated saved macro view context backed by `/api/skyweb/saved-views`
-- Protected `/saved` route for a private macro view watchlist
-- Save/remove actions on macro view detail pages
-- Saved badges on macro catalog cards
+- Authenticated saved-view controls directly on the Macro Views catalog cards
+- Save/remove, pin/unpin, and custom-label/display-order edits from `/macro/views`
+- Legacy `/saved` route redirects into `/macro/views?status=SAVED`
 - Saved-view account summary and preferred landing option
 - Saved-view pin/unpin controls, metadata editing, private notes, and display-order support
-- Saved-page search, region/category/status filters, and sort controls
+- Macro Views status filters for all/saved/unsaved/pinned/unpinned saved-view management
 - Protected `/dashboard` route that composes pinned saved macro views into a personal member dashboard
 - Visible product rebrand from SkyWeb to SkyWeb Analytics while preserving repo/app code names
 - Protected `/dashboards` route for the dashboard builder foundation
@@ -255,20 +255,18 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 #### 7.1 — Saved Macro Views Foundation
 
 - Add a shared saved-views context for authenticated SkyWeb members
-- Add protected `/saved` route for the first private watchlist surface
-- Add save/remove controls to macro view detail pages
-- Add saved badges to macro catalog cards
-- Add saved-view summary on the account page
-- Add `/saved` as a preferred landing-page option
+- Add saved macro view context for the first private watchlist surface
+- Add save/remove controls for macro views
+- Add saved badges and saved-view summaries across member surfaces
 - Prepare the personalized object layer for saved dashboards, presets, and future alert rules
 
 #### 7.2 — Saved View Polish + Pinning Controls
 
 - Keep saved views sorted globally by pinned state, display order, updated date, and label
-- Add saved-page search across labels, notes, descriptions, regions, categories, and view keys
-- Add region, category, and pinned/unpinned filters for the private saved shelf
+- Add saved-view search across labels, notes, descriptions, regions, categories, and view keys
+- Add region, category, and pinned/unpinned filters for saved-view management
 - Add sort controls for priority, recently updated, recently saved, title, region, and category
-- Add pin/unpin controls directly from `/saved`
+- Add pin/unpin controls for saved views
 - Add editable saved-view metadata for custom labels, private notes, and display order
 - Improve empty and no-match states for saved-view workflows
 
@@ -323,6 +321,15 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 - Add copy-link and print/save-PDF actions to the presentation toolbar
 - Add presentation-view entry points from dashboard builder, dashboard viewer, and default dashboard surfaces
 - Add print CSS that hides workspace controls and preserves dashboard colors for portfolio captures
+
+#### Phase 7 Revision — Combined Views and Saved Controls
+
+- Remove the separate Saved navbar item so Views becomes the primary macro catalog and watchlist control surface
+- Add saved-status filtering directly to `/macro/views`
+- Add save/remove, pin/unpin, and metadata editing controls to macro catalog cards
+- Keep custom label and display order edits on the catalog card layer for fast shelf management
+- Move longer private saved-view notes onto the individual macro view detail page
+- Redirect legacy `/saved` links to `/macro/views?status=SAVED`
 
 #### Coming next
 

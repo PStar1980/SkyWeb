@@ -8,7 +8,7 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 **Phase 7 Revision — Macro Navigation and Dashboard Cockpit Polish**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, and begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection and table-first exploration.
 
 Implemented foundation pieces:
 
@@ -328,6 +328,15 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 - Add copy-link and print/save-PDF actions to the presentation toolbar
 - Add presentation-view entry points from dashboard builder, dashboard viewer, and default dashboard surfaces
 - Add print CSS that hides workspace controls and preserves dashboard colors for portfolio captures
+
+#### Phase 7 Requirement 2 — Multi-Series Analytical Views
+
+- Clarify macro views as grouped analytical lenses rather than default single-line dashboard chart sources
+- Add multi-series selection to macro view detail charts
+- Allow one or more numeric columns from a view to render on the same comparison chart
+- Preserve latest-row and preview-table exploration as central view-detail behavior
+- Keep indicator items as the preferred model for single-series dashboard cards
+- Treat saved macro views on dashboards as lens summaries, latest-row panels, or table previews rather than implicit single-series charts
 
 #### Phase 7 Revision — Macro Navigation and Dashboard Cockpit Polish
 

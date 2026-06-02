@@ -3,9 +3,11 @@ import { Link } from 'react-router-dom';
 import macroService from '../services/macroService.js';
 import { getPreferredSeriesKey, getSeriesCatalog, summarizeSeries } from '../utils/charting.js';
 import {
+  formatCategory,
   formatColumnLabel,
   formatDate,
   formatNumber,
+  formatRegion,
   formatValue,
   isDateKey,
 } from '../utils/formatters.js';
@@ -132,8 +134,7 @@ function useDashboardItemData(item, mode) {
     let active = true;
 
     async function loadItemData() {
-      const needsRichViewData =
-        viewKey && ['metric_card', 'mini_chart', 'latest_row', 'table_preview'].includes(mode);
+      const needsRichViewData = viewKey && ['latest_row', 'table_preview'].includes(mode);
       const needsIndicatorData = Boolean(indicatorItem && indicatorCode);
 
       if (!needsRichViewData && !needsIndicatorData) {
@@ -267,6 +268,36 @@ function IndicatorSummaryVisual({ item }) {
           ? `${formatNumber(stats.totalRows || 0, { compact: true })} point(s), latest ${formatDate(latestDate)}`
           : item.indicator?.description || 'Direct macro indicator dashboard item.'}
       </p>
+    </DashboardItemShell>
+  );
+}
+
+function AnalyticalLensSummaryVisual({ item }) {
+  const stats = getViewStats(item);
+  const latestDate = stats.maxDate || item.view?.maxDate;
+
+  return (
+    <DashboardItemShell
+      item={item}
+      eyebrow="Analytical lens"
+      meta={
+        <>
+          <span>{item.view?.region ? formatRegion(item.view.region) : 'Grouped view'}</span>
+          <span>
+            {item.view?.category ? formatCategory(item.view.category) : 'Analytical lens'}
+          </span>
+        </>
+      }
+    >
+      <p className="skyweb-dashboard-visual-muted">
+        This dashboard item points to a multi-column view. Open the lens for multi-series charting
+        and table exploration, or add direct indicators for single-line dashboard charts.
+      </p>
+      {latestDate && (
+        <div className="skyweb-dashboard-metric-value skyweb-dashboard-lens-date">
+          {formatDate(latestDate)}
+        </div>
+      )}
     </DashboardItemShell>
   );
 }
@@ -461,6 +492,10 @@ export default function DashboardItemVisualization({ item }) {
     }
 
     return <ViewCard compact={mode === 'compact_card'} saved view={{ ...item.view, label }} />;
+  }
+
+  if (!indicatorItem && ['metric_card', 'mini_chart'].includes(mode)) {
+    return <AnalyticalLensSummaryVisual item={item} />;
   }
 
   if (dataState.loading) {

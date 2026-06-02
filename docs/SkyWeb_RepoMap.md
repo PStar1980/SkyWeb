@@ -45,6 +45,7 @@ SkyWeb/
 │           │   ├── DashboardSurface.jsx
 │           │   ├── MacroViewCatalogCard.jsx
 │           │   ├── MetricQuickCard.jsx
+│           │   ├── MultiSeriesSparkline.jsx
 │           │   ├── Navbar.jsx
 │           │   ├── PageState.jsx
 │           │   ├── ProtectedRoute.jsx

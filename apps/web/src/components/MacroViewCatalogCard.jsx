@@ -98,7 +98,7 @@ export default function MacroViewCatalogCard({
           </label>
 
           <p className="skyweb-catalog-note-hint">
-            Private notes live on the individual view page so the catalog stays fast to manage.
+            Private notes live on the individual lens page so the catalog stays fast to manage.
           </p>
 
           <div className="skyweb-catalog-action-row">
@@ -119,7 +119,7 @@ export default function MacroViewCatalogCard({
 
       <div className="skyweb-catalog-action-row skyweb-catalog-primary-actions">
         <Link className="btn skyweb-btn-primary" to={`/macro/views/${view.viewKey}`}>
-          Open view
+          Open lens
         </Link>
 
         {isAuthenticated ? (

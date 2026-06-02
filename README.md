@@ -6,9 +6,9 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 ## Current Status
 
-**Phase 7 Revision — Combined Views and Saved Controls**
+**Phase 7 Revision — Macro Navigation and Dashboard Cockpit Polish**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, and now consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit.
 
 Implemented foundation pieces:
 
@@ -35,6 +35,11 @@ Implemented foundation pieces:
 - Authenticated saved-view controls directly on the Macro Views catalog cards
 - Save/remove, pin/unpin, and custom-label/display-order edits from `/macro/views`
 - Legacy `/saved` route redirects into `/macro/views?status=SAVED`
+- Home navigation removed because the SkyWeb Analytics brand link already returns to the public landing page
+- Macro navigation is now a dropdown with Overview and Dashboard entry points
+- `/macro` is titled Macro Overview to distinguish it from the private dashboard cockpit
+- `/dashboard` now supports switching across custom dashboards from the top of the page
+- `/dashboard` removes duplicated default-live, dashboard-hero, and metadata summary cards so the cockpit focuses on dashboard controls and configured blocks
 - Saved-view account summary and preferred landing option
 - Saved-view pin/unpin controls, metadata editing, private notes, and display-order support
 - Macro Views status filters for all/saved/unsaved/pinned/unpinned saved-view management
@@ -322,7 +327,7 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 - Add presentation-view entry points from dashboard builder, dashboard viewer, and default dashboard surfaces
 - Add print CSS that hides workspace controls and preserves dashboard colors for portfolio captures
 
-#### Phase 7 Revision — Combined Views and Saved Controls
+#### Phase 7 Revision — Macro Navigation and Dashboard Cockpit Polish
 
 - Remove the separate Saved navbar item so Views becomes the primary macro catalog and watchlist control surface
 - Add saved-status filtering directly to `/macro/views`

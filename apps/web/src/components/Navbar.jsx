@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -8,7 +8,9 @@ function getNavLinkClass({ isActive }) {
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { isAuthenticated, loading, logout, user } = useAuth();
+  const macroActive = location.pathname.startsWith('/macro') || location.pathname === '/dashboard';
 
   async function handleLogout() {
     await logout();
@@ -23,22 +25,32 @@ export default function Navbar() {
       </NavLink>
 
       <nav className="skyweb-nav" aria-label="Primary navigation">
-        <NavLink className={getNavLinkClass} end to="/">
-          Home
-        </NavLink>
-        <NavLink className={getNavLinkClass} end to="/macro">
-          Macro
-        </NavLink>
-        {!loading && isAuthenticated && (
-          <>
-            <NavLink className={getNavLinkClass} to="/dashboard">
-              Dashboard
+        <div className="skyweb-nav-dropdown">
+          <button
+            aria-expanded="false"
+            className={
+              macroActive
+                ? 'skyweb-nav-link skyweb-nav-dropdown-trigger active'
+                : 'skyweb-nav-link skyweb-nav-dropdown-trigger'
+            }
+            type="button"
+          >
+            Macro
+            <span aria-hidden="true" className="skyweb-nav-caret">
+              ▾
+            </span>
+          </button>
+          <div className="skyweb-nav-menu" role="menu">
+            <NavLink className={getNavLinkClass} end role="menuitem" to="/macro">
+              Overview
             </NavLink>
-            <NavLink className={getNavLinkClass} to="/dashboards">
-              Dashboards
-            </NavLink>
-          </>
-        )}
+            {!loading && isAuthenticated && (
+              <NavLink className={getNavLinkClass} role="menuitem" to="/dashboard">
+                Dashboard
+              </NavLink>
+            )}
+          </div>
+        </div>
         <NavLink className={getNavLinkClass} to="/macro/views">
           Views
         </NavLink>

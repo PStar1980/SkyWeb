@@ -3508,8 +3508,7 @@
     transform 140ms ease;
 }
 
-.skyweb-nav-dropdown:hover .skyweb-nav-menu,
-.skyweb-nav-dropdown:focus-within .skyweb-nav-menu {
+.skyweb-nav-dropdown.open .skyweb-nav-menu {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
@@ -3572,8 +3571,7 @@
     transform: none;
   }
 
-  .skyweb-nav-dropdown:hover .skyweb-nav-menu,
-  .skyweb-nav-dropdown:focus-within .skyweb-nav-menu {
+  .skyweb-nav-dropdown.open .skyweb-nav-menu {
     display: grid;
   }
 }

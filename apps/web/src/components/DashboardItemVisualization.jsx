@@ -6,7 +6,6 @@ import {
   formatColumnLabel,
   formatDate,
   formatNumber,
-  formatRegion,
   formatValue,
   isDateKey,
 } from '../utils/formatters.js';
@@ -19,14 +18,46 @@ const TABLE_PREVIEW_LIMIT = 5;
 const TABLE_COLUMN_LIMIT = 5;
 const LATEST_FIELD_LIMIT = 8;
 
+function isIndicatorItem(item = {}) {
+  return item.itemSource === 'indicator' || Boolean(item.indicatorCode && !item.viewKey);
+}
+
 function getDashboardItemLabel(item = {}) {
   return (
-    item.itemTitle || item.savedDisplayLabel || item.view?.label || item.viewKey || 'Dashboard item'
+    item.itemTitle ||
+    item.savedDisplayLabel ||
+    item.view?.label ||
+    item.indicator?.description ||
+    item.indicatorCode ||
+    item.viewKey ||
+    'Dashboard item'
   );
+}
+
+function getDashboardItemLink(item = {}) {
+  if (isIndicatorItem(item) && item.indicatorCode) {
+    return {
+      href: `/macro/indicators/${item.indicatorCode}`,
+      label: 'Open indicator →',
+    };
+  }
+
+  if (item.viewKey) {
+    return {
+      href: `/macro/views/${item.viewKey}`,
+      label: 'Open macro view →',
+    };
+  }
+
+  return null;
 }
 
 function getViewStats(item = {}) {
   return item.view?.stats || {};
+}
+
+function getIndicatorStats(item = {}) {
+  return item.indicator?.stats || {};
 }
 
 function getCellValue(row = {}, key) {
@@ -46,7 +77,7 @@ function getCellValue(row = {}, key) {
 function getLatestFields(latest = {}, limit = LATEST_FIELD_LIMIT) {
   return Object.entries(latest || {})
     .filter(([key]) => !['createdAt', 'updatedAt'].includes(key))
-    .filter(([key, value]) => value !== null && value !== undefined && value !== '')
+    .filter(([, value]) => value !== null && value !== undefined && value !== '')
     .sort(([leftKey], [rightKey]) => {
       if (isDateKey(leftKey) && !isDateKey(rightKey)) {
         return -1;
@@ -80,8 +111,16 @@ function getTableColumns(rows = []) {
     .slice(0, TABLE_COLUMN_LIMIT);
 }
 
+function getDashboardItemSeries(rows = []) {
+  const catalog = getSeriesCatalog(rows);
+  const preferredKey = getPreferredSeriesKey(catalog.map((metric) => metric.key));
+  return catalog.find((catalogItem) => catalogItem.key === preferredKey) || catalog[0] || null;
+}
+
 function useDashboardItemData(item, mode) {
   const viewKey = item?.viewKey;
+  const indicatorCode = item?.indicatorCode;
+  const indicatorItem = isIndicatorItem(item);
   const [state, setState] = useState({
     loading: false,
     error: null,
@@ -93,10 +132,11 @@ function useDashboardItemData(item, mode) {
     let active = true;
 
     async function loadItemData() {
-      if (
-        !viewKey ||
-        !['metric_card', 'mini_chart', 'latest_row', 'table_preview'].includes(mode)
-      ) {
+      const needsRichViewData =
+        viewKey && ['metric_card', 'mini_chart', 'latest_row', 'table_preview'].includes(mode);
+      const needsIndicatorData = Boolean(indicatorItem && indicatorCode);
+
+      if (!needsRichViewData && !needsIndicatorData) {
         setState({ loading: false, error: null, rows: [], latest: null });
         return;
       }
@@ -104,6 +144,26 @@ function useDashboardItemData(item, mode) {
       setState((currentState) => ({ ...currentState, loading: true, error: null }));
 
       try {
+        if (needsIndicatorData) {
+          const rowLimit = mode === 'table_preview' ? TABLE_PREVIEW_LIMIT : MINI_CHART_LIMIT;
+          const rowsPayload = await macroService.getIndicatorSeries(indicatorCode, {
+            limit: rowLimit,
+          });
+
+          if (!active) {
+            return;
+          }
+
+          const rows = rowsPayload?.items || [];
+          setState({
+            loading: false,
+            error: null,
+            rows,
+            latest: rows[0] || null,
+          });
+          return;
+        }
+
         const needsRows = mode !== 'latest_row';
         const rowLimit = mode === 'table_preview' ? TABLE_PREVIEW_LIMIT : MINI_CHART_LIMIT;
         const [rowsPayload, latestPayload] = await Promise.all([
@@ -135,13 +195,14 @@ function useDashboardItemData(item, mode) {
     return () => {
       active = false;
     };
-  }, [mode, viewKey]);
+  }, [indicatorCode, indicatorItem, mode, viewKey]);
 
   return state;
 }
 
 function DashboardItemShell({ item, children, eyebrow, title, meta = null }) {
   const label = title || getDashboardItemLabel(item);
+  const link = getDashboardItemLink(item);
 
   return (
     <article className="skyweb-dashboard-visual-card">
@@ -150,13 +211,17 @@ function DashboardItemShell({ item, children, eyebrow, title, meta = null }) {
           <div className="skyweb-card-kicker">{eyebrow}</div>
           <h3>{label}</h3>
         </div>
-        {item.viewKey && <span className="skyweb-saved-pill">Saved</span>}
+        {isIndicatorItem(item) ? (
+          <span className="skyweb-saved-pill skyweb-saved-pill-muted">Indicator</span>
+        ) : (
+          item.viewKey && <span className="skyweb-saved-pill">Saved</span>
+        )}
       </div>
       {children}
       {meta && <div className="skyweb-dashboard-visual-meta-strip">{meta}</div>}
-      {item.viewKey && (
-        <Link className="skyweb-card-link" to={`/macro/views/${item.viewKey}`}>
-          Open macro view →
+      {link && (
+        <Link className="skyweb-card-link" to={link.href}>
+          {link.label}
         </Link>
       )}
     </article>
@@ -166,7 +231,7 @@ function DashboardItemShell({ item, children, eyebrow, title, meta = null }) {
 function LoadingVisual({ item }) {
   return (
     <DashboardItemShell item={item} eyebrow="Loading data">
-      <p className="skyweb-dashboard-visual-muted">Pulling the latest public macro surface...</p>
+      <p className="skyweb-dashboard-visual-muted">Pulling the latest public macro series...</p>
     </DashboardItemShell>
   );
 }
@@ -181,18 +246,37 @@ function ErrorVisual({ item, error }) {
   );
 }
 
-function MetricCardVisual({ item, rows }) {
-  const catalog = useMemo(() => getSeriesCatalog(rows), [rows]);
-  const preferredKey = useMemo(
-    () => getPreferredSeriesKey(catalog.map((metric) => metric.key)),
-    [catalog],
+function IndicatorSummaryVisual({ item }) {
+  const stats = getIndicatorStats(item);
+  const latestDate = stats.maxDate || null;
+
+  return (
+    <DashboardItemShell
+      item={item}
+      eyebrow="Indicator card"
+      meta={
+        <>
+          <span>{item.indicator?.source || 'Macro source'}</span>
+          <span>{item.indicator?.frequency || 'Series'}</span>
+        </>
+      }
+    >
+      <div className="skyweb-dashboard-metric-value">{item.indicatorCode || '—'}</div>
+      <p className="skyweb-dashboard-visual-muted">
+        {latestDate
+          ? `${formatNumber(stats.totalRows || 0, { compact: true })} point(s), latest ${formatDate(latestDate)}`
+          : item.indicator?.description || 'Direct macro indicator dashboard item.'}
+      </p>
+    </DashboardItemShell>
   );
-  const metric =
-    catalog.find((catalogItem) => catalogItem.key === preferredKey) || catalog[0] || null;
+}
+
+function MetricCardVisual({ item, rows }) {
+  const metric = useMemo(() => getDashboardItemSeries(rows), [rows]);
   const summary = useMemo(() => summarizeSeries(metric?.series || []), [metric]);
 
   if (!metric || !summary.latest) {
-    const stats = getViewStats(item);
+    const stats = isIndicatorItem(item) ? getIndicatorStats(item) : getViewStats(item);
     const latestDate = stats.maxDate || item.view?.maxDate;
 
     return (
@@ -238,20 +322,14 @@ function MetricCardVisual({ item, rows }) {
 }
 
 function MiniChartVisual({ item, rows }) {
-  const catalog = useMemo(() => getSeriesCatalog(rows), [rows]);
-  const preferredKey = useMemo(
-    () => getPreferredSeriesKey(catalog.map((metric) => metric.key)),
-    [catalog],
-  );
-  const metric =
-    catalog.find((catalogItem) => catalogItem.key === preferredKey) || catalog[0] || null;
+  const metric = useMemo(() => getDashboardItemSeries(rows), [rows]);
   const summary = useMemo(() => summarizeSeries(metric?.series || []), [metric]);
 
   if (!metric || !metric.series.length) {
     return (
       <DashboardItemShell item={item} eyebrow="Mini chart">
         <p className="skyweb-dashboard-visual-muted">
-          No numeric series available for this view yet.
+          No numeric series available for this dashboard item yet.
         </p>
       </DashboardItemShell>
     );
@@ -283,8 +361,23 @@ function MiniChartVisual({ item, rows }) {
   );
 }
 
-function LatestRowVisual({ item, latest }) {
-  const fields = getLatestFields(latest);
+function LatestRowVisual({ item, latest, rows }) {
+  const indicatorItem = isIndicatorItem(item);
+  const indicatorMetric = useMemo(
+    () => (indicatorItem ? getDashboardItemSeries(rows) : null),
+    [indicatorItem, rows],
+  );
+  const indicatorSummary = useMemo(
+    () => summarizeSeries(indicatorMetric?.series || []),
+    [indicatorMetric],
+  );
+  const indicatorLatest = indicatorSummary.latest
+    ? {
+        date: indicatorSummary.latest.date,
+        value: indicatorSummary.latest.value,
+      }
+    : null;
+  const fields = getLatestFields(indicatorItem ? indicatorLatest : latest);
 
   return (
     <DashboardItemShell item={item} eyebrow="Latest row">
@@ -330,7 +423,7 @@ function TablePreviewVisual({ item, rows }) {
             </thead>
             <tbody>
               {rows.map((row, rowIndex) => (
-                <tr key={`${item.viewKey}-${rowIndex}`}>
+                <tr key={`${item.viewKey || item.indicatorCode}-${rowIndex}`}>
                   {columns.map((column) => (
                     <td key={column}>{formatValue(getCellValue(row, column), column)}</td>
                   ))}
@@ -349,7 +442,12 @@ function TablePreviewVisual({ item, rows }) {
 export default function DashboardItemVisualization({ item }) {
   const mode = normalizeDashboardItemMode(item?.itemMode);
   const label = getDashboardItemLabel(item);
+  const indicatorItem = isIndicatorItem(item);
   const dataState = useDashboardItemData(item, mode);
+
+  if (indicatorItem && ['view_card', 'wide_card', 'compact_card'].includes(mode)) {
+    return <IndicatorSummaryVisual item={item} />;
+  }
 
   if (['view_card', 'wide_card', 'compact_card'].includes(mode)) {
     if (!item?.view) {
@@ -382,7 +480,7 @@ export default function DashboardItemVisualization({ item }) {
   }
 
   if (mode === 'latest_row') {
-    return <LatestRowVisual item={item} latest={dataState.latest} />;
+    return <LatestRowVisual item={item} latest={dataState.latest} rows={dataState.rows} />;
   }
 
   if (mode === 'table_preview') {

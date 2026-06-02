@@ -8,7 +8,7 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 **Phase 7 Revision — Macro Navigation and Dashboard Cockpit Polish**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, and begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards.
 
 Implemented foundation pieces:
 
@@ -49,14 +49,14 @@ Implemented foundation pieces:
 - Protected `/dashboards` route for the dashboard builder foundation
 - Dashboard library backed by SkyServer user-owned dashboard objects
 - Create, edit, and remove dashboard definitions with title, description, layout preset, and display order
-- Add saved macro views as dashboard items with item title, note, mode, order, and size metadata
+- Add direct macro indicators or saved macro views as dashboard items with item title, note, mode, order, and size metadata
 - Edit/remove dashboard items from the builder surface
 - `/dashboards` preferred landing-page option for builder-focused workflows
 - Default-dashboard selection from the dashboard builder
 - Protected `/dashboards/:dashboardKey` viewer route for clean dashboard presentation
 - `/dashboard` now renders the default custom dashboard when one exists, with pinned saved-view fallback
-- Dashboard viewer rendering that respects dashboard item order, mode, notes, and size metadata
-- Dashboard item visualization modes for metric cards, mini charts, latest rows, and table previews
+- Dashboard viewer rendering that respects dashboard item source, order, mode, notes, and size metadata
+- Indicator-centric dashboard item visualization modes for metric cards, mini charts, latest rows, and table previews
 - Dashboard layout engine that applies item width/height spans across executive, research, and compact presets
 - Dashboard builder size presets and size guidance for shaping custom dashboard blocks
 - Protected `/dashboards/:dashboardKey/presentation` route for screenshot-ready dashboard canvases

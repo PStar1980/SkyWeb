@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import { useAuth } from '../context/AuthContext.jsx';
@@ -11,6 +12,29 @@ export default function Navbar() {
   const location = useLocation();
   const { isAuthenticated, loading, logout, user } = useAuth();
   const macroActive = location.pathname.startsWith('/macro') || location.pathname === '/dashboard';
+  const [macroMenuOpen, setMacroMenuOpen] = useState(false);
+  const macroDropdownRef = useRef(null);
+
+  function openMacroMenu() {
+    setMacroMenuOpen(true);
+  }
+
+  function closeMacroMenu() {
+    setMacroMenuOpen(false);
+  }
+
+  function handleMacroBlur(event) {
+    if (!macroDropdownRef.current?.contains(event.relatedTarget)) {
+      closeMacroMenu();
+    }
+  }
+
+  function handleMacroKeyDown(event) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      closeMacroMenu();
+    }
+  }
 
   async function handleLogout() {
     await logout();
@@ -25,14 +49,23 @@ export default function Navbar() {
       </NavLink>
 
       <nav className="skyweb-nav" aria-label="Primary navigation">
-        <div className="skyweb-nav-dropdown">
+        <div
+          className={macroMenuOpen ? 'skyweb-nav-dropdown open' : 'skyweb-nav-dropdown'}
+          onBlur={handleMacroBlur}
+          onKeyDown={handleMacroKeyDown}
+          onMouseEnter={openMacroMenu}
+          onMouseLeave={closeMacroMenu}
+          ref={macroDropdownRef}
+        >
           <button
-            aria-expanded="false"
+            aria-expanded={macroMenuOpen}
             className={
               macroActive
                 ? 'skyweb-nav-link skyweb-nav-dropdown-trigger active'
                 : 'skyweb-nav-link skyweb-nav-dropdown-trigger'
             }
+            onClick={() => setMacroMenuOpen((isOpen) => !isOpen)}
+            onFocus={openMacroMenu}
             type="button"
           >
             Macro
@@ -41,11 +74,22 @@ export default function Navbar() {
             </span>
           </button>
           <div className="skyweb-nav-menu" role="menu">
-            <NavLink className={getNavLinkClass} end role="menuitem" to="/macro">
+            <NavLink
+              className={getNavLinkClass}
+              end
+              onClick={closeMacroMenu}
+              role="menuitem"
+              to="/macro"
+            >
               Overview
             </NavLink>
             {!loading && isAuthenticated && (
-              <NavLink className={getNavLinkClass} role="menuitem" to="/dashboard">
+              <NavLink
+                className={getNavLinkClass}
+                onClick={closeMacroMenu}
+                role="menuitem"
+                to="/dashboard"
+              >
                 Dashboard
               </NavLink>
             )}

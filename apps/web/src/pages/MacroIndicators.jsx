@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import StatCard from '../components/StatCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import macroService from '../services/macroService.js';
@@ -162,15 +163,31 @@ export default function MacroIndicators() {
                   <th>Source</th>
                   <th>Frequency</th>
                   <th>Description</th>
+                  <th>Action</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredIndicators.map((indicator) => (
                   <tr key={indicator.indicatorCode}>
-                    <td className="skyweb-mono">{indicator.indicatorCode}</td>
+                    <td className="skyweb-mono">
+                      <Link
+                        className="skyweb-table-link"
+                        to={`/macro/indicators/${encodeURIComponent(indicator.indicatorCode)}`}
+                      >
+                        {indicator.indicatorCode}
+                      </Link>
+                    </td>
                     <td>{indicator.source}</td>
                     <td>{indicator.frequency ? formatCategory(indicator.frequency) : '—'}</td>
                     <td>{indicator.description || '—'}</td>
+                    <td>
+                      <Link
+                        className="skyweb-table-action"
+                        to={`/macro/indicators/${encodeURIComponent(indicator.indicatorCode)}`}
+                      >
+                        Open series →
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>

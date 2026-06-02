@@ -36,6 +36,10 @@ function listIndicators(params = {}) {
   return api.get(`${macroPrefix}/indicators`, { query: buildQuery(params) });
 }
 
+function getIndicator(indicatorCode) {
+  return api.get(`${macroPrefix}/indicators/${encodeURIComponent(indicatorCode)}`);
+}
+
 function getIndicatorSeries(indicatorCode, params = {}) {
   return api.get(`${macroPrefix}/indicators/${encodeURIComponent(indicatorCode)}/series`, {
     query: buildQuery(params),
@@ -49,5 +53,6 @@ export default {
   getLatestViewRow,
   getViewColumns,
   listIndicators,
+  getIndicator,
   getIndicatorSeries,
 };

@@ -22,7 +22,8 @@ Implemented foundation pieces:
 - Macro dashboard overview with live summary metrics
 - Curated view cards with coverage metadata
 - View detail pages with latest-row and preview-table surfaces
-- Indicator explorer with source/frequency filtering
+- Indicator explorer with source/frequency filtering and indicator drilldown pages
+- Indicator detail route with chart preview and latest series table
 - Public macro API namespace: `/api/public/macro/*`
 - SkyWeb Analytics login/session context using app-scoped `SKYWEB` authentication
 - Protected `/account` route backed by `/api/skyweb/profile`
@@ -181,6 +182,7 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 - Regional and category coverage panels
 - View detail metrics, latest values, and readable preview tables
 - Indicator source/frequency filtering
+- Indicator drilldown pages with chart preview and latest series table
 
 ### Phase 4 — Auth Shell & Member Layer Prep
 

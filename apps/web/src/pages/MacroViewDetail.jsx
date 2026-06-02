@@ -272,10 +272,12 @@ export default function MacroViewDetail() {
                 <label className="skyweb-saved-note-edit">
                   <span>Private note</span>
                   <textarea
+                    aria-label="Private saved view note"
                     className="form-control"
+                    id={`saved-view-note-${viewKey}`}
                     maxLength={2000}
+                    name="savedViewNote"
                     onChange={(event) => setNoteDraft(event.target.value)}
-                    placeholder="Why does this macro surface matter? What should future-you remember here?"
                     rows={6}
                     value={noteDraft}
                   />

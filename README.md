@@ -8,7 +8,7 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 **Phase 7 Revision — Macro Navigation and Dashboard Cockpit Polish**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection, precision chart axes, hover coordinate tooltips, and table-first exploration.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection, precision chart axes, hover coordinate tooltips, full-history loading, 50-row paginated data tables, time-based period filters, and table-first exploration.
 
 Implemented foundation pieces:
 
@@ -28,9 +28,10 @@ Implemented foundation pieces:
 - SkyWeb Analytics login/session context using app-scoped `SKYWEB` authentication
 - Protected `/account` route backed by `/api/skyweb/profile`
 - Editable account/profile UI for display name, headline, bio, timezone, locale, and avatar URL
-- Editable dashboard-preference UI for default macro region, macro category, chart window, dashboard density, and preferred landing page
+- Editable dashboard-preference UI for default macro region, macro category, chart period, dashboard density, and preferred landing page
 - Preference-aware macro catalog defaults that respect saved region/category unless URL filters are present
-- Preference-aware chart windows for macro view drilldowns
+- Preference-aware chart periods for macro view drilldowns
+- Full-history view and indicator detail loads with 50-row paginated analytical tables
 - App-level dashboard density classes for comfortable, compact, and roomy layouts
 - Authenticated saved macro view context backed by `/api/skyweb/saved-views`
 - Authenticated saved-view controls directly on the Macro Views catalog cards
@@ -67,7 +68,7 @@ Implemented foundation pieces:
 - Lightweight SVG chart foundation for macro view drilldowns
 - Precision chart mode with y-axis ruler labels, x-axis reference ticks, separator gridlines, and hover coordinate tooltips
 - Trend metric cards for latest/range/change summaries
-- Metric-selectable chart panels with quick metric cards and chart window controls
+- Metric-selectable chart panels with quick metric cards and chart period controls
 - Drilldown UX refinements for loaded date windows, latest-row emphasis, and chart/table pairing
 - Macro overview signal board for freshest, deepest, cross-border, and breadth stories
 - Decision-lane cards for category-driven exploration
@@ -207,7 +208,7 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 #### 5.2 — Macro Drilldown UX Upgrade
 
 - Add metric quick-select cards for the highest-value numeric series
-- Add chart window controls for 30, 60, 120, or all loaded points
+- Add chart period controls for 1yr, 3yr, 5yr, 7yr, 10yr, or Max history
 - Add chart metadata chips for selected metric, plotted points, and date range
 - Add lightweight gridline/zero-line context to the SVG trend chart
 - Rename preview rows as latest rows and highlight the newest table observation
@@ -244,7 +245,7 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 
 - Add authenticated SkyWeb preference loading through `/api/skyweb/preferences`
 - Add dashboard-preference save support through `PATCH /api/skyweb/preferences`
-- Support default macro region, default macro category, default chart window, dashboard density, and preferred landing page
+- Support default macro region, default macro category, default chart period, dashboard density, and preferred landing page
 - Add edit/cancel/save/reset-defaults controls with dirty-state detection
 - Keep preference state visible beside profile, identity, session, and permission cards
 

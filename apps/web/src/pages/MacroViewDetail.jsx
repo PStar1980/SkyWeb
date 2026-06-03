@@ -16,8 +16,7 @@ import {
   isDateKey,
 } from '../utils/formatters.js';
 
-const CHART_ROW_LIMIT = 240;
-const PREVIEW_ROW_LIMIT = 25;
+const TABLE_PAGE_SIZE = 50;
 
 function getColumnsFromRows(rows = []) {
   const firstRow = rows[0] || {};
@@ -80,8 +79,15 @@ function getLatestFields(latest = {}) {
     .slice(0, 12);
 }
 
-function getPreviewRows(rows = [], limit = PREVIEW_ROW_LIMIT) {
-  return rows.slice(0, limit);
+function getPageRows(rows = [], pageIndex = 0, pageSize = TABLE_PAGE_SIZE) {
+  const safePageIndex = Math.max(0, pageIndex);
+  const start = safePageIndex * pageSize;
+
+  return rows.slice(start, start + pageSize);
+}
+
+function getPageCount(rows = [], pageSize = TABLE_PAGE_SIZE) {
+  return Math.max(1, Math.ceil(rows.length / pageSize));
 }
 
 export default function MacroViewDetail() {
@@ -99,17 +105,22 @@ export default function MacroViewDetail() {
   const [noteError, setNoteError] = useState(null);
   const [noteDraft, setNoteDraft] = useState('');
   const [savingNote, setSavingNote] = useState(false);
+  const [tablePage, setTablePage] = useState(0);
 
   const displayColumns = useMemo(() => {
     if (columns.length > 0) {
-      return columns.map(normalizeColumn).slice(0, 10);
+      return columns.map(normalizeColumn);
     }
 
-    return getColumnsFromRows(rows).slice(0, 10);
+    return getColumnsFromRows(rows);
   }, [columns, rows]);
 
   const latestFields = useMemo(() => getLatestFields(latest), [latest]);
-  const previewRows = useMemo(() => getPreviewRows(rows), [rows]);
+  const tablePageCount = useMemo(() => getPageCount(rows), [rows]);
+  const safeTablePage = Math.min(tablePage, tablePageCount - 1);
+  const tableRows = useMemo(() => getPageRows(rows, safeTablePage), [rows, safeTablePage]);
+  const tableStartRow = rows.length ? safeTablePage * TABLE_PAGE_SIZE + 1 : 0;
+  const tableEndRow = rows.length ? tableStartRow + tableRows.length - 1 : 0;
   const loadedRange = useMemo(() => getDateRangeFromRows(rows), [rows]);
   const stats = view?.stats || {};
   const totalRows = stats.totalRows !== undefined ? stats.totalRows : rows.length;
@@ -143,6 +154,10 @@ export default function MacroViewDetail() {
   }, [savedView?.note, viewKey]);
 
   useEffect(() => {
+    setTablePage(0);
+  }, [viewKey, rows.length]);
+
+  useEffect(() => {
     let active = true;
 
     async function loadView() {
@@ -151,7 +166,7 @@ export default function MacroViewDetail() {
 
       try {
         const [rowsPayload, latestPayload, columnsPayload] = await Promise.all([
-          macroService.getViewRows(viewKey, { limit: CHART_ROW_LIMIT }),
+          macroService.getViewRows(viewKey, { all: true, sort: 'desc' }),
           macroService.getLatestViewRow(viewKey),
           macroService.getViewColumns(viewKey),
         ]);
@@ -237,7 +252,7 @@ export default function MacroViewDetail() {
               detail="Newest public row"
             />
             <StatCard
-              label="Loaded window"
+              label="History start"
               value={oldestLoadedDate ? formatDate(oldestLoadedDate) : '—'}
               detail={`Oldest of ${formatNumber(rows.length)} loaded row(s)`}
             />
@@ -322,10 +337,13 @@ export default function MacroViewDetail() {
             <div className="skyweb-table-header">
               <div>
                 <div className="skyweb-card-kicker">Analytical table</div>
-                <h2>Latest {previewRows.length} row(s)</h2>
+                <h2>
+                  Rows {formatNumber(tableStartRow)}-{formatNumber(tableEndRow)} of{' '}
+                  {formatNumber(rows.length)}
+                </h2>
                 <p>
-                  Showing the newest records from this grouped macro view. Use the table to inspect
-                  the full analytical lens behind the selected chart series.
+                  Showing 50 records at a time from the full loaded analytical lens. Use Next and
+                  Previous to inspect the complete history behind the selected chart series.
                 </p>
               </div>
             </div>
@@ -339,10 +357,12 @@ export default function MacroViewDetail() {
                   </tr>
                 </thead>
                 <tbody>
-                  {previewRows.map((row, rowIndex) => (
+                  {tableRows.map((row, rowIndex) => (
                     <tr
-                      className={rowIndex === 0 ? 'skyweb-row-highlight' : undefined}
-                      key={`${viewKey}-${rowIndex}`}
+                      className={
+                        safeTablePage === 0 && rowIndex === 0 ? 'skyweb-row-highlight' : undefined
+                      }
+                      key={`${viewKey}-${row.date || tableStartRow + rowIndex}`}
                     >
                       {displayColumns.map((column) => {
                         const value = getCellValue(row, column);
@@ -358,7 +378,32 @@ export default function MacroViewDetail() {
                 </tbody>
               </table>
             </div>
-            {previewRows.length === 0 && <EmptyState>No rows returned.</EmptyState>}
+            {tableRows.length === 0 && <EmptyState>No rows returned.</EmptyState>}
+            {rows.length > TABLE_PAGE_SIZE && (
+              <div className="skyweb-table-pagination">
+                <button
+                  className="btn skyweb-btn-ghost"
+                  disabled={safeTablePage === 0}
+                  onClick={() => setTablePage((currentPage) => Math.max(0, currentPage - 1))}
+                  type="button"
+                >
+                  Previous page
+                </button>
+                <span>
+                  Page {formatNumber(safeTablePage + 1)} of {formatNumber(tablePageCount)}
+                </span>
+                <button
+                  className="btn skyweb-btn-ghost"
+                  disabled={safeTablePage >= tablePageCount - 1}
+                  onClick={() =>
+                    setTablePage((currentPage) => Math.min(tablePageCount - 1, currentPage + 1))
+                  }
+                  type="button"
+                >
+                  Next page
+                </button>
+              </div>
+            )}
           </section>
         </>
       )}

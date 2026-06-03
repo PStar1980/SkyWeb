@@ -1491,6 +1491,28 @@
   background: rgba(5, 10, 20, 0.42);
 }
 
+.skyweb-table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.85rem;
+  color: rgba(220, 232, 255, 0.76);
+  font-size: 0.9rem;
+}
+
+.skyweb-table-pagination span {
+  font-family: var(--skyweb-display-font);
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 640px) {
+  .skyweb-table-pagination {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}
+
 @media (max-width: 1200px) {
   .skyweb-main {
     width: min(100vw - 1.5rem, 1180px);

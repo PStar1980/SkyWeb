@@ -84,14 +84,24 @@ export default function Navbar() {
               Overview
             </NavLink>
             {!loading && isAuthenticated && (
-              <NavLink
-                className={getNavLinkClass}
-                onClick={closeMacroMenu}
-                role="menuitem"
-                to="/dashboard"
-              >
-                Dashboard
-              </NavLink>
+              <>
+                <NavLink
+                  className={getNavLinkClass}
+                  onClick={closeMacroMenu}
+                  role="menuitem"
+                  to="/dashboard"
+                >
+                  Dashboard
+                </NavLink>
+                <NavLink
+                  className={getNavLinkClass}
+                  onClick={closeMacroMenu}
+                  role="menuitem"
+                  to="/macro/alerts"
+                >
+                  Alerts
+                </NavLink>
+              </>
             )}
           </div>
         </div>

@@ -22,15 +22,36 @@ import MacroIndicators from './pages/MacroIndicators.jsx';
 import MacroIndicatorDetail from './pages/MacroIndicatorDetail.jsx';
 import './App.css';
 
+function isWorkspaceRoute(pathname) {
+  return (
+    pathname === '/dashboard' ||
+    pathname.startsWith('/dashboards') ||
+    pathname === '/macro' ||
+    pathname.startsWith('/macro/')
+  );
+}
+
 function SkyWebShell() {
   const { preferences } = usePreferences();
   const location = useLocation();
   const densityClassName = getDensityClassName(preferences);
   const presentationMode = location.pathname.endsWith('/presentation');
+  const workspaceMode = !presentationMode && isWorkspaceRoute(location.pathname);
   const appClassName = [
     'skyweb-app',
     densityClassName,
     presentationMode ? 'skyweb-presentation-mode' : '',
+    workspaceMode ? 'skyweb-workspace-mode' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+  const mainClassName = [
+    'skyweb-main',
+    presentationMode
+      ? 'skyweb-main-presentation'
+      : workspaceMode
+        ? 'skyweb-main-workspace'
+        : 'skyweb-main-standard',
   ]
     .filter(Boolean)
     .join(' ');
@@ -38,7 +59,7 @@ function SkyWebShell() {
   return (
     <div className={appClassName}>
       <Navbar />
-      <main className="skyweb-main">
+      <main className={mainClassName}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/macro" element={<MacroOverview />} />

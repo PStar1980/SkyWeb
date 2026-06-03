@@ -8,7 +8,7 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 **Phase 7 Revision — Macro Navigation and Dashboard Cockpit Polish**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection, precision chart axes, hover coordinate tooltips, full-history loading, 50-row paginated data tables, time-based period filters, and table-first exploration.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection, precision chart axes, hover coordinate tooltips, full-history loading, 50-row paginated data tables, time-based period filters, table-first exploration, and a full-width analytics workspace layout for chart/dashboard/table-heavy routes.
 
 Implemented foundation pieces:
 
@@ -32,6 +32,7 @@ Implemented foundation pieces:
 - Preference-aware macro catalog defaults that respect saved region/category unless URL filters are present
 - Preference-aware chart periods for macro view drilldowns
 - Full-history view and indicator detail loads with 50-row paginated analytical tables
+- Full-width analytics workspace shell for macro, view, indicator, dashboard, builder, and presentation routes
 - App-level dashboard density classes for comfortable, compact, and roomy layouts
 - Authenticated saved macro view context backed by `/api/skyweb/saved-views`
 - Authenticated saved-view controls directly on the Macro Views catalog cards
@@ -228,6 +229,7 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 - Refresh the home page status panel to reflect the current dashboard polish layer
 - Make the navbar sticky and more resilient across desktop, tablet, and mobile widths
 - Improve table/chart overflow behavior for narrow screens and screenshot capture
+- Widen desktop analytics pages so charts, tables, and dashboards use more horizontal workspace
 - Add print-friendly presentation rules for dashboard screenshots and exported views
 
 ### Phase 6 — Profile and Preferences UI

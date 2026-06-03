@@ -4108,3 +4108,181 @@
     width: min(100vw - 0.85rem, var(--skyweb-standard-max));
   }
 }
+
+/* Phase 8.1 — macro alert-rule foundation */
+.skyweb-alert-builder form {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.skyweb-form-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.skyweb-form-grid-two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.skyweb-form-grid-three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.skyweb-form-field-full {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.skyweb-check-field {
+  align-items: center;
+  border: 1px solid rgba(138, 163, 202, 0.16);
+  border-radius: 0.85rem;
+  display: flex;
+  gap: 0.55rem;
+  min-height: 3.1rem;
+  padding: 0.75rem 0.9rem;
+}
+
+.skyweb-check-field input {
+  accent-color: #70b7ff;
+}
+
+.skyweb-alert-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.skyweb-alert-rule-card {
+  align-items: start;
+  background: linear-gradient(135deg, rgba(15, 28, 52, 0.94), rgba(17, 21, 45, 0.94));
+  border: 1px solid rgba(138, 163, 202, 0.16);
+  border-radius: 1rem;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) minmax(170px, 0.18fr);
+  padding: 1rem;
+}
+
+.skyweb-alert-card-topline,
+.skyweb-alert-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skyweb-alert-rule-card h3 {
+  margin: 0.6rem 0 0.25rem;
+}
+
+.skyweb-alert-rule-card p {
+  color: rgba(220, 232, 255, 0.66);
+  margin: 0 0 0.85rem;
+}
+
+.skyweb-alert-rule-grid {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0;
+}
+
+.skyweb-alert-rule-grid div {
+  border-top: 1px solid rgba(119, 151, 190, 0.18);
+  padding-top: 0.5rem;
+}
+
+.skyweb-alert-rule-grid dt {
+  color: rgba(220, 232, 255, 0.66);
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.skyweb-alert-rule-grid dd {
+  font-weight: 900;
+  margin: 0.2rem 0 0;
+}
+
+.skyweb-alert-message {
+  background: rgba(7, 14, 28, 0.56);
+  border: 1px solid rgba(119, 151, 190, 0.2);
+  border-radius: 0.75rem;
+  padding: 0.65rem 0.75rem;
+}
+
+.skyweb-alert-actions {
+  align-content: start;
+  justify-content: flex-end;
+}
+
+.skyweb-status-pill,
+.skyweb-mini-pill {
+  align-items: center;
+  border: 1px solid rgba(119, 151, 190, 0.3);
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 900;
+  justify-content: center;
+  line-height: 1;
+  padding: 0.38rem 0.62rem;
+  text-transform: uppercase;
+}
+
+.skyweb-status-pill-success {
+  background: rgba(28, 163, 107, 0.13);
+  border-color: rgba(72, 214, 151, 0.48);
+  color: #89f7c2;
+}
+
+.skyweb-status-pill-warning {
+  background: rgba(255, 184, 107, 0.14);
+  border-color: rgba(255, 184, 107, 0.55);
+  color: #ffd5a0;
+}
+
+.skyweb-status-pill-danger {
+  background: rgba(255, 96, 124, 0.13);
+  border-color: rgba(255, 96, 124, 0.55);
+  color: #ff9aad;
+}
+
+.skyweb-status-pill-muted {
+  background: rgba(119, 151, 190, 0.12);
+  color: rgba(220, 232, 255, 0.66);
+}
+
+.skyweb-mini-pill {
+  background: rgba(119, 151, 190, 0.1);
+  color: rgba(220, 232, 255, 0.66);
+}
+
+.skyweb-btn-danger {
+  background: rgba(255, 96, 124, 0.12);
+  border-color: rgba(255, 96, 124, 0.45);
+  color: #ffb2c0;
+}
+
+@media (max-width: 900px) {
+  .skyweb-form-grid-two,
+  .skyweb-form-grid-three,
+  .skyweb-alert-rule-card,
+  .skyweb-alert-rule-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skyweb-alert-actions {
+    justify-content: flex-start;
+  }
+}
+
+.skyweb-success {
+  background: rgba(22, 101, 73, 0.24);
+  border: 1px solid rgba(80, 220, 157, 0.34);
+  border-radius: 1rem;
+  color: #baf7d4;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+}

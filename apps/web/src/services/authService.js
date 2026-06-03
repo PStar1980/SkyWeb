@@ -99,7 +99,42 @@ async function removeDashboardItem(dashboardKey, itemId) {
   );
 }
 
+async function listAlerts(params = {}) {
+  return api.get('/skyweb/alerts', { query: params });
+}
+
+async function createAlert(payload) {
+  return api.post('/skyweb/alerts', payload);
+}
+
+async function getAlert(alertKey) {
+  return api.get(`/skyweb/alerts/${encodeURIComponent(alertKey)}`);
+}
+
+async function updateAlert(alertKey, payload) {
+  return api.patch(`/skyweb/alerts/${encodeURIComponent(alertKey)}`, payload);
+}
+
+async function removeAlert(alertKey) {
+  return api.delete(`/skyweb/alerts/${encodeURIComponent(alertKey)}`);
+}
+
+async function evaluateAlert(alertKey) {
+  return api.post(`/skyweb/alerts/${encodeURIComponent(alertKey)}/evaluate`, {});
+}
+
+async function evaluateAlerts(payload = {}) {
+  return api.post('/skyweb/alerts/evaluate', payload);
+}
+
 const authService = {
+  createAlert,
+  evaluateAlert,
+  evaluateAlerts,
+  getAlert,
+  listAlerts,
+  removeAlert,
+  updateAlert,
   updateDashboardItem,
   updateDashboard,
   removeDashboardItem,

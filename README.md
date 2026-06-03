@@ -6,9 +6,9 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 ## Current Status
 
-**Phase 7 Revision — Macro Navigation and Dashboard Cockpit Polish**
+**Phase 8.1 — Macro Alerts Foundation**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection, precision chart axes, hover coordinate tooltips, full-history loading, 50-row paginated data tables, time-based period filters, table-first exploration, and a full-width analytics workspace layout for chart/dashboard/table-heavy routes.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection, precision chart axes, hover coordinate tooltips, full-history loading, 50-row paginated data tables, time-based period filters, table-first exploration, a full-width analytics workspace layout for chart/dashboard/table-heavy routes, and the first user-owned macro alert-rule surface for indicator and view-metric threshold watches.
 
 Implemented foundation pieces:
 
@@ -33,6 +33,10 @@ Implemented foundation pieces:
 - Preference-aware chart periods for macro view drilldowns
 - Full-history view and indicator detail loads with 50-row paginated analytical tables
 - Full-width analytics workspace shell for macro, view, indicator, dashboard, builder, and presentation routes
+- Protected `/macro/alerts` route for user-owned macro alert rules
+- Alert-rule creation for direct indicators or numeric view metrics
+- Manual alert evaluation against the latest/previous macro observations
+- Alert inventory cards showing status, severity, target, threshold, latest value, and evaluation history summary
 - App-level dashboard density classes for comfortable, compact, and roomy layouts
 - Authenticated saved macro view context backed by `/api/skyweb/saved-views`
 - Authenticated saved-view controls directly on the Macro Views catalog cards
@@ -156,8 +160,8 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 | ✅ Phase 4 | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation |
 | ✅ Phase 5 | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces             |
 | ✅ Phase 6 | Profile and preferences UI: editable member profile, saved display preferences, and account settings                 |
-| 🔄 Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb Analytics dashboard features                              |
-| 🔜 Phase 8 | Macro alerts foundation: user-tracked indicators, views, threshold metadata, and notification prep                   |
+| ✅ Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb Analytics dashboard features                              |
+| 🔄 Phase 8 | Macro alerts foundation: user-tracked indicators, views, threshold metadata, and notification prep                   |
 | 🔜 Phase 9 | Public portfolio polish: screenshots, GitHub/LinkedIn proof assets, and presentation-ready feature storytelling      |
 
 ## Phase Details
@@ -384,3 +388,14 @@ SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on publi
 - `/account` is protected by the SkyWeb AuthContext and reads `/api/skyweb/profile`.
 - SkyWeb profiles and preferences are staged in the `skyweb` database schema.
 - SkyServer Admin controls which shared users have `SKYWEB` application membership and SkyWeb-specific roles.
+
+### Phase 8 — Macro Alerts Foundation
+
+#### 8.1 — Alert Rules Foundation
+
+- Add protected `/macro/alerts` route
+- Create user-owned alert rules for indicators and view metrics
+- Support threshold condition types: above, below, crosses above, crosses below, absolute change, and percent change
+- Add manual alert evaluation controls before scheduler/notification automation
+- Show last evaluation status, latest observed value, triggered time, and evaluation message
+- Keep future notification delivery staged for later Phase 8 slices

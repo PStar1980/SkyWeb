@@ -68,6 +68,7 @@ SkyWeb/
 │           │   ├── DashboardViewer.jsx
 │           │   ├── Home.jsx
 │           │   ├── Login.jsx
+│           │   ├── MacroAlerts.jsx
 │           │   ├── MacroIndicatorDetail.jsx
 │           │   ├── MacroIndicators.jsx
 │           │   ├── MacroOverview.jsx

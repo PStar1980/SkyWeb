@@ -3970,3 +3970,141 @@
 .skyweb-sparkline-tooltip-series-5 {
   fill: #8ee7ff;
 }
+
+/* Requirement 6 — full-width analytics workspace */
+.skyweb-app {
+  --skyweb-shell-gutter: clamp(1rem, 2vw, 2.25rem);
+  --skyweb-standard-max: 1180px;
+  --skyweb-workspace-max: 1840px;
+  --skyweb-presentation-max: 1920px;
+}
+
+.skyweb-main {
+  width: min(
+    var(--skyweb-standard-max),
+    calc(100vw - var(--skyweb-shell-gutter) - var(--skyweb-shell-gutter))
+  );
+}
+
+.skyweb-main-standard {
+  width: min(
+    var(--skyweb-standard-max),
+    calc(100vw - var(--skyweb-shell-gutter) - var(--skyweb-shell-gutter))
+  );
+}
+
+.skyweb-main-workspace {
+  width: min(
+    var(--skyweb-workspace-max),
+    calc(100vw - var(--skyweb-shell-gutter) - var(--skyweb-shell-gutter))
+  );
+}
+
+.skyweb-main-presentation {
+  width: min(var(--skyweb-presentation-max), calc(100vw - 2rem));
+}
+
+.skyweb-navbar {
+  padding-inline: var(--skyweb-shell-gutter);
+}
+
+.skyweb-main-workspace .skyweb-page-header h1,
+.skyweb-main-workspace .skyweb-page-card h1,
+.skyweb-main-workspace .skyweb-hero-content h1 {
+  max-width: 1120px;
+}
+
+.skyweb-main-workspace .skyweb-page-header p,
+.skyweb-main-workspace .skyweb-dashboard-builder-header p,
+.skyweb-main-workspace .skyweb-dashboard-viewer-header p,
+.skyweb-main-workspace .skyweb-member-dashboard-header p,
+.skyweb-main-workspace .skyweb-chart-header p,
+.skyweb-main-workspace .skyweb-table-header p,
+.skyweb-main-workspace .skyweb-section-copy {
+  max-width: 1040px;
+}
+
+.skyweb-main-workspace .skyweb-chart-panel,
+.skyweb-main-workspace .skyweb-table-card,
+.skyweb-main-workspace .skyweb-dashboard-viewer-surface,
+.skyweb-main-workspace .skyweb-dashboard-builder-card,
+.skyweb-main-workspace .skyweb-dashboard-builder-create-card,
+.skyweb-main-workspace .skyweb-dashboard-builder-empty-card {
+  width: 100%;
+}
+
+.skyweb-main-workspace .skyweb-chart-stage {
+  padding: clamp(1rem, 1.4vw, 1.45rem);
+}
+
+.skyweb-main-workspace .skyweb-chart-panel .skyweb-chart-stage > .skyweb-sparkline {
+  height: clamp(320px, 26vw, 460px);
+}
+
+.skyweb-main-workspace .skyweb-series-picker-grid {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.skyweb-main-workspace .skyweb-table-card .table-responsive {
+  width: 100%;
+}
+
+.skyweb-main-workspace .skyweb-table {
+  min-width: max-content;
+}
+
+@media (min-width: 1280px) {
+  .skyweb-main-workspace .skyweb-view-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .skyweb-main-workspace .skyweb-section-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .skyweb-main-workspace .skyweb-toolbar-three {
+    grid-template-columns: minmax(360px, 1fr) minmax(180px, 240px) minmax(180px, 240px);
+  }
+
+  .skyweb-main-workspace .skyweb-toolbar-four {
+    grid-template-columns:
+      minmax(420px, 1fr)
+      minmax(180px, 220px)
+      minmax(180px, 220px)
+      minmax(170px, 210px);
+  }
+}
+
+@media (min-width: 1500px) {
+  .skyweb-main-workspace .skyweb-dashboard-viewer-grid,
+  .skyweb-main-workspace .skyweb-dashboard-layout-executive .skyweb-dashboard-viewer-grid {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .skyweb-main-workspace .skyweb-dashboard-layout-research .skyweb-dashboard-viewer-grid,
+  .skyweb-main-workspace .skyweb-dashboard-layout-compact .skyweb-dashboard-viewer-grid {
+    grid-template-columns: repeat(8, minmax(0, 1fr));
+  }
+
+  .skyweb-main-workspace .skyweb-dashboard-viewer-item {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 0.28fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .skyweb-main,
+  .skyweb-main-standard,
+  .skyweb-main-workspace,
+  .skyweb-main-presentation {
+    width: min(100vw - 1rem, var(--skyweb-standard-max));
+  }
+}
+
+@media (max-width: 540px) {
+  .skyweb-main,
+  .skyweb-main-standard,
+  .skyweb-main-workspace,
+  .skyweb-main-presentation {
+    width: min(100vw - 0.85rem, var(--skyweb-standard-max));
+  }
+}

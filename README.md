@@ -8,7 +8,7 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 **Phase 7 Revision — Macro Navigation and Dashboard Cockpit Polish**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection and table-first exploration.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection, precision chart axes, hover coordinate tooltips, and table-first exploration.
 
 Implemented foundation pieces:
 
@@ -65,6 +65,7 @@ Implemented foundation pieces:
 - Dirty-state detection, edit/cancel/save flow, saving state, and success/error messaging
 - Profile/preferences table foundation in the `skyweb` schema
 - Lightweight SVG chart foundation for macro view drilldowns
+- Precision chart mode with y-axis ruler labels, x-axis reference ticks, separator gridlines, and hover coordinate tooltips
 - Trend metric cards for latest/range/change summaries
 - Metric-selectable chart panels with quick metric cards and chart window controls
 - Drilldown UX refinements for loaded date windows, latest-row emphasis, and chart/table pairing
@@ -337,6 +338,13 @@ SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analyt
 - Preserve latest-row and preview-table exploration as central view-detail behavior
 - Keep indicator items as the preferred model for single-series dashboard cards
 - Treat saved macro views on dashboards as lens summaries, latest-row panels, or table previews rather than implicit single-series charts
+
+#### Phase 7 Requirement 3 — Precision Chart Surfaces
+
+- Add y-axis ruler labels, x-axis reference ticks, and separator gridlines to detail chart surfaces
+- Add hover coordinate tooltips for single-series indicator charts and multi-series analytical lens charts
+- Remove side summary cards beside detail charts so the chart canvas uses the full available width
+- Preserve compact sparkline behavior for dashboard cards while making detail charts more precise
 
 #### Phase 7 Revision — Macro Navigation and Dashboard Cockpit Polish
 

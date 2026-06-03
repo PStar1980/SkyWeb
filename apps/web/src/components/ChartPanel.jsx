@@ -1,18 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
-import { normalizeChartWindowPreference } from '../context/PreferencesContext.jsx';
+import { normalizeChartPeriodPreference } from '../context/PreferencesContext.jsx';
 import { getPreferredSeriesKey, getSeriesCatalog, summarizeSeries } from '../utils/charting.js';
 import { formatNumber } from '../utils/formatters.js';
 import MetricQuickCard from './MetricQuickCard.jsx';
 import MultiSeriesSparkline from './MultiSeriesSparkline.jsx';
 import Sparkline from './Sparkline.jsx';
 
-const WINDOW_OPTIONS = [
-  { label: '30 points', value: 30 },
-  { label: '60 points', value: 60 },
-  { label: '120 points', value: 120 },
-  { label: 'All loaded', value: 0 },
+const PERIOD_OPTIONS = [
+  { label: '1yr', value: '1Y', years: 1 },
+  { label: '3yr', value: '3Y', years: 3 },
+  { label: '5yr', value: '5Y', years: 5 },
+  { label: '7yr', value: '7Y', years: 7 },
+  { label: '10yr', value: '10Y', years: 10 },
+  { label: 'Max', value: 'MAX', years: null },
 ];
 
+const PERIOD_YEARS = new Map(PERIOD_OPTIONS.map((option) => [option.value, option.years]));
 const DEFAULT_MULTI_SERIES_COUNT = 3;
 const MAX_MULTI_SERIES_COUNT = 5;
 const MULTI_SERIES_PICKER_LIMIT = 12;
@@ -24,19 +27,69 @@ function getDefaultSelectedKeys(catalog = []) {
     .filter(Boolean);
 }
 
-function getWindowedSeries(series = [], windowSize = 0) {
-  return windowSize > 0 ? series.slice(-windowSize) : series;
+function getPointTime(point = {}) {
+  if (!point.date) {
+    return null;
+  }
+
+  const date = new Date(point.date);
+  const time = date.getTime();
+
+  return Number.isNaN(time) ? null : time;
+}
+
+function getLatestSeriesDate(seriesList = []) {
+  const times = seriesList
+    .flatMap((series) => series || [])
+    .map(getPointTime)
+    .filter((time) => Number.isFinite(time));
+
+  if (!times.length) {
+    return null;
+  }
+
+  return new Date(Math.max(...times));
+}
+
+function subtractYears(date, years) {
+  const nextDate = new Date(date);
+  nextDate.setFullYear(nextDate.getFullYear() - years);
+  return nextDate;
+}
+
+function getPeriodedSeries(series = [], periodKey = '3Y', latestDate = null) {
+  const normalizedPeriod = normalizeChartPeriodPreference(periodKey);
+  const years = PERIOD_YEARS.get(normalizedPeriod);
+
+  if (!years) {
+    return series;
+  }
+
+  const anchorDate = latestDate || getLatestSeriesDate([series]);
+
+  if (!anchorDate) {
+    return series;
+  }
+
+  const startDate = subtractYears(anchorDate, years);
+  const startTime = startDate.getTime();
+  const filteredSeries = series.filter((point) => {
+    const pointTime = getPointTime(point);
+    return pointTime === null || pointTime >= startTime;
+  });
+
+  return filteredSeries.length ? filteredSeries : series.slice(-1);
 }
 
 export default function ChartPanel({
   rows = [],
   columns = [],
   title = 'Trend preview',
-  defaultWindowSize = '120',
+  defaultWindowSize = '3Y',
   multiSeries = false,
 }) {
-  const initialWindowSize = useMemo(
-    () => normalizeChartWindowPreference(defaultWindowSize),
+  const initialPeriod = useMemo(
+    () => normalizeChartPeriodPreference(defaultWindowSize),
     [defaultWindowSize],
   );
   const catalog = useMemo(() => getSeriesCatalog(rows, columns), [rows, columns]);
@@ -44,7 +97,7 @@ export default function ChartPanel({
   const preferredKey = useMemo(() => getPreferredSeriesKey(seriesKeys), [seriesKeys]);
   const [selectedKey, setSelectedKey] = useState('');
   const [selectedKeys, setSelectedKeys] = useState([]);
-  const [windowSize, setWindowSize] = useState(initialWindowSize);
+  const [period, setPeriod] = useState(initialPeriod);
   const activeKey = seriesKeys.includes(selectedKey) ? selectedKey : preferredKey;
   const activeMetric = catalog.find((item) => item.key === activeKey) || catalog[0] || null;
   const safeSelectedKeys = useMemo(() => {
@@ -56,22 +109,30 @@ export default function ChartPanel({
     () => safeSelectedKeys.map((key) => catalog.find((item) => item.key === key)).filter(Boolean),
     [catalog, safeSelectedKeys],
   );
+  const latestSelectedDate = useMemo(
+    () => getLatestSeriesDate(selectedMetrics.map((metric) => metric.series || [])),
+    [selectedMetrics],
+  );
   const displaySeries = useMemo(() => {
     if (!activeMetric?.series) {
       return [];
     }
 
-    return getWindowedSeries(activeMetric.series, windowSize);
-  }, [activeMetric, windowSize]);
+    return getPeriodedSeries(activeMetric.series, period);
+  }, [activeMetric, period]);
   const multiDisplaySeries = useMemo(
     () =>
-      selectedMetrics.map((metric) => ({
-        key: metric.key,
-        label: metric.label,
-        points: getWindowedSeries(metric.series, windowSize),
-        summary: summarizeSeries(getWindowedSeries(metric.series, windowSize)),
-      })),
-    [selectedMetrics, windowSize],
+      selectedMetrics.map((metric) => {
+        const points = getPeriodedSeries(metric.series, period, latestSelectedDate);
+
+        return {
+          key: metric.key,
+          label: metric.label,
+          points,
+          summary: summarizeSeries(points),
+        };
+      }),
+    [latestSelectedDate, period, selectedMetrics],
   );
   const summary = useMemo(() => summarizeSeries(displaySeries), [displaySeries]);
   const selectedLabel = activeMetric?.label || 'Metric';
@@ -85,6 +146,8 @@ export default function ChartPanel({
     .flatMap((series) => series.points)
     .sort((left, right) => new Date(left.date || 0).getTime() - new Date(right.date || 0).getTime())
     .at(-1);
+  const selectedPeriodLabel =
+    PERIOD_OPTIONS.find((option) => option.value === period)?.label || 'Max';
 
   function toggleSeriesKey(key) {
     setSelectedKeys((currentKeys) => {
@@ -102,8 +165,8 @@ export default function ChartPanel({
   }
 
   useEffect(() => {
-    setWindowSize(initialWindowSize);
-  }, [initialWindowSize]);
+    setPeriod(initialPeriod);
+  }, [initialPeriod]);
 
   useEffect(() => {
     if (!multiSeries || !catalog.length) {
@@ -153,13 +216,13 @@ export default function ChartPanel({
             </label>
           )}
           <label className="skyweb-chart-picker skyweb-chart-window-picker">
-            <span>Window</span>
+            <span>Period</span>
             <select
               className="form-select"
-              onChange={(event) => setWindowSize(Number(event.target.value))}
-              value={windowSize}
+              onChange={(event) => setPeriod(normalizeChartPeriodPreference(event.target.value))}
+              value={period}
             >
-              {WINDOW_OPTIONS.map((option) => (
+              {PERIOD_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -215,6 +278,7 @@ export default function ChartPanel({
         {multiSeries ? (
           <>
             <span>{formatNumber(safeSelectedKeys.length)} selected series</span>
+            <span>{selectedPeriodLabel} period</span>
             <span>
               {formatNumber(
                 Math.max(...multiDisplaySeries.map((series) => series.points.length), 0),
@@ -228,6 +292,7 @@ export default function ChartPanel({
         ) : (
           <>
             <span>Selected: {selectedLabel}</span>
+            <span>{selectedPeriodLabel} period</span>
             <span>{formatNumber(displaySeries.length)} plotted point(s)</span>
             <span>
               {displaySeries[0]?.label || '—'} →{' '}

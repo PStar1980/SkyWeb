@@ -5,7 +5,7 @@ import { useAuth } from './AuthContext.jsx';
 export const DEFAULT_SKYWEB_PREFERENCES = Object.freeze({
   defaultMacroRegion: 'ALL',
   defaultMacroCategory: 'ALL',
-  defaultChartWindow: '120',
+  defaultChartWindow: '3Y',
   dashboardDensity: 'comfortable',
   preferredLandingPage: '/macro',
 });
@@ -26,7 +26,7 @@ const ALLOWED_PREFERENCE_VALUES = Object.freeze({
     'comparison',
     'rates_fx',
   ],
-  defaultChartWindow: ['30', '60', '120', 'ALL'],
+  defaultChartWindow: ['1Y', '3Y', '5Y', '7Y', '10Y', 'MAX'],
   dashboardDensity: ['comfortable', 'compact', 'roomy'],
   preferredLandingPage: [
     '/',
@@ -42,7 +42,11 @@ const ALLOWED_PREFERENCE_VALUES = Object.freeze({
 const PreferencesContext = createContext(null);
 
 function normalizePreferenceValue(fieldName, value) {
-  const candidateValue = String(value || '').trim();
+  let candidateValue = String(value || '').trim();
+
+  if (fieldName === 'defaultChartWindow') {
+    candidateValue = normalizeLegacyChartPeriod(candidateValue);
+  }
 
   if (fieldName === 'preferredLandingPage' && candidateValue === '/saved') {
     return '/macro/views';
@@ -64,14 +68,30 @@ export function normalizePreferences(preferences = {}) {
   }, {});
 }
 
-export function normalizeChartWindowPreference(value) {
-  const normalized = normalizePreferenceValue('defaultChartWindow', value);
+function normalizeLegacyChartPeriod(value) {
+  const candidateValue = String(value || '').trim();
 
-  if (normalized === 'ALL') {
-    return 0;
+  if (candidateValue === '30' || candidateValue === '60') {
+    return '1Y';
   }
 
-  return Number(normalized);
+  if (candidateValue === '120') {
+    return '3Y';
+  }
+
+  if (candidateValue === 'ALL') {
+    return 'MAX';
+  }
+
+  return candidateValue;
+}
+
+export function normalizeChartPeriodPreference(value) {
+  return normalizePreferenceValue('defaultChartWindow', normalizeLegacyChartPeriod(value));
+}
+
+export function normalizeChartWindowPreference(value) {
+  return normalizeChartPeriodPreference(value);
 }
 
 export function getDensityClassName(preferences = DEFAULT_SKYWEB_PREFERENCES) {

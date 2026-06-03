@@ -8,8 +8,7 @@ import macroService from '../services/macroService.js';
 import { getDateRangeFromRows } from '../utils/charting.js';
 import { formatCategory, formatDate, formatNumber, formatValue } from '../utils/formatters.js';
 
-const SERIES_ROW_LIMIT = 1000;
-const PREVIEW_ROW_LIMIT = 50;
+const TABLE_PAGE_SIZE = 50;
 const SERIES_COLUMNS = [
   {
     columnName: 'date',
@@ -23,8 +22,15 @@ const SERIES_COLUMNS = [
   },
 ];
 
-function getPreviewRows(rows = [], limit = PREVIEW_ROW_LIMIT) {
-  return rows.slice(0, limit);
+function getPageRows(rows = [], pageIndex = 0, pageSize = TABLE_PAGE_SIZE) {
+  const safePageIndex = Math.max(0, pageIndex);
+  const start = safePageIndex * pageSize;
+
+  return rows.slice(start, start + pageSize);
+}
+
+function getPageCount(rows = [], pageSize = TABLE_PAGE_SIZE) {
+  return Math.max(1, Math.ceil(rows.length / pageSize));
 }
 
 function getLatestPoint(rows = []) {
@@ -40,8 +46,13 @@ export default function MacroIndicatorDetail() {
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [tablePage, setTablePage] = useState(0);
 
-  const previewRows = useMemo(() => getPreviewRows(rows), [rows]);
+  const tablePageCount = useMemo(() => getPageCount(rows), [rows]);
+  const safeTablePage = Math.min(tablePage, tablePageCount - 1);
+  const tableRows = useMemo(() => getPageRows(rows, safeTablePage), [rows, safeTablePage]);
+  const tableStartRow = rows.length ? safeTablePage * TABLE_PAGE_SIZE + 1 : 0;
+  const tableEndRow = rows.length ? tableStartRow + tableRows.length - 1 : 0;
   const loadedRange = useMemo(() => getDateRangeFromRows(rows), [rows]);
   const latestPoint = useMemo(() => getLatestPoint(rows), [rows]);
   const loadedStartDate = loadedRange.minDate || stats?.minDate;
@@ -58,7 +69,8 @@ export default function MacroIndicatorDetail() {
 
       try {
         const payload = await macroService.getIndicatorSeries(indicatorCode, {
-          limit: SERIES_ROW_LIMIT,
+          all: true,
+          sort: 'desc',
         });
 
         if (!active) {
@@ -86,6 +98,10 @@ export default function MacroIndicatorDetail() {
       active = false;
     };
   }, [indicatorCode]);
+
+  useEffect(() => {
+    setTablePage(0);
+  }, [indicatorCode, rows.length]);
 
   return (
     <>
@@ -121,7 +137,7 @@ export default function MacroIndicatorDetail() {
               detail="Newest public point"
             />
             <StatCard
-              label="Loaded window"
+              label="History start"
               value={loadedStartDate ? formatDate(loadedStartDate) : '—'}
               detail={`Oldest of ${formatNumber(rows.length)} loaded point(s)`}
             />
@@ -174,10 +190,13 @@ export default function MacroIndicatorDetail() {
             <div className="skyweb-table-header">
               <div>
                 <div className="skyweb-card-kicker">Series rows</div>
-                <h2>Latest {previewRows.length} point(s)</h2>
+                <h2>
+                  Rows {formatNumber(tableStartRow)}-{formatNumber(tableEndRow)} of{' '}
+                  {formatNumber(rows.length)}
+                </h2>
                 <p>
-                  Showing the newest public observations from the loaded indicator series. The first
-                  row is the latest point.
+                  Showing 50 records at a time from the full loaded indicator history. Use Next and
+                  Previous to inspect the complete source series.
                 </p>
               </div>
             </div>
@@ -190,10 +209,12 @@ export default function MacroIndicatorDetail() {
                   </tr>
                 </thead>
                 <tbody>
-                  {previewRows.map((row, rowIndex) => (
+                  {tableRows.map((row, rowIndex) => (
                     <tr
-                      className={rowIndex === 0 ? 'skyweb-row-highlight' : undefined}
-                      key={`${indicatorCode}-${row.date || rowIndex}`}
+                      className={
+                        safeTablePage === 0 && rowIndex === 0 ? 'skyweb-row-highlight' : undefined
+                      }
+                      key={`${indicatorCode}-${row.date || tableStartRow + rowIndex}`}
                     >
                       <td className="skyweb-table-date">{formatDate(row.date)}</td>
                       <td className="skyweb-number-cell">{formatValue(row.value, 'value')}</td>
@@ -202,7 +223,32 @@ export default function MacroIndicatorDetail() {
                 </tbody>
               </table>
             </div>
-            {previewRows.length === 0 && <EmptyState>No indicator rows returned.</EmptyState>}
+            {tableRows.length === 0 && <EmptyState>No indicator rows returned.</EmptyState>}
+            {rows.length > TABLE_PAGE_SIZE && (
+              <div className="skyweb-table-pagination">
+                <button
+                  className="btn skyweb-btn-ghost"
+                  disabled={safeTablePage === 0}
+                  onClick={() => setTablePage((currentPage) => Math.max(0, currentPage - 1))}
+                  type="button"
+                >
+                  Previous page
+                </button>
+                <span>
+                  Page {formatNumber(safeTablePage + 1)} of {formatNumber(tablePageCount)}
+                </span>
+                <button
+                  className="btn skyweb-btn-ghost"
+                  disabled={safeTablePage >= tablePageCount - 1}
+                  onClick={() =>
+                    setTablePage((currentPage) => Math.min(tablePageCount - 1, currentPage + 1))
+                  }
+                  type="button"
+                >
+                  Next page
+                </button>
+              </div>
+            )}
           </section>
         </>
       )}

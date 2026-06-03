@@ -92,13 +92,15 @@ const PREFERENCE_FIELDS = [
   },
   {
     name: 'defaultChartWindow',
-    label: 'Default chart window',
-    helper: 'Saved preference for future chart panels and dashboard presets.',
+    label: 'Default chart period',
+    helper: 'Saved time horizon for future chart panels and dashboard presets.',
     options: [
-      { value: '30', label: '30 loaded points' },
-      { value: '60', label: '60 loaded points' },
-      { value: '120', label: '120 loaded points' },
-      { value: 'ALL', label: 'All loaded points' },
+      { value: '1Y', label: '1 year' },
+      { value: '3Y', label: '3 years' },
+      { value: '5Y', label: '5 years' },
+      { value: '7Y', label: '7 years' },
+      { value: '10Y', label: '10 years' },
+      { value: 'MAX', label: 'Max history' },
     ],
   },
   {
@@ -588,7 +590,7 @@ export default function Account() {
                 </strong>
               </div>
               <div>
-                <span>Chart window</span>
+                <span>Chart period</span>
                 <strong>
                   {getPreferenceLabel('defaultChartWindow', preferences.defaultChartWindow)}
                 </strong>

@@ -3843,3 +3843,108 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* R11 chart precision pass */
+.skyweb-chart-grid-precision {
+  grid-template-columns: 1fr;
+}
+
+.skyweb-chart-stage-precision {
+  padding: 1rem 1rem 0.8rem;
+}
+
+.skyweb-chart-stage-precision .skyweb-sparkline {
+  min-height: 360px;
+  cursor: crosshair;
+}
+
+.skyweb-sparkline-precision {
+  border: 1px solid rgba(138, 163, 202, 0.1);
+  border-radius: 0.9rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.005)),
+    rgba(5, 10, 20, 0.3);
+}
+
+.skyweb-sparkline-axis-label {
+  fill: rgba(220, 232, 255, 0.64);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  paint-order: stroke;
+  stroke: rgba(5, 10, 20, 0.8);
+  stroke-width: 2px;
+}
+
+.skyweb-sparkline-axis-line {
+  stroke: rgba(220, 232, 255, 0.22);
+  stroke-width: 1.2;
+}
+
+.skyweb-sparkline-gridline-major {
+  stroke: rgba(220, 232, 255, 0.15);
+  stroke-dasharray: 5 8;
+}
+
+.skyweb-sparkline-gridline-vertical {
+  stroke: rgba(220, 232, 255, 0.08);
+  stroke-dasharray: 4 10;
+}
+
+.skyweb-sparkline-hover-line {
+  stroke: rgba(255, 255, 255, 0.48);
+  stroke-dasharray: 4 5;
+  stroke-width: 1.2;
+}
+
+.skyweb-sparkline-hover-point {
+  fill: #ffffff;
+  stroke: rgba(5, 10, 20, 0.96);
+  stroke-width: 3;
+}
+
+.skyweb-sparkline-tooltip rect {
+  fill: rgba(5, 10, 20, 0.92);
+  stroke: rgba(112, 183, 255, 0.42);
+  stroke-width: 1.2;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.35));
+}
+
+.skyweb-sparkline-tooltip text {
+  fill: rgba(220, 232, 255, 0.88);
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.skyweb-sparkline-tooltip-label {
+  fill: #ffffff;
+  font-weight: 900;
+}
+
+.skyweb-sparkline-tooltip-value {
+  fill: rgba(220, 232, 255, 0.82);
+}
+
+.skyweb-sparkline-tooltip-series-0 {
+  fill: #70b7ff;
+}
+
+.skyweb-sparkline-tooltip-series-1 {
+  fill: #67e8a5;
+}
+
+.skyweb-sparkline-tooltip-series-2 {
+  fill: #ffb86b;
+}
+
+.skyweb-sparkline-tooltip-series-3 {
+  fill: #b695ff;
+}
+
+.skyweb-sparkline-tooltip-series-4 {
+  fill: #f58bd4;
+}
+
+.skyweb-sparkline-tooltip-series-5 {
+  fill: #8ee7ff;
+}

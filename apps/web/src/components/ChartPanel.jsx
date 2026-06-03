@@ -5,7 +5,6 @@ import { formatNumber } from '../utils/formatters.js';
 import MetricQuickCard from './MetricQuickCard.jsx';
 import MultiSeriesSparkline from './MultiSeriesSparkline.jsx';
 import Sparkline from './Sparkline.jsx';
-import TrendMetricCard from './TrendMetricCard.jsx';
 
 const WINDOW_OPTIONS = [
   { label: '30 points', value: 30 },
@@ -77,7 +76,6 @@ export default function ChartPanel({
   const summary = useMemo(() => summarizeSeries(displaySeries), [displaySeries]);
   const selectedLabel = activeMetric?.label || 'Metric';
   const quickMetrics = catalog.slice(0, multiSeries ? MULTI_SERIES_PICKER_LIMIT : 6);
-  const primaryMultiSeries = multiDisplaySeries[0] || null;
   const firstMultiPoint = multiDisplaySeries
     .flatMap((series) => series.points)
     .sort(
@@ -239,12 +237,14 @@ export default function ChartPanel({
         )}
       </div>
 
-      <div className="skyweb-chart-grid">
-        <div className="skyweb-chart-stage">
+      <div className="skyweb-chart-grid skyweb-chart-grid-precision">
+        <div className="skyweb-chart-stage skyweb-chart-stage-precision">
           {multiSeries ? (
             <>
               <MultiSeriesSparkline
+                height={340}
                 label={`${title} selected series comparison`}
+                precision
                 seriesList={multiDisplaySeries}
               />
               <div className="skyweb-series-legend">
@@ -260,8 +260,10 @@ export default function ChartPanel({
             </>
           ) : (
             <Sparkline
+              height={340}
               label={`${selectedLabel} trend`}
               points={displaySeries}
+              precision
               tone={summary.direction}
             />
           )}
@@ -275,56 +277,6 @@ export default function ChartPanel({
                 : displaySeries[displaySeries.length - 1]?.label || '—'}
             </span>
           </div>
-        </div>
-        <div className="skyweb-trend-grid">
-          {multiSeries ? (
-            multiDisplaySeries
-              .slice(0, 4)
-              .map((series) => (
-                <TrendMetricCard
-                  change={series.summary.change}
-                  detail={series.summary.latest?.label || 'Latest point'}
-                  direction={series.summary.direction}
-                  key={series.key}
-                  label={series.label}
-                  value={series.summary.latest ? formatNumber(series.summary.latest.value) : '—'}
-                />
-              ))
-          ) : (
-            <>
-              <TrendMetricCard
-                change={summary.change}
-                detail={summary.latest?.label || 'Latest point'}
-                direction={summary.direction}
-                label="Latest"
-                value={summary.latest ? formatNumber(summary.latest.value) : '—'}
-              />
-              <TrendMetricCard
-                detail={`${summary.count || 0} plotted point(s)`}
-                direction="flat"
-                label="Range"
-                value={
-                  summary.min !== null && summary.max !== null
-                    ? `${formatNumber(summary.min)} → ${formatNumber(summary.max)}`
-                    : '—'
-                }
-              />
-              <TrendMetricCard
-                detail={summary.previous?.label || 'Previous point'}
-                direction={summary.direction}
-                label="Point change"
-                value={summary.change !== null ? formatNumber(summary.change) : '—'}
-              />
-            </>
-          )}
-          {multiSeries && primaryMultiSeries && multiDisplaySeries.length > 4 && (
-            <TrendMetricCard
-              detail={`${multiDisplaySeries.length - 4} more selected`}
-              direction="flat"
-              label="Additional series"
-              value={formatNumber(multiDisplaySeries.length)}
-            />
-          )}
         </div>
       </div>
     </section>

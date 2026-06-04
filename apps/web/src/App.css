@@ -4286,3 +4286,57 @@
   margin-bottom: 1rem;
   padding: 0.85rem 1rem;
 }
+
+/* Phase 8.2 — alert evaluation history + rule detail */
+.skyweb-alert-detail-header h1 {
+  max-width: 980px;
+}
+
+.skyweb-alert-detail-metrics {
+  margin-bottom: 1rem;
+}
+
+.skyweb-alert-detail-card {
+  margin-bottom: 1rem;
+}
+
+.skyweb-alert-detail-layout {
+  align-items: start;
+  display: grid;
+  gap: 1.2rem;
+  grid-template-columns: minmax(0, 0.95fr) minmax(420px, 1.25fr);
+  margin-top: 0.8rem;
+}
+
+.skyweb-alert-detail-layout h2 {
+  margin-bottom: 0.5rem;
+}
+
+.skyweb-alert-detail-layout p {
+  color: rgba(220, 232, 255, 0.7);
+  margin-bottom: 0.85rem;
+}
+
+.skyweb-alert-detail-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.skyweb-alert-event-table td:last-child {
+  min-width: 320px;
+  white-space: normal;
+}
+
+.skyweb-empty-inline {
+  background: rgba(7, 14, 28, 0.46);
+  border: 1px solid rgba(119, 151, 190, 0.18);
+  border-radius: 0.9rem;
+  color: rgba(220, 232, 255, 0.72);
+  padding: 1rem;
+}
+
+@media (max-width: 1100px) {
+  .skyweb-alert-detail-layout,
+  .skyweb-alert-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}

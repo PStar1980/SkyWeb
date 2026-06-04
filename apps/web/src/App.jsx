@@ -20,6 +20,7 @@ import MacroViews from './pages/MacroViews.jsx';
 import MacroViewDetail from './pages/MacroViewDetail.jsx';
 import MacroIndicators from './pages/MacroIndicators.jsx';
 import MacroAlerts from './pages/MacroAlerts.jsx';
+import MacroAlertDetail from './pages/MacroAlertDetail.jsx';
 import MacroIndicatorDetail from './pages/MacroIndicatorDetail.jsx';
 import './App.css';
 
@@ -71,6 +72,14 @@ function SkyWebShell() {
             element={
               <ProtectedRoute>
                 <MacroAlerts />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/macro/alerts/:alertKey"
+            element={
+              <ProtectedRoute>
+                <MacroAlertDetail />
               </ProtectedRoute>
             }
           />

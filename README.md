@@ -405,3 +405,9 @@ SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on publi
 - Added `/macro/alerts/:alertKey` protected detail page for per-rule alert inspection.
 - Alert inventory cards now link to the rule detail surface and show event counts.
 - Rule detail surfaces show current status, latest observed values, trigger counts, and evaluation-event history.
+
+### Phase 8.3 — Scheduled Alert Evaluation
+
+- Alert detail history now distinguishes manual evaluations from worker-scheduled evaluations.
+- Macro alert copy now reflects that SkyServer Worker can evaluate active alert watches on a schedule.
+- Scheduled evaluation remains backed by SkyServer, while SkyWeb continues to show the audit trail and current rule status.

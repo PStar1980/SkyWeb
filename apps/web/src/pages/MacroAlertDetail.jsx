@@ -256,7 +256,7 @@ export default function MacroAlertDetail() {
             <div className="skyweb-card-kicker">Evaluation history</div>
             <h2>{events.length} event(s)</h2>
             <p>
-              Showing the latest stored evaluation events for this alert rule. New manual
+              Showing the latest stored evaluation events for this alert rule. Manual and scheduled
               evaluations append to this audit trail.
             </p>
           </div>
@@ -278,6 +278,7 @@ export default function MacroAlertDetail() {
                   <th>Previous</th>
                   <th>Δ</th>
                   <th>Threshold</th>
+                  <th>Source</th>
                   <th>Message</th>
                 </tr>
               </thead>
@@ -297,6 +298,7 @@ export default function MacroAlertDetail() {
                     <td>{formatNumber(event.previousValue)}</td>
                     <td>{eventDelta(event)}</td>
                     <td>{formatNumber(event.thresholdValue)}</td>
+                    <td>{formatColumnLabel(event.eventMetadata?.evaluationSource || 'manual')}</td>
                     <td>{event.message || '—'}</td>
                   </tr>
                 ))}

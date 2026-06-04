@@ -1,7 +1,8 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import { useAuth } from '../context/AuthContext.jsx';
+import authService from '../services/authService.js';
 
 function getNavLinkClass({ isActive }) {
   return isActive ? 'skyweb-nav-link active' : 'skyweb-nav-link';
@@ -13,6 +14,7 @@ export default function Navbar() {
   const { isAuthenticated, loading, logout, user } = useAuth();
   const macroActive = location.pathname.startsWith('/macro') || location.pathname === '/dashboard';
   const [macroMenuOpen, setMacroMenuOpen] = useState(false);
+  const [openSignalCount, setOpenSignalCount] = useState(0);
   const macroDropdownRef = useRef(null);
 
   function openMacroMenu() {
@@ -35,6 +37,35 @@ export default function Navbar() {
       closeMacroMenu();
     }
   }
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadOpenSignals() {
+      if (loading || !isAuthenticated) {
+        setOpenSignalCount(0);
+        return;
+      }
+
+      try {
+        const payload = await authService.listAlertNotifications({ status: 'open', limit: 1 });
+
+        if (active) {
+          setOpenSignalCount(payload.total ?? payload.summary?.total ?? 0);
+        }
+      } catch {
+        if (active) {
+          setOpenSignalCount(0);
+        }
+      }
+    }
+
+    loadOpenSignals();
+
+    return () => {
+      active = false;
+    };
+  }, [isAuthenticated, loading, location.pathname]);
 
   async function handleLogout() {
     await logout();
@@ -99,7 +130,10 @@ export default function Navbar() {
                   role="menuitem"
                   to="/macro/alerts"
                 >
-                  Alerts
+                  <span>Alerts</span>
+                  {openSignalCount > 0 && (
+                    <span className="skyweb-nav-signal-badge">{openSignalCount}</span>
+                  )}
                 </NavLink>
               </>
             )}

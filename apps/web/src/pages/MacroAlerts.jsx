@@ -559,6 +559,10 @@ export default function MacroAlerts() {
                         <dt>Triggered</dt>
                         <dd>{formatDateTime(alert.lastTriggeredAt)}</dd>
                       </div>
+                      <div>
+                        <dt>Events</dt>
+                        <dd>{formatNumber(alert.eventCount || 0)}</dd>
+                      </div>
                     </dl>
                     {alert.lastMessage && (
                       <p className="skyweb-alert-message">{alert.lastMessage}</p>
@@ -587,6 +591,12 @@ export default function MacroAlerts() {
                     >
                       Remove
                     </button>
+                    <Link
+                      className="skyweb-link-action"
+                      to={`/macro/alerts/${encodeURIComponent(alert.alertKey)}`}
+                    >
+                      Open rule →
+                    </Link>
                     {alert.targetType === 'indicator' && alert.indicatorCode && (
                       <Link
                         className="skyweb-link-action"

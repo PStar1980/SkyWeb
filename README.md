@@ -399,3 +399,9 @@ SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on publi
 - Add manual alert evaluation controls before scheduler/notification automation
 - Show last evaluation status, latest observed value, triggered time, and evaluation message
 - Keep future notification delivery staged for later Phase 8 slices
+
+### Phase 8.2 — Alert Evaluation History
+
+- Added `/macro/alerts/:alertKey` protected detail page for per-rule alert inspection.
+- Alert inventory cards now link to the rule detail surface and show event counts.
+- Rule detail surfaces show current status, latest observed values, trigger counts, and evaluation-event history.

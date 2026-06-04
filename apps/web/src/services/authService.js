@@ -111,6 +111,10 @@ async function getAlert(alertKey) {
   return api.get(`/skyweb/alerts/${encodeURIComponent(alertKey)}`);
 }
 
+async function listAlertEvents(alertKey, params = {}) {
+  return api.get(`/skyweb/alerts/${encodeURIComponent(alertKey)}/events`, { query: params });
+}
+
 async function updateAlert(alertKey, payload) {
   return api.patch(`/skyweb/alerts/${encodeURIComponent(alertKey)}`, payload);
 }
@@ -132,6 +136,7 @@ const authService = {
   evaluateAlert,
   evaluateAlerts,
   getAlert,
+  listAlertEvents,
   listAlerts,
   removeAlert,
   updateAlert,

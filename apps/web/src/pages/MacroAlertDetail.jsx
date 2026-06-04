@@ -47,8 +47,12 @@ function getStatusTone(status) {
     return 'danger';
   }
 
-  if (status === 'ok') {
+  if (status === 'ok' || status === 'acknowledged') {
     return 'success';
+  }
+
+  if (status === 'dismissed') {
+    return 'muted';
   }
 
   return 'default';
@@ -69,19 +73,23 @@ export default function MacroAlertDetail() {
   const { alertKey } = useParams();
   const [alert, setAlert] = useState(null);
   const [events, setEvents] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [evaluating, setEvaluating] = useState(false);
+  const [notificationActionId, setNotificationActionId] = useState(null);
   const [message, setMessage] = useState('');
   const [error, setError] = useState(null);
 
   async function loadAlertDetail() {
-    const [alertPayload, eventsPayload] = await Promise.all([
+    const [alertPayload, eventsPayload, notificationsPayload] = await Promise.all([
       authService.getAlert(alertKey),
       authService.listAlertEvents(alertKey, { limit: 100 }),
+      authService.listAlertNotifications({ status: 'open', alertKey, limit: 25 }),
     ]);
 
     setAlert(alertPayload.item || null);
     setEvents(eventsPayload.items || alertPayload.item?.events || []);
+    setNotifications(notificationsPayload.items || []);
   }
 
   useEffect(() => {
@@ -92,9 +100,10 @@ export default function MacroAlertDetail() {
       setError(null);
 
       try {
-        const [alertPayload, eventsPayload] = await Promise.all([
+        const [alertPayload, eventsPayload, notificationsPayload] = await Promise.all([
           authService.getAlert(alertKey),
           authService.listAlertEvents(alertKey, { limit: 100 }),
+          authService.listAlertNotifications({ status: 'open', alertKey, limit: 25 }),
         ]);
 
         if (!active) {
@@ -103,6 +112,7 @@ export default function MacroAlertDetail() {
 
         setAlert(alertPayload.item || null);
         setEvents(eventsPayload.items || alertPayload.item?.events || []);
+        setNotifications(notificationsPayload.items || []);
       } catch (loadError) {
         if (active) {
           setError(loadError);
@@ -146,6 +156,38 @@ export default function MacroAlertDetail() {
     }
   }
 
+  async function handleAcknowledgeNotification(notification) {
+    setNotificationActionId(notification.notificationId);
+    setMessage('');
+    setError(null);
+
+    try {
+      await authService.acknowledgeAlertNotification(notification.notificationId);
+      await loadAlertDetail();
+      setMessage('Alert signal acknowledged.');
+    } catch (actionError) {
+      setError(actionError);
+    } finally {
+      setNotificationActionId(null);
+    }
+  }
+
+  async function handleDismissNotification(notification) {
+    setNotificationActionId(notification.notificationId);
+    setMessage('');
+    setError(null);
+
+    try {
+      await authService.dismissAlertNotification(notification.notificationId);
+      await loadAlertDetail();
+      setMessage('Alert signal dismissed.');
+    } catch (actionError) {
+      setError(actionError);
+    } finally {
+      setNotificationActionId(null);
+    }
+  }
+
   if (loading) {
     return <LoadingState>Loading alert rule...</LoadingState>;
   }
@@ -165,8 +207,8 @@ export default function MacroAlertDetail() {
           <div className="skyweb-kicker">Macro alert detail</div>
           <h1>{alert.title}</h1>
           <p>
-            Inspect the evaluation trail for this rule. Each manual or scheduled evaluation becomes
-            an event so the alert can explain what it saw and why it fired or stayed quiet.
+            Inspect the evaluation trail for this rule. Triggered evaluations also create alert
+            signals that can be acknowledged or dismissed without losing audit history.
           </p>
         </div>
         <div className="skyweb-header-actions">
@@ -197,6 +239,11 @@ export default function MacroAlertDetail() {
           detail={alert.active ? 'Active rule' : 'Disabled rule'}
         />
         <StatCard
+          label="Open signals"
+          value={notifications.length}
+          detail="Needs acknowledgement"
+        />
+        <StatCard
           label="Latest value"
           value={formatNumber(alert.lastObservedValue)}
           detail={formatDate(alert.lastEvaluatedAt)}
@@ -212,6 +259,66 @@ export default function MacroAlertDetail() {
           detail={`${triggeredEvents.length} triggered`}
         />
       </section>
+
+      {notifications.length > 0 && (
+        <section className="skyweb-card skyweb-alert-signal-board mb-4">
+          <div className="skyweb-card-kicker">Open signals</div>
+          <h2>{notifications.length} active notification(s)</h2>
+          <div className="skyweb-alert-signal-list">
+            {notifications.map((notification) => (
+              <article
+                className="skyweb-alert-signal-card skyweb-alert-signal-card-warning"
+                key={notification.notificationId}
+              >
+                <div>
+                  <div className="skyweb-alert-card-topline">
+                    <span className="skyweb-status-pill skyweb-status-pill-warning">
+                      {notification.severity}
+                    </span>
+                    <span className="skyweb-mini-pill">
+                      {formatDateTime(notification.evaluatedAt)}
+                    </span>
+                  </div>
+                  <h3>{notification.title}</h3>
+                  <p>{notification.message || 'Triggered alert evaluation.'}</p>
+                  <dl className="skyweb-alert-rule-grid">
+                    <div>
+                      <dt>Observed</dt>
+                      <dd>{formatNumber(notification.observedValue)}</dd>
+                    </div>
+                    <div>
+                      <dt>Threshold</dt>
+                      <dd>{formatNumber(notification.thresholdValue)}</dd>
+                    </div>
+                    <div>
+                      <dt>Observed date</dt>
+                      <dd>{formatDate(notification.observedAt)}</dd>
+                    </div>
+                  </dl>
+                </div>
+                <div className="skyweb-alert-actions">
+                  <button
+                    className="skyweb-btn skyweb-btn-secondary"
+                    disabled={notificationActionId === notification.notificationId}
+                    onClick={() => handleAcknowledgeNotification(notification)}
+                    type="button"
+                  >
+                    Acknowledge
+                  </button>
+                  <button
+                    className="skyweb-btn skyweb-btn-danger"
+                    disabled={notificationActionId === notification.notificationId}
+                    onClick={() => handleDismissNotification(notification)}
+                    type="button"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="skyweb-card skyweb-alert-detail-card">
         <div className="skyweb-card-kicker">Rule context</div>

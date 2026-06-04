@@ -131,12 +131,35 @@ async function evaluateAlerts(payload = {}) {
   return api.post('/skyweb/alerts/evaluate', payload);
 }
 
+async function listAlertNotifications(params = {}) {
+  return api.get('/skyweb/alert-notifications', { query: params });
+}
+
+async function acknowledgeAlertNotification(notificationId) {
+  return api.patch(
+    `/skyweb/alert-notifications/${encodeURIComponent(notificationId)}/acknowledge`,
+    {},
+  );
+}
+
+async function dismissAlertNotification(notificationId) {
+  return api.patch(`/skyweb/alert-notifications/${encodeURIComponent(notificationId)}/dismiss`, {});
+}
+
+async function acknowledgeAllAlertNotifications(payload = {}) {
+  return api.post('/skyweb/alert-notifications/acknowledge-all', payload);
+}
+
 const authService = {
+  acknowledgeAllAlertNotifications,
+  acknowledgeAlertNotification,
   createAlert,
   evaluateAlert,
   evaluateAlerts,
   getAlert,
+  dismissAlertNotification,
   listAlertEvents,
+  listAlertNotifications,
   listAlerts,
   removeAlert,
   updateAlert,

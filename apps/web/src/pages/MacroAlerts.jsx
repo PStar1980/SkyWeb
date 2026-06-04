@@ -267,7 +267,7 @@ export default function MacroAlerts() {
     try {
       await authService.evaluateAlert(alert.alertKey);
       await loadAlerts();
-      setMessage('Alert evaluated.');
+      setMessage('Alert evaluated manually.');
     } catch (evaluateError) {
       setError(evaluateError);
     } finally {
@@ -311,8 +311,9 @@ export default function MacroAlerts() {
           <div className="skyweb-kicker">Macro alerts</div>
           <h1>Macro alert rules</h1>
           <p>
-            Create threshold watches for indicators or view metrics. Phase 8.1 stores durable rules
-            and lets you manually evaluate them before scheduled notifications arrive.
+            Create threshold watches for indicators or view metrics. Phase 8.3 stores durable rules,
+            supports manual checks, and lets the SkyServer worker evaluate active watches on a
+            schedule.
           </p>
         </div>
         <div className="skyweb-header-actions">

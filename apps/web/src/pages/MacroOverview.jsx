@@ -13,6 +13,8 @@ import {
   getNotificationTargetLink,
   getNotificationTone,
   getSeverityLabel,
+  getSurfacedAlertNotifications,
+  normalizeAlertPreferences,
 } from '../utils/alertSignals.js';
 import {
   buildOverviewStories,
@@ -226,10 +228,17 @@ export default function MacroOverview() {
       }
 
       try {
-        const payload = await authService.listAlertNotifications({ status: 'open', limit: 5 });
+        const [payload, preferencesPayload] = await Promise.all([
+          authService.listAlertNotifications({ status: 'open', limit: 25 }),
+          authService.getAlertPreferences(),
+        ]);
+        const surfacedNotifications = getSurfacedAlertNotifications(
+          payload.items || [],
+          normalizeAlertPreferences(preferencesPayload.preferences),
+        ).slice(0, 5);
 
         if (active) {
-          setNotifications(payload.items || []);
+          setNotifications(surfacedNotifications);
         }
       } catch {
         if (active) {

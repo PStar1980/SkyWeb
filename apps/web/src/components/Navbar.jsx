@@ -3,7 +3,11 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import authService from '../services/authService.js';
-import { ALERT_SIGNALS_CHANGED_EVENT } from '../utils/alertSignals.js';
+import {
+  ALERT_SIGNALS_CHANGED_EVENT,
+  getSurfacedAlertNotifications,
+  normalizeAlertPreferences,
+} from '../utils/alertSignals.js';
 
 function getNavLinkClass({ isActive }) {
   return isActive ? 'skyweb-nav-link active' : 'skyweb-nav-link';
@@ -49,10 +53,17 @@ export default function Navbar() {
       }
 
       try {
-        const payload = await authService.listAlertNotifications({ status: 'open', limit: 1 });
+        const [payload, preferencesPayload] = await Promise.all([
+          authService.listAlertNotifications({ status: 'open', limit: 100 }),
+          authService.getAlertPreferences(),
+        ]);
+        const surfacedNotifications = getSurfacedAlertNotifications(
+          payload.items || [],
+          normalizeAlertPreferences(preferencesPayload.preferences),
+        );
 
         if (active) {
-          setOpenSignalCount(payload.total ?? payload.summary?.total ?? 0);
+          setOpenSignalCount(surfacedNotifications.length);
         }
       } catch {
         if (active) {
@@ -141,6 +152,14 @@ export default function Navbar() {
                   {openSignalCount > 0 && (
                     <span className="skyweb-nav-signal-badge">{openSignalCount}</span>
                   )}
+                </NavLink>
+                <NavLink
+                  className={getNavLinkClass}
+                  onClick={closeMacroMenu}
+                  role="menuitem"
+                  to="/macro/alerts/preferences"
+                >
+                  Alert preferences
                 </NavLink>
               </>
             )}

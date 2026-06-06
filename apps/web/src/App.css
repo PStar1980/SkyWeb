@@ -4579,3 +4579,125 @@
     order: -1;
   }
 }
+
+/* Phase 8.6 — alert preferences / delivery prep */
+.skyweb-alert-preferences-header h1 {
+  max-width: 980px;
+}
+
+.skyweb-alert-preference-summary {
+  margin-bottom: 1rem;
+}
+
+.skyweb-alert-preferences-card {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.skyweb-alert-preferences-form {
+  display: grid;
+  gap: 1rem;
+}
+
+.skyweb-alert-preference-section {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(260px, 0.32fr) minmax(0, 1fr);
+  border-top: 1px solid rgba(138, 163, 202, 0.12);
+  padding-top: 1rem;
+}
+
+.skyweb-alert-preference-section:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.skyweb-alert-preference-section h3 {
+  color: #ffffff;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  margin: 0 0 0.45rem;
+}
+
+.skyweb-alert-preference-section p {
+  color: rgba(220, 232, 255, 0.66);
+  margin: 0;
+}
+
+.skyweb-alert-preference-grid {
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.skyweb-alert-preference-grid-four {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.skyweb-alert-preference-grid label:not(.skyweb-alert-preference-check) {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.skyweb-alert-preference-grid label > span,
+.skyweb-alert-preference-check strong {
+  color: rgba(220, 232, 255, 0.72);
+  font-size: 0.82rem;
+  font-weight: 900;
+}
+
+.skyweb-alert-preference-grid small,
+.skyweb-alert-preference-check small {
+  color: rgba(220, 232, 255, 0.52);
+  line-height: 1.5;
+}
+
+.skyweb-alert-preferences-form .form-control,
+.skyweb-alert-preferences-form .form-select {
+  border-color: rgba(138, 163, 202, 0.2);
+  background-color: rgba(5, 10, 20, 0.72);
+  color: #ffffff;
+}
+
+.skyweb-alert-preferences-form .form-control:focus,
+.skyweb-alert-preferences-form .form-select:focus {
+  border-color: rgba(112, 183, 255, 0.55);
+  box-shadow: 0 0 0 0.2rem rgba(112, 183, 255, 0.14);
+}
+
+.skyweb-alert-preferences-form .form-control:disabled,
+.skyweb-alert-preferences-form .form-select:disabled {
+  border-color: rgba(138, 163, 202, 0.12);
+  background-color: rgba(5, 10, 20, 0.34);
+  color: rgba(220, 232, 255, 0.78);
+  opacity: 1;
+}
+
+.skyweb-alert-preference-check {
+  align-items: flex-start;
+  background: rgba(7, 14, 28, 0.42);
+  border: 1px solid rgba(119, 151, 190, 0.18);
+  border-radius: 0.95rem;
+  display: flex;
+  gap: 0.7rem;
+  min-height: 5rem;
+  padding: 0.85rem;
+}
+
+.skyweb-alert-preference-check input {
+  accent-color: #70b7ff;
+  margin-top: 0.2rem;
+}
+
+.skyweb-alert-preference-check span {
+  display: grid;
+  gap: 0.3rem;
+}
+
+@media (max-width: 1100px) {
+  .skyweb-alert-preference-section,
+  .skyweb-alert-preference-grid,
+  .skyweb-alert-preference-grid-four {
+    grid-template-columns: 1fr;
+  }
+}

@@ -5,6 +5,16 @@ import StatCard from '../components/StatCard.jsx';
 import authService from '../services/authService.js';
 import macroService from '../services/macroService.js';
 import {
+  getAlertStatusLabel,
+  getAlertStatusTone,
+  getNotificationStatusLabel,
+  getNotificationTargetLabel,
+  getNotificationTargetLink,
+  getNotificationTone,
+  getSeverityLabel,
+  getSeverityTone,
+} from '../utils/alertSignals.js';
+import {
   formatColumnLabel,
   formatDate,
   formatDateTime,
@@ -46,62 +56,6 @@ function getAlertTargetLabel(alert) {
   }
 
   return `${alert.viewKey || 'View'} · ${formatColumnLabel(alert.metricKey || '')}`;
-}
-
-function getNotificationTargetLabel(notification) {
-  if (notification.targetType === 'indicator') {
-    return notification.indicatorCode || 'Indicator';
-  }
-
-  return `${notification.viewKey || 'View'} · ${formatColumnLabel(notification.metricKey || '')}`;
-}
-
-function getNotificationTargetLink(notification) {
-  if (notification.targetType === 'indicator' && notification.indicatorCode) {
-    return `/macro/indicators/${encodeURIComponent(notification.indicatorCode)}`;
-  }
-
-  if (notification.targetType === 'view_metric' && notification.viewKey) {
-    return `/macro/views/${encodeURIComponent(notification.viewKey)}`;
-  }
-
-  return '/macro/alerts';
-}
-
-function getAlertStatusTone(alert) {
-  if (!alert.active) {
-    return 'muted';
-  }
-
-  if (alert.lastStatus === 'triggered') {
-    return 'warning';
-  }
-
-  if (alert.lastStatus === 'error') {
-    return 'danger';
-  }
-
-  if (alert.lastStatus === 'ok') {
-    return 'success';
-  }
-
-  return 'default';
-}
-
-function getNotificationTone(notification) {
-  if (notification.notificationStatus === 'dismissed') {
-    return 'muted';
-  }
-
-  if (notification.notificationStatus === 'acknowledged') {
-    return 'success';
-  }
-
-  if (notification.severity === 'critical' || notification.severity === 'high') {
-    return 'danger';
-  }
-
-  return 'warning';
 }
 
 function getNumericViewColumns(columns = []) {
@@ -413,9 +367,9 @@ export default function MacroAlerts() {
           <div className="skyweb-kicker">Macro alerts</div>
           <h1>Macro alert rules</h1>
           <p>
-            Create threshold watches for indicators or view metrics. Phase 8.4 surfaces triggered
-            signals as an actionable notification queue while retaining the full evaluation audit
-            trail.
+            Create threshold watches for indicators or view metrics. Triggered rules now surface as
+            open signals across the app while the permanent event history stays attached to each
+            rule.
           </p>
         </div>
         <div className="skyweb-header-actions">
@@ -463,8 +417,9 @@ export default function MacroAlerts() {
               <div className="skyweb-card-kicker">Triggered signals</div>
               <h2>{openNotifications.length} open signal(s)</h2>
               <p>
-                Triggered evaluations appear here until you acknowledge or dismiss them. The
-                underlying evaluation events remain in the rule audit trail.
+                Open means the watched condition fired and still needs review. Acknowledge means you
+                saw it; dismiss removes it from the open queue. Either way, the event history
+                remains permanent.
               </p>
             </div>
             {openNotifications.length > 0 && (
@@ -495,9 +450,11 @@ export default function MacroAlerts() {
                       <span
                         className={`skyweb-status-pill skyweb-status-pill-${getNotificationTone(notification)}`}
                       >
-                        {notification.severity}
+                        {getSeverityLabel(notification.severity)}
                       </span>
-                      <span className="skyweb-mini-pill">{notification.notificationStatus}</span>
+                      <span className="skyweb-mini-pill">
+                        {getNotificationStatusLabel(notification.notificationStatus)}
+                      </span>
                       <span className="skyweb-mini-pill">
                         {formatDateTime(notification.evaluatedAt)}
                       </span>
@@ -566,7 +523,8 @@ export default function MacroAlerts() {
           <h2>Define a macro watch</h2>
           <p>
             Start with a direct indicator alert for single-series monitoring, or choose a metric
-            from an analytical view when you need a grouped lens.
+            from an analytical view when you need a grouped lens. Severity controls how loudly the
+            signal appears after it fires.
           </p>
 
           <form onSubmit={handleCreateAlert}>
@@ -737,11 +695,18 @@ export default function MacroAlerts() {
                   <div>
                     <div className="skyweb-alert-card-topline">
                       <span
-                        className={`skyweb-status-pill skyweb-status-pill-${getAlertStatusTone(alert)}`}
+                        className={`skyweb-status-pill skyweb-status-pill-${getAlertStatusTone(
+                          alert.lastStatus,
+                          alert.active,
+                        )}`}
                       >
-                        {alert.active ? alert.lastStatus || 'never' : 'disabled'}
+                        {getAlertStatusLabel(alert.lastStatus, alert.active)}
                       </span>
-                      <span className="skyweb-mini-pill">{alert.severity}</span>
+                      <span
+                        className={`skyweb-status-pill skyweb-status-pill-${getSeverityTone(alert.severity)}`}
+                      >
+                        {getSeverityLabel(alert.severity)}
+                      </span>
                       <span className="skyweb-mini-pill">{alert.targetType}</span>
                     </div>
                     <h3>{alert.title}</h3>

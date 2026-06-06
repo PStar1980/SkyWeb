@@ -146,8 +146,8 @@ function AlertSummaryCard({ alertSummary }) {
           <dd>{formatDateTime(alertSummary.lastEvaluatedAt)}</dd>
         </div>
       </dl>
-      <Link className="skyweb-card-link" to="/macro/alerts">
-        Open alerts →
+      <Link className="skyweb-card-link" to="/macro/alerts/signals">
+        Review signals →
       </Link>
     </section>
   );

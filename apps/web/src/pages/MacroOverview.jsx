@@ -122,7 +122,7 @@ function TriggeredSignalStrip({ notifications }) {
         <Link className="skyweb-card-link" to={getNotificationTargetLink(leadSignal)}>
           Open target →
         </Link>
-        <Link className="skyweb-card-link" to="/macro/alerts">
+        <Link className="skyweb-card-link" to="/macro/alerts/signals">
           Review signals →
         </Link>
       </div>

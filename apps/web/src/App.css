@@ -4701,3 +4701,81 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Phase 8.7 — dedicated alert signal center */
+.skyweb-signal-center-header h1 {
+  max-width: 980px;
+}
+
+.skyweb-signal-center-summary {
+  margin-bottom: 1rem;
+}
+
+.skyweb-signal-center-controls {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(280px, 0.85fr) minmax(360px, 1fr) auto;
+}
+
+.skyweb-signal-center-controls h2 {
+  margin: 0.35rem 0;
+}
+
+.skyweb-signal-center-controls p {
+  color: rgba(220, 232, 255, 0.7);
+  margin: 0;
+}
+
+.skyweb-signal-filter-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.skyweb-signal-filter-grid label {
+  color: rgba(220, 232, 255, 0.72);
+  display: grid;
+  font-size: 0.82rem;
+  font-weight: 900;
+  gap: 0.4rem;
+}
+
+.skyweb-signal-filter-grid .form-select {
+  background-color: rgba(5, 10, 20, 0.72);
+  border-color: rgba(138, 163, 202, 0.22);
+  color: #ffffff;
+}
+
+.skyweb-signal-bulk-actions {
+  align-content: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  justify-content: flex-end;
+}
+
+.skyweb-signal-bulk-note,
+.skyweb-signal-center-footnote {
+  color: rgba(220, 232, 255, 0.62);
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.skyweb-signal-center-list {
+  margin-bottom: 1rem;
+}
+
+.skyweb-signal-center-footnote {
+  margin: 0.75rem 0 0;
+}
+
+@media (max-width: 1180px) {
+  .skyweb-signal-center-controls,
+  .skyweb-signal-filter-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skyweb-signal-bulk-actions {
+    justify-content: flex-start;
+  }
+}

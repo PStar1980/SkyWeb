@@ -146,12 +146,20 @@ export default function Navbar() {
                   className={getNavLinkClass}
                   onClick={closeMacroMenu}
                   role="menuitem"
-                  to="/macro/alerts"
+                  to="/macro/alerts/signals"
                 >
-                  <span>Alerts</span>
+                  <span>Signal center</span>
                   {openSignalCount > 0 && (
                     <span className="skyweb-nav-signal-badge">{openSignalCount}</span>
                   )}
+                </NavLink>
+                <NavLink
+                  className={getNavLinkClass}
+                  onClick={closeMacroMenu}
+                  role="menuitem"
+                  to="/macro/alerts"
+                >
+                  Alert rules
                 </NavLink>
                 <NavLink
                   className={getNavLinkClass}
@@ -177,7 +185,7 @@ export default function Navbar() {
         {!loading && isAuthenticated && (
           <>
             {openSignalCount > 0 && (
-              <NavLink className="skyweb-global-signal-pill" to="/macro/alerts">
+              <NavLink className="skyweb-global-signal-pill" to="/macro/alerts/signals">
                 <span>Signals</span>
                 <strong>{openSignalCount}</strong>
               </NavLink>

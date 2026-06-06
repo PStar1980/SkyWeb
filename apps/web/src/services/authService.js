@@ -172,6 +172,12 @@ async function acknowledgeAllAlertNotifications(payload = {}) {
   return result;
 }
 
+async function dismissAllAlertNotifications(payload = {}) {
+  const result = await api.post('/skyweb/alert-notifications/dismiss-all', payload);
+  notifyAlertSignalsChanged();
+  return result;
+}
+
 const authService = {
   acknowledgeAllAlertNotifications,
   acknowledgeAlertNotification,
@@ -181,6 +187,7 @@ const authService = {
   getAlert,
   getAlertPreferences,
   dismissAlertNotification,
+  dismissAllAlertNotifications,
   listAlertEvents,
   listAlertNotifications,
   listAlerts,

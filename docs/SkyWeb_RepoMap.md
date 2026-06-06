@@ -71,6 +71,7 @@ SkyWeb/
 │           │   ├── MacroAlertDetail.jsx
 │           │   ├── MacroAlertPreferences.jsx
 │           │   ├── MacroAlerts.jsx
+│           │   ├── MacroAlertSignals.jsx
 │           │   ├── MacroIndicatorDetail.jsx
 │           │   ├── MacroIndicators.jsx
 │           │   ├── MacroOverview.jsx

@@ -47,6 +47,14 @@ async function updatePreferences(payload) {
   return api.patch('/skyweb/preferences', payload);
 }
 
+async function getAlertPreferences() {
+  return api.get('/skyweb/alert-preferences');
+}
+
+async function updateAlertPreferences(payload) {
+  return api.patch('/skyweb/alert-preferences', payload);
+}
+
 async function listSavedViews() {
   return api.get('/skyweb/saved-views');
 }
@@ -171,12 +179,14 @@ const authService = {
   evaluateAlert,
   evaluateAlerts,
   getAlert,
+  getAlertPreferences,
   dismissAlertNotification,
   listAlertEvents,
   listAlertNotifications,
   listAlerts,
   removeAlert,
   updateAlert,
+  updateAlertPreferences,
   updateDashboardItem,
   updateDashboard,
   removeDashboardItem,

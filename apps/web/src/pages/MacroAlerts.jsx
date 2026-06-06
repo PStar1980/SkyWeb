@@ -381,6 +381,9 @@ export default function MacroAlerts() {
           >
             {evaluatingKey === '__all__' ? 'Evaluating...' : 'Evaluate active alerts'}
           </button>
+          <Link className="skyweb-btn skyweb-btn-secondary" to="/macro/alerts/preferences">
+            Alert preferences
+          </Link>
           <Link className="skyweb-btn skyweb-btn-primary" to="/macro/indicators">
             Browse indicators
           </Link>

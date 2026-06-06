@@ -14,6 +14,8 @@ import {
   ALERT_SIGNALS_CHANGED_EVENT,
   getSeverityLabel,
   getSeverityTone,
+  getSurfacedAlertNotifications,
+  normalizeAlertPreferences,
   summarizeAlertSurface,
 } from '../utils/alertSignals.js';
 import { formatCategory, formatDateTime, formatRegion } from '../utils/formatters.js';
@@ -329,15 +331,20 @@ export default function MemberDashboard() {
 
     async function loadAlertSurface() {
       try {
-        const [alertsPayload, notificationsPayload] = await Promise.all([
+        const [alertsPayload, notificationsPayload, preferencesPayload] = await Promise.all([
           authService.listAlerts(),
-          authService.listAlertNotifications({ status: 'open', limit: 25 }),
+          authService.listAlertNotifications({ status: 'open', limit: 100 }),
+          authService.getAlertPreferences(),
         ]);
+        const surfacedNotifications = getSurfacedAlertNotifications(
+          notificationsPayload.items || [],
+          normalizeAlertPreferences(preferencesPayload.preferences),
+        );
 
         if (active) {
           setAlertSurface({
             alerts: alertsPayload.items || [],
-            notifications: notificationsPayload.items || [],
+            notifications: surfacedNotifications,
           });
         }
       } catch {

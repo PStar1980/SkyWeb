@@ -69,6 +69,7 @@ SkyWeb/
 │           │   ├── Home.jsx
 │           │   ├── Login.jsx
 │           │   ├── MacroAlertDetail.jsx
+│           │   ├── MacroAlertPreferences.jsx
 │           │   ├── MacroAlerts.jsx
 │           │   ├── MacroIndicatorDetail.jsx
 │           │   ├── MacroIndicators.jsx

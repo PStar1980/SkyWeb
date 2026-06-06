@@ -1,14 +1,21 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import DashboardSurface from '../components/DashboardSurface.jsx';
+import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import StatCard from '../components/StatCard.jsx';
 import ViewCard from '../components/ViewCard.jsx';
-import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useDashboards } from '../context/DashboardsContext.jsx';
 import { usePreferences } from '../context/PreferencesContext.jsx';
 import { useSavedViews } from '../context/SavedViewsContext.jsx';
+import authService from '../services/authService.js';
+import {
+  ALERT_SIGNALS_CHANGED_EVENT,
+  getSeverityLabel,
+  getSeverityTone,
+  summarizeAlertSurface,
+} from '../utils/alertSignals.js';
 import { formatCategory, formatDateTime, formatRegion } from '../utils/formatters.js';
 
 function countUniqueValues(items = [], getter) {
@@ -83,6 +90,67 @@ function getDashboardOptionLabel(dashboard = {}) {
   return `${dashboard.title || dashboard.dashboardKey} (${itemCount} item${itemCount === 1 ? '' : 's'}${defaultText})`;
 }
 
+function getAlertSummaryTone(alertSummary = {}) {
+  if (alertSummary.openCount > 0) {
+    return getSeverityTone(alertSummary.highestSeverity || 'medium');
+  }
+
+  if (alertSummary.triggeredCount > 0) {
+    return 'warning';
+  }
+
+  return 'success';
+}
+
+function AlertSummaryCard({ alertSummary }) {
+  const tone = getAlertSummaryTone(alertSummary);
+  const highestSeverity = alertSummary.highestSeverity
+    ? getSeverityLabel(alertSummary.highestSeverity)
+    : 'None';
+
+  return (
+    <section className={`skyweb-alert-dashboard-card skyweb-alert-dashboard-card-${tone}`}>
+      <div>
+        <div className="skyweb-card-kicker">Alert notification center</div>
+        <h2>
+          {alertSummary.openCount > 0
+            ? `${alertSummary.openCount} open signal${alertSummary.openCount === 1 ? '' : 's'}`
+            : 'No open signals'}
+        </h2>
+        <p>
+          Dashboard-facing summary of the alert queue. Acknowledge means reviewed; dismiss clears
+          the open signal while preserving the rule event history.
+        </p>
+      </div>
+      <dl className="skyweb-alert-dashboard-grid">
+        <div>
+          <dt>Open signals</dt>
+          <dd>{alertSummary.openCount}</dd>
+        </div>
+        <div>
+          <dt>Triggered rules</dt>
+          <dd>{alertSummary.triggeredCount}</dd>
+        </div>
+        <div>
+          <dt>Highest severity</dt>
+          <dd>
+            <span className={`skyweb-status-pill skyweb-status-pill-${tone}`}>
+              {highestSeverity}
+            </span>
+          </dd>
+        </div>
+        <div>
+          <dt>Last evaluated</dt>
+          <dd>{formatDateTime(alertSummary.lastEvaluatedAt)}</dd>
+        </div>
+      </dl>
+      <Link className="skyweb-card-link" to="/macro/alerts">
+        Open alerts →
+      </Link>
+    </section>
+  );
+}
+
 function SavedViewNote({ savedView }) {
   return (
     <article className="skyweb-dashboard-note-card">
@@ -122,6 +190,7 @@ function DashboardSwitcher({ dashboards, onChange, selectedDashboardKey }) {
 }
 
 function DefaultDashboardBoard({
+  alertSummary,
   dashboard,
   dashboards,
   displayName,
@@ -184,6 +253,8 @@ function DefaultDashboardBoard({
         />
       </section>
 
+      <AlertSummaryCard alertSummary={alertSummary} />
+
       <DashboardSurface
         dashboard={dashboard}
         emptyAction={
@@ -206,6 +277,7 @@ export default function MemberDashboard() {
     useDashboards();
   const { loadingSavedViews, refreshSavedViews, savedViews, savedViewsError } = useSavedViews();
   const [selectedDashboardKey, setSelectedDashboardKey] = useState('');
+  const [alertSurface, setAlertSurface] = useState({ alerts: [], notifications: [] });
 
   const pinnedSavedViews = useMemo(
     () => savedViews.filter((savedView) => savedView.pinned && savedView.view),
@@ -234,6 +306,10 @@ export default function MemberDashboard() {
       null,
     [dashboards, defaultDashboard, selectedDashboardKey],
   );
+  const alertSummary = useMemo(
+    () => summarizeAlertSurface(alertSurface.alerts, alertSurface.notifications),
+    [alertSurface],
+  );
   const loading = loadingDashboards || (!activeDashboard && loadingSavedViews);
   const error = dashboardsError || (!activeDashboard ? savedViewsError : null);
 
@@ -247,6 +323,42 @@ export default function MemberDashboard() {
 
     setSelectedDashboardKey(defaultDashboard?.dashboardKey || dashboards[0]?.dashboardKey || '');
   }, [dashboards, defaultDashboard, selectedDashboardKey]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadAlertSurface() {
+      try {
+        const [alertsPayload, notificationsPayload] = await Promise.all([
+          authService.listAlerts(),
+          authService.listAlertNotifications({ status: 'open', limit: 25 }),
+        ]);
+
+        if (active) {
+          setAlertSurface({
+            alerts: alertsPayload.items || [],
+            notifications: notificationsPayload.items || [],
+          });
+        }
+      } catch {
+        if (active) {
+          setAlertSurface({ alerts: [], notifications: [] });
+        }
+      }
+    }
+
+    function handleSignalsChanged() {
+      loadAlertSurface();
+    }
+
+    loadAlertSurface();
+    window.addEventListener(ALERT_SIGNALS_CHANGED_EVENT, handleSignalsChanged);
+
+    return () => {
+      active = false;
+      window.removeEventListener(ALERT_SIGNALS_CHANGED_EVENT, handleSignalsChanged);
+    };
+  }, []);
 
   if (loading) {
     return <LoadingState>Loading your dashboard...</LoadingState>;
@@ -263,6 +375,7 @@ export default function MemberDashboard() {
   if (activeDashboard) {
     return (
       <DefaultDashboardBoard
+        alertSummary={alertSummary}
         dashboard={activeDashboard}
         dashboards={dashboards}
         displayName={displayName}
@@ -336,6 +449,8 @@ export default function MemberDashboard() {
           detail="Regions / categories"
         />
       </section>
+
+      <AlertSummaryCard alertSummary={alertSummary} />
 
       {savedViews.length === 0 ? (
         <section className="skyweb-page-card skyweb-saved-empty-card">

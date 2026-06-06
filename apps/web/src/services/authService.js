@@ -1,3 +1,4 @@
+import { notifyAlertSignalsChanged } from '../utils/alertSignals.js';
 import api from './api.js';
 
 const AUTH_APP_CODE = import.meta.env.VITE_SKYWEB_AUTH_APP_CODE || 'SKYWEB';
@@ -124,11 +125,15 @@ async function removeAlert(alertKey) {
 }
 
 async function evaluateAlert(alertKey) {
-  return api.post(`/skyweb/alerts/${encodeURIComponent(alertKey)}/evaluate`, {});
+  const result = await api.post(`/skyweb/alerts/${encodeURIComponent(alertKey)}/evaluate`, {});
+  notifyAlertSignalsChanged();
+  return result;
 }
 
 async function evaluateAlerts(payload = {}) {
-  return api.post('/skyweb/alerts/evaluate', payload);
+  const result = await api.post('/skyweb/alerts/evaluate', payload);
+  notifyAlertSignalsChanged();
+  return result;
 }
 
 async function listAlertNotifications(params = {}) {
@@ -136,18 +141,27 @@ async function listAlertNotifications(params = {}) {
 }
 
 async function acknowledgeAlertNotification(notificationId) {
-  return api.patch(
+  const result = await api.patch(
     `/skyweb/alert-notifications/${encodeURIComponent(notificationId)}/acknowledge`,
     {},
   );
+  notifyAlertSignalsChanged();
+  return result;
 }
 
 async function dismissAlertNotification(notificationId) {
-  return api.patch(`/skyweb/alert-notifications/${encodeURIComponent(notificationId)}/dismiss`, {});
+  const result = await api.patch(
+    `/skyweb/alert-notifications/${encodeURIComponent(notificationId)}/dismiss`,
+    {},
+  );
+  notifyAlertSignalsChanged();
+  return result;
 }
 
 async function acknowledgeAllAlertNotifications(payload = {}) {
-  return api.post('/skyweb/alert-notifications/acknowledge-all', payload);
+  const result = await api.post('/skyweb/alert-notifications/acknowledge-all', payload);
+  notifyAlertSignalsChanged();
+  return result;
 }
 
 const authService = {

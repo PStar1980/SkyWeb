@@ -4,7 +4,16 @@ import StatCard from '../components/StatCard.jsx';
 import StoryCard from '../components/StoryCard.jsx';
 import ViewCard from '../components/ViewCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
+import authService from '../services/authService.js';
 import macroService from '../services/macroService.js';
+import {
+  ALERT_SIGNALS_CHANGED_EVENT,
+  getNotificationTargetLabel,
+  getNotificationTargetLink,
+  getNotificationTone,
+  getSeverityLabel,
+} from '../utils/alertSignals.js';
 import {
   buildOverviewStories,
   buildViewSearchPath,
@@ -15,6 +24,7 @@ import {
 import {
   formatCategory,
   formatDate,
+  formatDateTime,
   formatNumber,
   formatRegion,
   getMaxDate,
@@ -74,10 +84,56 @@ function CoverageRow({ item, label, to }) {
   );
 }
 
+function TriggeredSignalStrip({ notifications }) {
+  if (notifications.length === 0) {
+    return null;
+  }
+
+  const leadSignal = notifications[0];
+  const hiddenCount = Math.max(0, notifications.length - 1);
+
+  return (
+    <section
+      className={`skyweb-triggered-signal-strip skyweb-triggered-signal-strip-${getNotificationTone(
+        leadSignal,
+      )}`}
+    >
+      <div>
+        <div className="skyweb-card-kicker">Triggered signals</div>
+        <h2>
+          {notifications.length} open macro signal{notifications.length === 1 ? '' : 's'}
+        </h2>
+        <p>
+          {leadSignal.title} fired for {getNotificationTargetLabel(leadSignal)}. Latest evaluation:{' '}
+          {formatDateTime(leadSignal.evaluatedAt)}.
+          {hiddenCount > 0
+            ? ` ${hiddenCount} more signal${hiddenCount === 1 ? '' : 's'} open.`
+            : ''}
+        </p>
+      </div>
+      <div className="skyweb-triggered-signal-actions">
+        <span
+          className={`skyweb-status-pill skyweb-status-pill-${getNotificationTone(leadSignal)}`}
+        >
+          {getSeverityLabel(leadSignal.severity)}
+        </span>
+        <Link className="skyweb-card-link" to={getNotificationTargetLink(leadSignal)}>
+          Open target →
+        </Link>
+        <Link className="skyweb-card-link" to="/macro/alerts">
+          Review signals →
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 export default function MacroOverview() {
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [summary, setSummary] = useState(null);
   const [views, setViews] = useState([]);
   const [indicators, setIndicators] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -160,6 +216,41 @@ export default function MacroOverview() {
     };
   }, []);
 
+  useEffect(() => {
+    let active = true;
+
+    async function loadSignals() {
+      if (authLoading || !isAuthenticated) {
+        setNotifications([]);
+        return;
+      }
+
+      try {
+        const payload = await authService.listAlertNotifications({ status: 'open', limit: 5 });
+
+        if (active) {
+          setNotifications(payload.items || []);
+        }
+      } catch {
+        if (active) {
+          setNotifications([]);
+        }
+      }
+    }
+
+    function handleSignalsChanged() {
+      loadSignals();
+    }
+
+    loadSignals();
+    window.addEventListener(ALERT_SIGNALS_CHANGED_EVENT, handleSignalsChanged);
+
+    return () => {
+      active = false;
+      window.removeEventListener(ALERT_SIGNALS_CHANGED_EVENT, handleSignalsChanged);
+    };
+  }, [authLoading, isAuthenticated]);
+
   return (
     <>
       <header className="skyweb-page-header skyweb-dashboard-header">
@@ -180,6 +271,8 @@ export default function MacroOverview() {
           </Link>
         </div>
       </header>
+
+      <TriggeredSignalStrip notifications={notifications} />
 
       {loading && <LoadingState>Loading macro overview...</LoadingState>}
 

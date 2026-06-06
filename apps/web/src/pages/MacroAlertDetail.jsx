@@ -4,6 +4,13 @@ import { ErrorState, LoadingState } from '../components/PageState.jsx';
 import StatCard from '../components/StatCard.jsx';
 import authService from '../services/authService.js';
 import {
+  getAlertStatusLabel,
+  getAlertStatusTone,
+  getNotificationStatusLabel,
+  getNotificationTone,
+  getSeverityLabel,
+} from '../utils/alertSignals.js';
+import {
   formatColumnLabel,
   formatDate,
   formatDateTime,
@@ -36,26 +43,6 @@ function getTargetLink(alert) {
   }
 
   return '/macro/alerts';
-}
-
-function getStatusTone(status) {
-  if (status === 'triggered') {
-    return 'warning';
-  }
-
-  if (status === 'error') {
-    return 'danger';
-  }
-
-  if (status === 'ok' || status === 'acknowledged') {
-    return 'success';
-  }
-
-  if (status === 'dismissed') {
-    return 'muted';
-  }
-
-  return 'default';
 }
 
 function eventDelta(event) {
@@ -207,8 +194,9 @@ export default function MacroAlertDetail() {
           <div className="skyweb-kicker">Macro alert detail</div>
           <h1>{alert.title}</h1>
           <p>
-            Inspect the evaluation trail for this rule. Triggered evaluations also create alert
-            signals that can be acknowledged or dismissed without losing audit history.
+            Inspect the evaluation trail for this rule. Triggered evaluations create open signals;
+            acknowledgement means reviewed, dismissal clears the queue, and the audit trail remains
+            intact.
           </p>
         </div>
         <div className="skyweb-header-actions">
@@ -235,14 +223,10 @@ export default function MacroAlertDetail() {
       <section className="skyweb-metric-grid skyweb-alert-detail-metrics">
         <StatCard
           label="Status"
-          value={alert.lastStatus || 'Never'}
+          value={getAlertStatusLabel(alert.lastStatus, alert.active)}
           detail={alert.active ? 'Active rule' : 'Disabled rule'}
         />
-        <StatCard
-          label="Open signals"
-          value={notifications.length}
-          detail="Needs acknowledgement"
-        />
+        <StatCard label="Open signals" value={notifications.length} detail="Awaiting review" />
         <StatCard
           label="Latest value"
           value={formatNumber(alert.lastObservedValue)}
@@ -263,17 +247,30 @@ export default function MacroAlertDetail() {
       {notifications.length > 0 && (
         <section className="skyweb-card skyweb-alert-signal-board mb-4">
           <div className="skyweb-card-kicker">Open signals</div>
-          <h2>{notifications.length} active notification(s)</h2>
+          <h2>{notifications.length} signal(s) awaiting review</h2>
+          <p>
+            Acknowledge keeps the signal in history as reviewed. Dismiss removes it from the open
+            queue.
+          </p>
           <div className="skyweb-alert-signal-list">
             {notifications.map((notification) => (
               <article
-                className="skyweb-alert-signal-card skyweb-alert-signal-card-warning"
+                className={`skyweb-alert-signal-card skyweb-alert-signal-card-${getNotificationTone(
+                  notification,
+                )}`}
                 key={notification.notificationId}
               >
                 <div>
                   <div className="skyweb-alert-card-topline">
-                    <span className="skyweb-status-pill skyweb-status-pill-warning">
-                      {notification.severity}
+                    <span
+                      className={`skyweb-status-pill skyweb-status-pill-${getNotificationTone(
+                        notification,
+                      )}`}
+                    >
+                      {getSeverityLabel(notification.severity)}
+                    </span>
+                    <span className="skyweb-mini-pill">
+                      {getNotificationStatusLabel(notification.notificationStatus)}
                     </span>
                     <span className="skyweb-mini-pill">
                       {formatDateTime(notification.evaluatedAt)}
@@ -394,9 +391,12 @@ export default function MacroAlertDetail() {
                   <tr key={event.eventId}>
                     <td>
                       <span
-                        className={`skyweb-status-pill skyweb-status-pill-${getStatusTone(event.eventStatus)}`}
+                        className={`skyweb-status-pill skyweb-status-pill-${getAlertStatusTone(
+                          event.eventStatus,
+                          true,
+                        )}`}
                       >
-                        {event.eventStatus || '—'}
+                        {getAlertStatusLabel(event.eventStatus, true)}
                       </span>
                     </td>
                     <td>{formatDateTime(event.evaluatedAt)}</td>

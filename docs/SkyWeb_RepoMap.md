@@ -82,10 +82,12 @@ SkyWeb/
 │           │   ├── authService.js
 │           │   └── macroService.js
 │           └── utils/
+│               ├── alertSignals.js
 │               ├── charting.js
 │               ├── formatters.js
 │               └── macroStory.js
 ├── docs/
+│   ├── SkyWeb_Analytics_Chart_Strategy_Migration_Plan.md
 │   └── SkyWeb_RepoMap.md
 └── tests/
     └── e2e/

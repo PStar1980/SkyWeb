@@ -3,6 +3,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { SKYWEB_PRODUCT_NAME } from '../constants/branding.js';
 import { useAuth } from '../context/AuthContext.jsx';
 import authService from '../services/authService.js';
+import { ALERT_SIGNALS_CHANGED_EVENT } from '../utils/alertSignals.js';
 
 function getNavLinkClass({ isActive }) {
   return isActive ? 'skyweb-nav-link active' : 'skyweb-nav-link';
@@ -60,10 +61,16 @@ export default function Navbar() {
       }
     }
 
+    function handleSignalsChanged() {
+      loadOpenSignals();
+    }
+
     loadOpenSignals();
+    window.addEventListener(ALERT_SIGNALS_CHANGED_EVENT, handleSignalsChanged);
 
     return () => {
       active = false;
+      window.removeEventListener(ALERT_SIGNALS_CHANGED_EVENT, handleSignalsChanged);
     };
   }, [isAuthenticated, loading, location.pathname]);
 
@@ -150,6 +157,12 @@ export default function Navbar() {
       <div className="skyweb-nav-account">
         {!loading && isAuthenticated && (
           <>
+            {openSignalCount > 0 && (
+              <NavLink className="skyweb-global-signal-pill" to="/macro/alerts">
+                <span>Signals</span>
+                <strong>{openSignalCount}</strong>
+              </NavLink>
+            )}
             <NavLink className={getNavLinkClass} to="/account">
               {user?.displayName || user?.username || 'Account'}
             </NavLink>

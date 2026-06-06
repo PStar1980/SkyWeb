@@ -6,9 +6,9 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 ## Current Status
 
-**Phase 8.4 — Alert Notifications / Trigger Surfacing**
+**Phase 8.5 — Alert Notification Center + Dashboard Surfacing**
 
-SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection, precision chart axes, hover coordinate tooltips, full-history loading, 50-row paginated data tables, time-based period filters, table-first exploration, a full-width analytics workspace layout for chart/dashboard/table-heavy routes, and the first user-owned macro alert-rule surface for indicator and view-metric threshold watches with scheduled evaluation, event history, and an actionable triggered-signal notification queue.
+SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection, precision chart axes, hover coordinate tooltips, full-history loading, 50-row paginated data tables, time-based period filters, table-first exploration, a full-width analytics workspace layout for chart/dashboard/table-heavy routes, and the first user-owned macro alert-rule surface for indicator and view-metric threshold watches with scheduled evaluation, event history, an actionable triggered-signal notification queue, a global signal badge, dashboard alert summary, and Macro Overview signal strip.
 
 Implemented foundation pieces:
 
@@ -40,6 +40,12 @@ Implemented foundation pieces:
 - Alert evaluation history pages showing manual/scheduled source, observed values, thresholds, and messages
 - Triggered alert notifications surfaced on Macro Alerts with acknowledge/dismiss actions
 - Macro dropdown alert badge showing open triggered signals
+- Global navbar signal pill near the account controls for open triggered alerts
+- Macro Dashboard alert summary card showing open signals, triggered rules, highest severity, and last evaluation
+- Macro Overview triggered-signal strip for authenticated users with open notifications
+- Alert lifecycle copy clarified for open, acknowledged, dismissed, triggered, and not-triggered states
+- Shared alert-signal helpers for severity labels, status labels, target links, and notification refresh events
+- Severity-aware styling for low, medium, high, and critical alert signals
 - App-level dashboard density classes for comfortable, compact, and roomy layouts
 - Authenticated saved macro view context backed by `/api/skyweb/saved-views`
 - Authenticated saved-view controls directly on the Macro Views catalog cards
@@ -155,17 +161,17 @@ During local development, Vite proxies `/api/*` to the SkyServer API using `VITE
 
 SkyServer tracks the broader ecosystem integration as its Phase 9. SkyWeb Analytics uses its own standalone phase numbering so the public application can grow independently.
 
-| Phase      | Objective                                                                                                            |
-| ---------- | -------------------------------------------------------------------------------------------------------------------- |
-| ✅ Phase 1 | SkyWeb foundation: identity, README, root package scripts, environment template, API client, and route shell         |
-| ✅ Phase 2 | SkyServer public macro API bridge: safe unauthenticated macro endpoints with public limits                           |
-| ✅ Phase 3 | Macro Dashboard v1: live overview, curated view cards, drilldowns, formatted tables, and indicator explorer          |
-| ✅ Phase 4 | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation |
-| ✅ Phase 5 | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces             |
-| ✅ Phase 6 | Profile and preferences UI: editable member profile, saved display preferences, and account settings                 |
-| ✅ Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb Analytics dashboard features                              |
-| 🔄 Phase 8 | Macro alerts foundation: user-tracked indicators, views, scheduled evaluation, and triggered signal surfacing        |
-| 🔜 Phase 9 | Public portfolio polish: screenshots, GitHub/LinkedIn proof assets, and presentation-ready feature storytelling      |
+| Phase      | Objective                                                                                                                       |
+| ---------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| ✅ Phase 1 | SkyWeb foundation: identity, README, root package scripts, environment template, API client, and route shell                    |
+| ✅ Phase 2 | SkyServer public macro API bridge: safe unauthenticated macro endpoints with public limits                                      |
+| ✅ Phase 3 | Macro Dashboard v1: live overview, curated view cards, drilldowns, formatted tables, and indicator explorer                     |
+| ✅ Phase 4 | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation            |
+| ✅ Phase 5 | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces                        |
+| ✅ Phase 6 | Profile and preferences UI: editable member profile, saved display preferences, and account settings                            |
+| ✅ Phase 7 | Saved dashboards and watchlists: first personalized SkyWeb Analytics dashboard features                                         |
+| 🔄 Phase 8 | Macro alerts foundation: user-tracked indicators, views, scheduled evaluation, notification center surfacing, and signal polish |
+| 🔜 Phase 9 | Public portfolio polish: screenshots, GitHub/LinkedIn proof assets, and presentation-ready feature storytelling                 |
 
 ## Phase Details
 
@@ -414,3 +420,18 @@ SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on publi
 - Alert detail history now distinguishes manual evaluations from worker-scheduled evaluations.
 - Macro alert copy now reflects that SkyServer Worker can evaluate active alert watches on a schedule.
 - Scheduled evaluation remains backed by SkyServer, while SkyWeb continues to show the audit trail and current rule status.
+
+### Phase 8.4 — Alert Notifications / Trigger Surfacing
+
+- Triggered evaluation events now create user-facing alert notifications.
+- Macro Alerts shows an actionable triggered-signal queue with acknowledge and dismiss actions.
+- Macro dropdown shows an open-signal badge so alerts are visible from navigation.
+- Notification actions preserve the permanent rule evaluation history.
+
+### Phase 8.5 — Alert Notification Center + Dashboard Surfacing
+
+- Added a global Signals pill near the account/logout controls when open alert notifications exist.
+- Added a Macro Dashboard alert summary card with open signals, triggered rules, highest severity, and last evaluated time.
+- Added an authenticated Macro Overview triggered-signal strip so watched conditions surface outside `/macro/alerts`.
+- Clarified lifecycle copy: open means awaiting review, acknowledge means reviewed, dismiss removes from the open queue, and event history remains permanent.
+- Added shared alert-signal helpers and severity-aware low/medium/high/critical styling.

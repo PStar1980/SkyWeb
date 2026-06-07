@@ -6,13 +6,14 @@ export default defineConfig(({ mode }) => {
   const clientRoot = fileURLToPath(new URL('.', import.meta.url));
   const env = loadEnv(mode, clientRoot, '');
   const skyWebApiOrigin = env.VITE_SKYWEB_API_ORIGIN || 'http://localhost:7280';
+  const skyWebClientPort = Number(env.VITE_SKYWEB_CLIENT_PORT || 5175);
 
   return {
     root: fileURLToPath(new URL('.', import.meta.url)),
     envDir: clientRoot,
     plugins: [react()],
     server: {
-      port: 5174,
+      port: skyWebClientPort,
       strictPort: true,
       proxy: {
         '/api': {

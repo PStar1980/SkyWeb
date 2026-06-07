@@ -30,6 +30,13 @@ SkyWeb.Client
       → proxy to SkyServer Node API for not-yet-migrated endpoint families
 ```
 
+The existing app and .NET-lane client intentionally use different local ports so they can run side-by-side during the migration:
+
+```text
+apps/web                  http://localhost:5174
+apps/web-dotnet/SkyWeb.Client  http://localhost:5175
+```
+
 Proxy fallback is migration scaffolding only. Each route family will be replaced with native C# implementation as the DN phases progress.
 
 ## Repository Layout
@@ -124,23 +131,23 @@ VITE_SKYWEB_SESSION_TOKEN_KEY=skyweb.sessionToken
 VITE_SKYWEB_PUBLIC_MODE=true
 ```
 
-The .NET-lane client has its own environment file:
+The .NET-lane client has its own example environment file:
 
 ```text
-apps/web-dotnet/SkyWeb.Client/.env.development
+apps/web-dotnet/SkyWeb.Client/.env.example
 ```
 
-Important .NET-lane variables:
+Defaults should work without creating a local `.env.development`, but local overrides can be added inside `apps/web-dotnet/SkyWeb.Client` if needed. Important .NET-lane variables:
 
 ```text
-VITE_SKYWEB_API_BASE_URL=http://localhost:7280/api
-VITE_SKYSERVER_API_BASE_URL=http://localhost:7280/api
+VITE_SKYWEB_CLIENT_PORT=5175
 VITE_SKYWEB_API_ORIGIN=http://localhost:7280
+VITE_SKYWEB_API_BASE_URL=/api
+VITE_SKYSERVER_API_BASE_URL=/api
 VITE_SKYSERVER_API_ORIGIN=http://localhost:7171
 VITE_MACRO_API_PREFIX=/public/macro
 VITE_SKYWEB_AUTH_APP_CODE=SKYWEB
 VITE_SKYWEB_SESSION_TOKEN_KEY=skyweb.sessionToken
-VITE_SKYWEB_PUBLIC_MODE=true
 VITE_API_TIMEOUT_MS=20000
 ```
 
@@ -219,7 +226,7 @@ SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on publi
 | SkyWeb.Api health       | `http://localhost:7280/_health`                           |
 | SkyWeb.Api DB health    | `http://localhost:7280/_db/health`                        |
 | SkyWeb.Api Swagger      | `http://localhost:7280/swagger`                           |
-| .NET-lane SkyWeb.Client | `http://localhost:5174` when running `npm run web:dotnet` |
+| .NET-lane SkyWeb.Client | `http://localhost:5175` when running `npm run web:dotnet` |
 
 ## Portfolio Positioning
 

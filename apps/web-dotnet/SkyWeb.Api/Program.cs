@@ -1,5 +1,6 @@
 using System.Text.Json;
 using SkyWeb.Api.Data;
+using SkyWeb.Api.Middleware;
 using SkyWeb.Api.Options;
 using SkyWeb.Api.Services;
 
@@ -18,6 +19,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DbConnectionFactory>();
 builder.Services.AddScoped<MacroReadService>();
 builder.Services.AddScoped<PublicMacroService>();
+builder.Services.AddScoped<AuthService>();
+builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection("Auth"));
 builder.Services.Configure<SkyServerOptions>(builder.Configuration.GetSection("SkyServer"));
 builder.Services.AddHttpClient<SkyServerProxyService>();
 
@@ -53,6 +56,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("SkyWebClient");
+app.UseMiddleware<AuthMiddleware>();
 app.MapControllers();
 
 app.Run();

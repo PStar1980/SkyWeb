@@ -70,8 +70,8 @@ DN-0  Preserve Pre-.NET Baseline
 DN-1  Create Parallel .NET App Structure
 DN-2  Configure API, CORS, Health, DB Connection
 DN-3  Wire SkyWeb.Client to SkyWeb.Api
-DN-4  Implement Public Macro REST Endpoints in C#
-DN-5  Implement Authentication in C#
+DN-4  Implement Public Macro REST Endpoints in C#        [implemented]
+DN-5  Implement Authentication in C#                   [current]
 DN-6  Implement SkyWeb Profile and Preferences
 DN-7  Implement Saved Views and Dashboards
 DN-8  Implement Alerts and Signal Center
@@ -907,7 +907,7 @@ Initial practical bridge:
 /api/skyweb/*     → proxy to SkyServer Node until DN-6/DN-7/DN-8
 ```
 
-Public macro endpoints become the first native C# route family in DN-4. Auth and `/api/skyweb/*` remain on proxy fallback until their later DN phases.
+Public macro endpoints became the first native C# route family in DN-4. DN-5 moves `/api/auth/*` into native ASP.NET Core/C# while `/api/skyweb/*` remains on proxy fallback until DN-6 through DN-8.
 
 ## Acceptance Criteria
 
@@ -922,7 +922,7 @@ Public macro endpoints become the first native C# route family in DN-4. Auth and
 
 ## DN-4 implementation note
 
-This phase replaces the `/api/public/macro/*` proxy fallback with native ASP.NET Core/C# endpoints. The temporary proxy bridge remains active for `/api/auth/*` and `/api/skyweb/*` until those route families are migrated.
+This phase replaced the `/api/public/macro/*` proxy fallback with native ASP.NET Core/C# endpoints. The temporary proxy bridge remained active for `/api/auth/*` and `/api/skyweb/*` until later route-family migrations.
 
 ## Goal
 
@@ -1003,6 +1003,10 @@ Preserve these behaviors initially.
 ---
 
 # DN-5 — Implement Authentication in C#
+
+## DN-5 implementation note
+
+This phase replaces the `/api/auth/*` proxy fallback with native ASP.NET Core/C# endpoints while preserving the existing opaque bearer-token contract. Sessions remain stored in `auth.sessions` as SHA-256 token hashes, permissions are still read from `auth.vw_user_permissions`, and login/audit events continue to write into the existing auth schema. The remaining `/api/skyweb/*` route families stay on the proxy bridge until DN-6 through DN-8.
 
 ## Goal
 

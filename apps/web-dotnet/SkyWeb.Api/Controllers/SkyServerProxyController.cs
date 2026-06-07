@@ -15,8 +15,6 @@ public sealed class SkyServerProxyController : ControllerBase
     }
 
     [AcceptVerbs("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")]
-    [Route("auth")]
-    [Route("auth/{**path}")]
     [Route("skyweb")]
     [Route("skyweb/{**path}")]
     public async Task ProxyToSkyServer(CancellationToken cancellationToken)

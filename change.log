@@ -1,39 +1,77 @@
 # SkyWeb Change Log
 
-Detailed implementation history for SkyWeb Analytics. README stays focused on current state and run instructions.
+Detailed implementation notes live here so `README.md` can stay focused on current status, setup, and architecture.
 
-## DN-4 — Public Macro REST Endpoints in C#
+## Current Feature Baseline
 
-- Added native ASP.NET Core/C# public macro endpoint family under `/api/public/macro/*`.
-- Added `PublicMacroController`, `PublicMacroService`, and `MacroReadService`.
-- Ported public macro view/indicator registry and SQL read behavior from SkyServer Node services.
-- Preserved public API response contracts: `{ ok: true, ... }`, public view payloads, indicator payloads, pagination fields, and service-style error responses.
-- Removed `/api/public/macro/*` from the temporary SkyServer proxy bridge so public macro reads are served by `SkyWeb.Api`.
-- Left `/api/auth/*` and `/api/skyweb/*` proxied to SkyServer for the next migration stages.
-- Confirmed `.NET` lane client port convention: existing SkyWeb app on `5174`, copied .NET-lane client on `5175`.
+### Phase 8.8 — Alert Rule UX Polish
 
-## DN-3 — .NET Client Wiring + Proxy Bridge
+Completed alert-system cockpit polish:
 
-- Wired copied `SkyWeb.Client` to call `SkyWeb.Api` first.
-- Added temporary proxy fallback from `SkyWeb.Api` to SkyServer Node API for unported route families.
-- Added support for `VITE_SKYWEB_API_BASE_URL`.
-- Established side-by-side local development flow: SkyServer Node API, SkyWeb.Api, and SkyWeb.Client.
+- Alert rule search, filter, and sort controls.
+- Inline edit mode for existing alert rules.
+- Clone rule action, staged inactive by default.
+- Safer remove confirmation.
+- Better client-side validation for missing target/metric/threshold inputs.
+- Alert detail edit handoff back to `/macro/alerts?edit=:alertKey`.
 
-## DN-0 to DN-2 — .NET Transition Foundation
+### Phase 8 — Macro Alerts Completed Scope
 
-- Preserved pre-.NET baseline.
-- Added `apps/web-dotnet` with `SkyWeb.DotNet.sln`, `SkyWeb.Api`, and copied `SkyWeb.Client`.
-- Added health and DB health endpoints: `/_health` and `/_db/health`.
-- Added Swagger, CORS, Dapper, Npgsql, and camelCase JSON serialization.
+- 8.1: Alert rules foundation, create rules, conditions, manual evaluation.
+- 8.2: Alert detail page and evaluation history.
+- 8.3: Scheduled alert evaluation visibility from SkyServer Worker.
+- 8.4: Triggered notification queue with acknowledge/dismiss lifecycle.
+- 8.5: Navbar Signals pill, dashboard alert card, Macro Overview signal strip, lifecycle wording, severity styling.
+- 8.6: Alert preferences and delivery-prep contract.
+- 8.7: Dedicated Signal Center.
+- 8.8: Alert-rule UX polish.
 
-## Phase 8 — Macro Alerts
+## .NET Transition Lane
 
-- Added alert rules, evaluation history, scheduled evaluation visibility, triggered notification queue, app-wide signal surfacing, alert preferences, dedicated Signal Center, and alert-rule UX polish.
+### DN-0 — Preserve Pre-.NET Baseline
 
-## Phase 7 — Saved Dashboards and Watchlists
+- Captured existing SkyWeb Analytics feature baseline before introducing the parallel ASP.NET Core lane.
+- Added baseline documentation for public macro routes, authenticated routes, alert routes, and Phase 8.8 behavior.
 
-- Added personalized dashboard builder, dashboard viewer, presentation route, reusable dashboard items, and saved/pinned macro view workflows.
+### DN-1 — Create Parallel .NET App Structure
 
-## Phase 1 to Phase 6 — Foundation through Preferences
+- Added `apps/web-dotnet/SkyWeb.DotNet.sln`.
+- Added `apps/web-dotnet/SkyWeb.Api` as the ASP.NET Core API project.
+- Added `apps/web-dotnet/SkyWeb.Client` as a copied React/Vite client for migration testing.
+- Kept existing `apps/web` untouched as the production baseline.
 
-- Built SkyWeb React/Vite shell, public macro API consumption, macro overview/detail surfaces, auth shell, member account route, profile/preferences UI, and dashboard/chart polish.
+### DN-2 — Configure API, CORS, Health, DB Connection
+
+- Added `/_health` endpoint.
+- Added `/_db/health` endpoint.
+- Added Swagger/OpenAPI support.
+- Added CORS support for the existing app and the .NET-lane client.
+- Added PostgreSQL connection factory using the existing `skyserver_dev` database.
+- Added guidance for .NET user secrets so local DB passwords are not committed.
+
+### DN-3 — Wire SkyWeb.Client to SkyWeb.Api
+
+- Added `VITE_SKYWEB_API_BASE_URL` support for the .NET-lane client.
+- Added temporary proxy bridge through `SkyWeb.Api`.
+- Proxied `/api/auth/*`, `/api/skyweb/*`, and `/api/public/macro/*` during early migration.
+- Moved the .NET-lane React client to port `5175` so it can run beside the existing app on `5174`.
+
+### DN-4 — Public Macro REST Endpoints in C#
+
+- Replaced `/api/public/macro/*` proxy fallback with native ASP.NET Core/C# endpoints.
+- Added native routes for macro summary, views, columns, latest rows, view rows, indicators, indicator detail, and indicator series.
+- Left `/api/auth/*` and `/api/skyweb/*` on proxy fallback pending later DN phases.
+
+### DN-5 — Authentication in C#
+
+- Added native ASP.NET Core/C# authentication endpoints:
+  - `POST /api/auth/login`
+  - `POST /api/auth/logout`
+  - `POST /api/auth/change-password`
+  - `GET /api/auth/me`
+  - `GET /api/auth/permissions`
+- Added native bearer-token session validation middleware.
+- Mirrored the existing opaque bearer-token model using raw session tokens and SHA-256 token hashes in `auth.sessions.session_token_hash`.
+- Mirrored app-scoped auth using `core.applications`, `auth.user_applications`, and `auth.vw_user_permissions`.
+- Mirrored login event and audit event writes.
+- Kept `/api/skyweb/*` on proxy fallback for DN-6 through DN-8.

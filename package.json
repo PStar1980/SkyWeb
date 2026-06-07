@@ -20,7 +20,11 @@
     "clean": "npm run lint:fix && npm run format",
     "prepush": "npm run lint:fix && npm run format:check",
     "setup": "npm install",
-    "hooks": "husky"
+    "hooks": "husky",
+    "web:dotnet": "vite --config apps/web-dotnet/SkyWeb.Client/vite.config.js",
+    "web:dotnet:build": "vite build --config apps/web-dotnet/SkyWeb.Client/vite.config.js",
+    "dotnet:api": "dotnet run --project apps/web-dotnet/SkyWeb.Api/SkyWeb.Api.csproj",
+    "dotnet:build": "dotnet build apps/web-dotnet/SkyWeb.DotNet.sln"
   },
   "lint-staged": {
     "*.{js,jsx,mjs,cjs,ts,tsx}": [

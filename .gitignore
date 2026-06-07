@@ -21,6 +21,10 @@ yarn-error.log*
 **/.env.production
 **/.env.test
 
+# .NET build outputs
+**/bin/
+**/obj/
+
 # Build outputs
 dist/
 build/

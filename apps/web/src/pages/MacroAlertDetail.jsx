@@ -203,6 +203,12 @@ export default function MacroAlertDetail() {
           <Link className="skyweb-btn skyweb-btn-secondary" to="/macro/alerts">
             Back to alerts
           </Link>
+          <Link
+            className="skyweb-btn skyweb-btn-secondary"
+            to={`/macro/alerts?edit=${encodeURIComponent(alert.alertKey)}`}
+          >
+            Edit rule
+          </Link>
           <Link className="skyweb-btn skyweb-btn-secondary" to={getTargetLink(alert)}>
             Open target
           </Link>

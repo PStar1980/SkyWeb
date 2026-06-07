@@ -4779,3 +4779,74 @@
     justify-content: flex-start;
   }
 }
+
+/* Phase 8.8 — alert rule UX polish */
+.skyweb-alert-edit-banner {
+  align-items: center;
+  background: rgba(112, 183, 255, 0.1);
+  border: 1px solid rgba(112, 183, 255, 0.26);
+  border-radius: 0.95rem;
+  color: rgba(220, 232, 255, 0.78);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+}
+
+.skyweb-alert-edit-banner strong {
+  color: #ffffff;
+}
+
+.skyweb-alert-form-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.skyweb-alert-inventory-controls {
+  align-items: end;
+  display: grid;
+  gap: 0.85rem;
+  grid-template-columns: minmax(280px, 1.4fr) repeat(4, minmax(150px, 0.75fr)) auto;
+  margin: 0 0 1rem;
+}
+
+.skyweb-alert-inventory-controls label {
+  color: rgba(220, 232, 255, 0.72);
+  display: grid;
+  font-size: 0.82rem;
+  font-weight: 900;
+  gap: 0.4rem;
+}
+
+.skyweb-alert-inventory-controls .form-control,
+.skyweb-alert-inventory-controls .form-select {
+  background-color: rgba(5, 10, 20, 0.72);
+  border-color: rgba(138, 163, 202, 0.22);
+  color: #ffffff;
+}
+
+@media (max-width: 1320px) {
+  .skyweb-alert-inventory-controls {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 720px) {
+  .skyweb-alert-edit-banner,
+  .skyweb-alert-form-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .skyweb-alert-edit-banner .skyweb-btn,
+  .skyweb-alert-form-actions .skyweb-btn {
+    width: 100%;
+  }
+
+  .skyweb-alert-inventory-controls {
+    grid-template-columns: 1fr;
+  }
+}

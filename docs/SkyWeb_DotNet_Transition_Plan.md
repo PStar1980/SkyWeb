@@ -457,8 +457,10 @@ const baseURL =
 Recommended `.env.development` for the copied client:
 
 ```text
-VITE_SKYWEB_API_BASE_URL=http://localhost:7280/api
-VITE_SKYSERVER_API_BASE_URL=http://localhost:7280/api
+VITE_SKYWEB_CLIENT_PORT=5175
+VITE_SKYWEB_API_ORIGIN=http://localhost:7280
+VITE_SKYWEB_API_BASE_URL=/api
+VITE_SKYSERVER_API_BASE_URL=/api
 VITE_MACRO_API_PREFIX=/public/macro
 VITE_SKYWEB_AUTH_APP_CODE=SKYWEB
 VITE_API_TIMEOUT_MS=20000
@@ -819,7 +821,7 @@ Use `appsettings.Development.json`, user secrets, or environment variables:
     "ApplicationCode": "SKYWEB"
   },
   "Cors": {
-    "AllowedOrigins": ["http://localhost:5173", "http://localhost:5174"]
+    "AllowedOrigins": ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175"]
   },
   "SkyServer": {
     "BaseUrl": "http://localhost:7171/api"
@@ -878,8 +880,10 @@ apps/web-dotnet/SkyWeb.Client/.env.development
 Suggested values:
 
 ```text
-VITE_SKYWEB_API_BASE_URL=http://localhost:7280/api
-VITE_SKYSERVER_API_BASE_URL=http://localhost:7280/api
+VITE_SKYWEB_CLIENT_PORT=5175
+VITE_SKYWEB_API_ORIGIN=http://localhost:7280
+VITE_SKYWEB_API_BASE_URL=/api
+VITE_SKYSERVER_API_BASE_URL=/api
 VITE_MACRO_API_PREFIX=/public/macro
 VITE_SKYWEB_AUTH_APP_CODE=SKYWEB
 VITE_API_TIMEOUT_MS=20000

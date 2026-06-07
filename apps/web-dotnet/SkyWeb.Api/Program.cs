@@ -1,5 +1,7 @@
 using System.Text.Json;
 using SkyWeb.Api.Data;
+using SkyWeb.Api.Options;
+using SkyWeb.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +16,8 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DbConnectionFactory>();
+builder.Services.Configure<SkyServerOptions>(builder.Configuration.GetSection("SkyServer"));
+builder.Services.AddHttpClient<SkyServerProxyService>();
 
 var allowedOrigins = builder.Configuration
     .GetSection("Cors:AllowedOrigins")

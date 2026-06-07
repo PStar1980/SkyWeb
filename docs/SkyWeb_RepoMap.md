@@ -114,15 +114,19 @@ SkyWeb/
 │       │   │           ├── Swashbuckle.AspNetCore.SwaggerGen.dll
 │       │   │           └── Swashbuckle.AspNetCore.SwaggerUI.dll
 │       │   ├── Controllers/
+│       │   │   ├── AuthController.cs
 │       │   │   ├── HealthController.cs
 │       │   │   ├── PublicMacroController.cs
 │       │   │   └── SkyServerProxyController.cs
 │       │   ├── Data/
 │       │   │   └── DbConnectionFactory.cs
 │       │   ├── DTOs/
+│       │   │   ├── Auth/
+│       │   │   │   └── AuthDtos.cs
 │       │   │   └── Health/
 │       │   │       └── HealthResponse.cs
 │       │   ├── Middleware/
+│       │   │   └── AuthMiddleware.cs
 │       │   ├── Models/
 │       │   │   └── Macro/
 │       │   │       └── MacroViewDefinition.cs
@@ -164,11 +168,15 @@ SkyWeb/
 │       │   │           │   └── SkyWeb.Api.dll
 │       │   │           └── staticwebassets/
 │       │   ├── Options/
+│       │   │   ├── AuthOptions.cs
 │       │   │   └── SkyServerOptions.cs
 │       │   ├── Properties/
 │       │   │   └── launchSettings.json
 │       │   └── Services/
 │       │       ├── ApiException.cs
+│       │       ├── AuthHttpException.cs
+│       │       ├── AuthService.cs
+│       │       ├── AuthTokenService.cs
 │       │       ├── MacroReadService.cs
 │       │       ├── PublicMacroService.cs
 │       │       └── SkyServerProxyService.cs

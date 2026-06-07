@@ -114,7 +114,8 @@ SkyWeb/
 │       │   │           ├── Swashbuckle.AspNetCore.SwaggerGen.dll
 │       │   │           └── Swashbuckle.AspNetCore.SwaggerUI.dll
 │       │   ├── Controllers/
-│       │   │   └── HealthController.cs
+│       │   │   ├── HealthController.cs
+│       │   │   └── SkyServerProxyController.cs
 │       │   ├── Data/
 │       │   │   └── DbConnectionFactory.cs
 │       │   ├── DTOs/
@@ -160,9 +161,11 @@ SkyWeb/
 │       │   │           │   └── SkyWeb.Api.dll
 │       │   │           └── staticwebassets/
 │       │   ├── Options/
+│       │   │   └── SkyServerOptions.cs
 │       │   ├── Properties/
 │       │   │   └── launchSettings.json
 │       │   └── Services/
+│       │       └── SkyServerProxyService.cs
 │       └── SkyWeb.Client/
 │           ├── .env.example
 │           ├── index.html

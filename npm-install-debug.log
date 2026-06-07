@@ -1,0 +1,866 @@
+npm verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+npm info using npm@11.6.1
+npm info using node@v24.11.0
+npm timing npm:load:whichnode Completed in 3ms
+npm silly config load:file:C:\Program Files\nodejs\node_modules\npm\npmrc
+npm silly config load:file:C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\.npmrc
+npm silly config load:file:C:\Users\pauls\.npmrc
+npm silly config load:file:C:\Users\pauls\AppData\Roaming\npm\etc\npmrc
+npm timing npm:load:configload Completed in 5ms
+npm timing config:load:flatten Completed in 1ms
+npm timing npm:load:mkdirpcache Completed in 1ms
+npm timing npm:load:mkdirplogs Completed in 0ms
+npm verbose title npm install
+npm verbose argv "install" "--foreground-scripts" "--timing" "--loglevel" "silly" "--no-audit" "--no-fund"
+npm timing npm:load:setTitle Completed in 1ms
+npm verbose logfile logs-max:10 dir:C:\Users\pauls\AppData\Local\npm-cache\_logs\2026-05-13T21_41_05_964Z-
+npm verbose logfile C:\Users\pauls\AppData\Local\npm-cache\_logs\2026-05-13T21_41_05_964Z-debug-0.log
+npm timing npm:load Completed in 25ms
+npm silly logfile start cleaning logs, removing 1 files
+npm silly packumentCache heap:4496293888 maxSize:1124073472 maxEntrySize:562036736
+npm timing arborist:ctor Completed in 1ms
+npm silly logfile done cleaning log files
+npm timing idealTree:init Completed in 43ms
+npm timing idealTree:userRequests Completed in 0ms
+npm silly idealTree buildDeps
+npm timing idealTree:#root Completed in 1ms
+npm timing idealTree:buildDeps Completed in 1ms
+npm timing idealTree:fixDepFlags Completed in 1ms
+npm timing idealTree Completed in 47ms
+npm timing reify:loadTrees Completed in 93ms
+npm timing reify:diffTrees Completed in 3ms
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\ansi-regex'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\cli-cursor'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\cli-truncate'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\ansi-escapes'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\colorette'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\commander'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\emoji-regex'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\environment'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\eslint-config-prettier'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\eslint-plugin-prettier'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\eventemitter3'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\fast-diff'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\fsevents'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\get-east-asian-width'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\husky'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\is-fullwidth-code-point'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-android-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-darwin-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-darwin-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-arm-gnueabihf'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-arm64-gnu'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-freebsd-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-arm64-musl'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-x64-musl'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-x64-gnu'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lint-staged'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-win32-arm64-msvc'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\log-update'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\listr2'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\mimic-function'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\onetime'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\prettier'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\prettier-linter-helpers'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\rolldown'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\restore-cursor'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\rfdc'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\signal-exit'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\string-argv'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\slice-ansi'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\string-width'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\strip-ansi'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\synckit'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\tinyexec'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\vite'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\wrap-ansi'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\yaml'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\aix-ppc64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\android-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\android-arm'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\android-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\darwin-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\freebsd-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\freebsd-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-arm'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\darwin-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-ia32'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-ppc64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-riscv64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-loong64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-mips64el'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-s390x'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\openbsd-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\openbsd-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\netbsd-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\sunos-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\netbsd-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\openharmony-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\win32-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\win32-ia32'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@oxc-project\\types'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@pkgr\\core'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-android-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-darwin-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-darwin-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-freebsd-x64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-arm64-gnu'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-arm-gnueabihf'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-ppc64-gnu'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-arm64-musl'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-x64-gnu'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-openharmony-arm64'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-s390x-gnu'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-wasm32-wasi'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-win32-arm64-msvc'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-win32-x64-msvc'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-x64-musl'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\acorn',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\acorn',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\acorn.cmd',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\acorn.ps1'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\eslint',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\eslint',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\eslint.cmd',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\eslint.ps1'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\js-yaml',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\js-yaml',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\js-yaml.cmd',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\js-yaml.ps1'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\loose-envify',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\loose-envify',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\loose-envify.cmd',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\loose-envify.ps1'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\nanoid',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\nanoid',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\nanoid.cmd',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\nanoid.ps1'
+npm silly reify ]
+npm silly reify mark retired [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\which',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\node-which',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\node-which.cmd',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\node-which.ps1'
+npm silly reify ]
+npm silly reify moves {
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\ansi-regex': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.ansi-regex-spc9vpFi',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\cli-cursor': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.cli-cursor-ihAw51R7',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\cli-truncate': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.cli-truncate-B3dMtPDR',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\ansi-escapes': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.ansi-escapes-I4JPH80V',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\colorette': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.colorette-LbsqVByo',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\commander': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.commander-T78Nvnmx',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\emoji-regex': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.emoji-regex-CwnWlfTj',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\environment': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.environment-ns8csgvl',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\eslint-config-prettier': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.eslint-config-prettier-QMzF5RtN',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\eslint-plugin-prettier': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.eslint-plugin-prettier-qgSANpO8',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\eventemitter3': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.eventemitter3-8jkS4Wz5',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\fast-diff': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.fast-diff-4odNb7Ud',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\fsevents': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.fsevents-sRSgrBgO',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\get-east-asian-width': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.get-east-asian-width-EW7OrxiO',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\husky': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.husky-4jwTIXsG',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\is-fullwidth-code-point': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.is-fullwidth-code-point-4dARyOme',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-android-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lightningcss-android-arm64-UcwXlGOM',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-darwin-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lightningcss-darwin-x64-NlB5UrGF',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-darwin-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lightningcss-darwin-arm64-XJdE2Ihh',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-arm-gnueabihf': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lightningcss-linux-arm-gnueabihf-DeP0hf5u',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-arm64-gnu': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lightningcss-linux-arm64-gnu-WdcUv9UH',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-freebsd-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lightningcss-freebsd-x64-nv0i2s6t',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-arm64-musl': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lightningcss-linux-arm64-musl-BxuC0V06',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-x64-musl': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lightningcss-linux-x64-musl-T1UJ0t9S',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-x64-gnu': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lightningcss-linux-x64-gnu-PZUR6ryr',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lint-staged': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lint-staged-VtstO6Ax',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-win32-arm64-msvc': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.lightningcss-win32-arm64-msvc-e6NzZYfD',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\log-update': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.log-update-JZ1MXwMZ',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\listr2': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.listr2-GrGNSosp',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\mimic-function': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.mimic-function-upssJ4Mq',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\onetime': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.onetime-l4qKaoJm',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\prettier': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.prettier-rOcah4FN',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\prettier-linter-helpers': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.prettier-linter-helpers-g7diTpG3',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\rolldown': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.rolldown-VRtkXBRg',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\restore-cursor': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.restore-cursor-NQ0LW6Xb',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\rfdc': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.rfdc-MgLDDzlr',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\signal-exit': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.signal-exit-irM90lfK',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\string-argv': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.string-argv-DO1wXhe4',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\slice-ansi': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.slice-ansi-d29GfgUM',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\string-width': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.string-width-I7sovJmf',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\strip-ansi': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.strip-ansi-XhwvkQER',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\synckit': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.synckit-sHUwuOpB',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\tinyexec': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.tinyexec-QDL9tj6W',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\vite': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.vite-SI3Klr7i',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\wrap-ansi': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.wrap-ansi-uTr0JKw1',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\yaml': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.yaml-9yqQMTuK',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\aix-ppc64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.aix-ppc64-XgxkAjw0',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\android-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.android-arm64-TOBX3zqT',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\android-arm': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.android-arm-AKVUMXvo',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\android-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.android-x64-41ZGRzUm',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\darwin-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.darwin-arm64-DtKEgVlC',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\freebsd-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.freebsd-arm64-BQ3JlRuE',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\freebsd-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.freebsd-x64-NCMSiSHC',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-arm': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.linux-arm-ZZNQpckK',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\darwin-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.darwin-x64-xgjCfksS',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.linux-arm64-cURZKKTf',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-ia32': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.linux-ia32-llYhO9hY',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-ppc64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.linux-ppc64-1e23NS8j',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-riscv64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.linux-riscv64-iBhqDofd',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-loong64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.linux-loong64-kagI9sLs',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-mips64el': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.linux-mips64el-6Jd11REk',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-s390x': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.linux-s390x-jXAEP9mw',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.linux-x64-ZAlorqVv',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\openbsd-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.openbsd-x64-DyHo9oWc',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\openbsd-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.openbsd-arm64-uBIWkCqg',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\netbsd-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.netbsd-x64-3zHq6KjM',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\sunos-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.sunos-x64-WcAGc5Cu',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\netbsd-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.netbsd-arm64-40DT7MWs',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\openharmony-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.openharmony-arm64-A01Y39Nj',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\win32-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.win32-arm64-emNEs6Nw',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\win32-ia32': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\.win32-ia32-utv8ejRK',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@oxc-project\\types': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@oxc-project\\.types-0SlhEtQn',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@pkgr\\core': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@pkgr\\.core-BIjE6b9g',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-android-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-android-arm64-MqNHqvol',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-darwin-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-darwin-arm64-V4wV4FeT',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-darwin-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-darwin-x64-CT0UqyIn',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-freebsd-x64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-freebsd-x64-wSXeVIJD',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-arm64-gnu': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-linux-arm64-gnu-Z8bA5hKi',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-arm-gnueabihf': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-linux-arm-gnueabihf-HUs7PR0v',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-ppc64-gnu': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-linux-ppc64-gnu-cG402xQn',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-arm64-musl': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-linux-arm64-musl-bLjAonaE',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-x64-gnu': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-linux-x64-gnu-2QOuOBFZ',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-openharmony-arm64': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-openharmony-arm64-SUiRSVjq',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-s390x-gnu': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-linux-s390x-gnu-QXEdpRy8',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-wasm32-wasi': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-wasm32-wasi-4jPPoCwV',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-win32-arm64-msvc': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-win32-arm64-msvc-k1tHycwl',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-win32-x64-msvc': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-win32-x64-msvc-GA3Tsghz',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-x64-musl': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\.binding-linux-x64-musl-IGajp6zg',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\acorn': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.acorn-5azX2GxR',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\acorn': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.acorn-xjrGclqQ',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\acorn.cmd': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.acorn.cmd-7HjrXGs6',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\acorn.ps1': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.acorn.ps1-RocDGswb',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\eslint': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.eslint-Ak5y5j11',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\eslint': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.eslint-675zSz82',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\eslint.cmd': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.eslint.cmd-LiSpipxD',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\eslint.ps1': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.eslint.ps1-O6s28on7',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\js-yaml': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.js-yaml-XGhnmdq0',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\js-yaml': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.js-yaml-TkExEgYV',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\js-yaml.cmd': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.js-yaml.cmd-5Hix00EV',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\js-yaml.ps1': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.js-yaml.ps1-0gERi8Np',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\loose-envify': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.loose-envify-SIa4HKGl',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\loose-envify': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.loose-envify-ipMO92oe',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\loose-envify.cmd': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.loose-envify.cmd-DaB2C6MW',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\loose-envify.ps1': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.loose-envify.ps1-G4atkkKd',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\nanoid': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.nanoid-MRBNtEAK',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\nanoid': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.nanoid-avGsGnvw',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\nanoid.cmd': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.nanoid.cmd-JkfqwRjr',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\nanoid.ps1': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.nanoid.ps1-3IQlc6Cf',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\which': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.which-MrKIdXbh',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\node-which': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.node-which-aOybD7Zn',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\node-which.cmd': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.node-which.cmd-7WCyao2G',
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\node-which.ps1': 'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\.bin\\.node-which.ps1-fNUUPXJu'
+npm silly reify }
+npm timing reify:retireShallow Completed in 2309ms
+npm timing reify:createSparse Completed in 20ms
+npm timing reify:loadBundles Completed in 0ms
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-linux-x64-musl
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-x64-musl'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-win32-arm64-msvc
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-win32-arm64-msvc'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-wasm32-wasi
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-wasm32-wasi'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@napi-rs\wasm-runtime
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@napi-rs\\wasm-runtime'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@tybys\wasm-util
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@tybys\\wasm-util'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-linux-s390x-gnu
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-s390x-gnu'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-openharmony-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-openharmony-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-linux-x64-gnu
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-x64-gnu'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-linux-arm64-musl
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-arm64-musl'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-linux-ppc64-gnu
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-ppc64-gnu'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-linux-arm-gnueabihf
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-arm-gnueabihf'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-linux-arm64-gnu
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-linux-arm64-gnu'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-freebsd-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-freebsd-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-darwin-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-darwin-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-darwin-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-darwin-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-android-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-android-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\win32-ia32
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\win32-ia32'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\win32-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\win32-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\openharmony-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\openharmony-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\netbsd-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\netbsd-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\sunos-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\sunos-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\netbsd-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\netbsd-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\openbsd-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\openbsd-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\openbsd-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\openbsd-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\linux-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\linux-s390x
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-s390x'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\linux-mips64el
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-mips64el'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\linux-loong64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-loong64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\linux-riscv64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-riscv64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\linux-ppc64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-ppc64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\linux-ia32
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-ia32'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\linux-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\darwin-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\darwin-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\linux-arm
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\linux-arm'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\freebsd-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\freebsd-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\freebsd-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\freebsd-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\darwin-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\darwin-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\android-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\android-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\android-arm
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\android-arm'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\android-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\android-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@esbuild\aix-ppc64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@esbuild\\aix-ppc64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\lightningcss-win32-arm64-msvc
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-win32-arm64-msvc'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\lightningcss-linux-x64-gnu
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-x64-gnu'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\lightningcss-linux-x64-musl
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-x64-musl'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\lightningcss-linux-arm64-musl
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-arm64-musl'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\lightningcss-freebsd-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-freebsd-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\lightningcss-linux-arm64-gnu
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-arm64-gnu'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\lightningcss-linux-arm-gnueabihf
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-linux-arm-gnueabihf'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\lightningcss-darwin-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-darwin-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\lightningcss-darwin-x64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-darwin-x64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\lightningcss-android-arm64
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\lightningcss-android-arm64'
+npm silly reify ]
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\fsevents
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\fsevents'
+npm silly reify ]
+npm timing reifyNode:node_modules/@rolldown/binding-linux-x64-musl Completed in 27ms
+npm timing reifyNode:node_modules/@rolldown/binding-win32-arm64-msvc Completed in 27ms
+npm timing reifyNode:node_modules/@rolldown/binding-wasm32-wasi Completed in 26ms
+npm timing reifyNode:node_modules/@rolldown/binding-linux-s390x-gnu Completed in 26ms
+npm timing reifyNode:node_modules/@rolldown/binding-openharmony-arm64 Completed in 26ms
+npm timing reifyNode:node_modules/@rolldown/binding-linux-x64-gnu Completed in 26ms
+npm timing reifyNode:node_modules/@rolldown/binding-linux-arm64-musl Completed in 26ms
+npm timing reifyNode:node_modules/@rolldown/binding-linux-ppc64-gnu Completed in 26ms
+npm timing reifyNode:node_modules/@rolldown/binding-linux-arm-gnueabihf Completed in 26ms
+npm timing reifyNode:node_modules/@rolldown/binding-linux-arm64-gnu Completed in 26ms
+npm timing reifyNode:node_modules/@rolldown/binding-freebsd-x64 Completed in 27ms
+npm timing reifyNode:node_modules/@rolldown/binding-darwin-x64 Completed in 27ms
+npm timing reifyNode:node_modules/@rolldown/binding-darwin-arm64 Completed in 27ms
+npm timing reifyNode:node_modules/@rolldown/binding-android-arm64 Completed in 27ms
+npm timing reifyNode:node_modules/@esbuild/win32-ia32 Completed in 27ms
+npm timing reifyNode:node_modules/@esbuild/win32-arm64 Completed in 27ms
+npm timing reifyNode:node_modules/@esbuild/openharmony-arm64 Completed in 27ms
+npm timing reifyNode:node_modules/@esbuild/netbsd-arm64 Completed in 27ms
+npm timing reifyNode:node_modules/@esbuild/sunos-x64 Completed in 27ms
+npm timing reifyNode:node_modules/@esbuild/netbsd-x64 Completed in 27ms
+npm timing reifyNode:node_modules/@esbuild/openbsd-arm64 Completed in 28ms
+npm timing reifyNode:node_modules/@esbuild/openbsd-x64 Completed in 28ms
+npm timing reifyNode:node_modules/@esbuild/linux-x64 Completed in 28ms
+npm timing reifyNode:node_modules/@esbuild/linux-s390x Completed in 28ms
+npm timing reifyNode:node_modules/@esbuild/linux-mips64el Completed in 28ms
+npm timing reifyNode:node_modules/@esbuild/linux-loong64 Completed in 28ms
+npm timing reifyNode:node_modules/@esbuild/linux-riscv64 Completed in 29ms
+npm timing reifyNode:node_modules/@esbuild/linux-ppc64 Completed in 29ms
+npm timing reifyNode:node_modules/@esbuild/linux-ia32 Completed in 29ms
+npm timing reifyNode:node_modules/@esbuild/linux-arm64 Completed in 29ms
+npm timing reifyNode:node_modules/@esbuild/darwin-x64 Completed in 29ms
+npm timing reifyNode:node_modules/@esbuild/linux-arm Completed in 29ms
+npm timing reifyNode:node_modules/@esbuild/freebsd-x64 Completed in 30ms
+npm timing reifyNode:node_modules/@esbuild/freebsd-arm64 Completed in 30ms
+npm timing reifyNode:node_modules/@esbuild/darwin-arm64 Completed in 30ms
+npm timing reifyNode:node_modules/@esbuild/android-x64 Completed in 30ms
+npm timing reifyNode:node_modules/@esbuild/android-arm Completed in 30ms
+npm timing reifyNode:node_modules/@esbuild/android-arm64 Completed in 30ms
+npm timing reifyNode:node_modules/@esbuild/aix-ppc64 Completed in 30ms
+npm timing reifyNode:node_modules/lightningcss-win32-arm64-msvc Completed in 30ms
+npm timing reifyNode:node_modules/lightningcss-linux-x64-gnu Completed in 30ms
+npm timing reifyNode:node_modules/lightningcss-linux-x64-musl Completed in 30ms
+npm timing reifyNode:node_modules/lightningcss-linux-arm64-musl Completed in 30ms
+npm timing reifyNode:node_modules/lightningcss-freebsd-x64 Completed in 30ms
+npm timing reifyNode:node_modules/lightningcss-linux-arm64-gnu Completed in 31ms
+npm timing reifyNode:node_modules/lightningcss-linux-arm-gnueabihf Completed in 31ms
+npm timing reifyNode:node_modules/lightningcss-darwin-arm64 Completed in 31ms
+npm timing reifyNode:node_modules/lightningcss-darwin-x64 Completed in 31ms
+npm timing reifyNode:node_modules/lightningcss-android-arm64 Completed in 31ms
+npm timing reifyNode:node_modules/fsevents Completed in 31ms
+npm http cache which@https://registry.npmjs.org/which/-/which-2.0.2.tgz 1ms (cache hit)
+npm http cache js-yaml@https://registry.npmjs.org/js-yaml/-/js-yaml-4.1.1.tgz 0ms (cache hit)
+npm http cache loose-envify@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/loose-envify/-/loose-envify-1.4.0.tgz 0ms (cache hit)
+npm http cache nanoid@https://registry.npmjs.org/nanoid/-/nanoid-3.3.12.tgz 0ms (cache hit)
+npm http cache @pkgr/core@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@pkgr/core/-/core-0.2.9.tgz 0ms (cache hit)
+npm http cache @oxc-project/types@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@oxc-project/types/-/types-0.129.0.tgz 0ms (cache hit)
+npm http cache eslint@https://registry.npmjs.org/eslint/-/eslint-9.39.4.tgz 0ms (cache hit)
+npm http cache @rolldown/binding-win32-x64-msvc@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@rolldown/binding-win32-x64-msvc/-/binding-win32-x64-msvc-1.0.0.tgz 0ms (cache hit)
+npm http cache acorn@https://registry.npmjs.org/acorn/-/acorn-8.16.0.tgz 0ms (cache hit)
+npm http cache yaml@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/yaml/-/yaml-2.9.0.tgz 0ms (cache hit)
+npm http cache wrap-ansi@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/wrap-ansi/-/wrap-ansi-9.0.2.tgz 0ms (cache hit)
+npm http cache tinyexec@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/tinyexec/-/tinyexec-1.1.2.tgz 0ms (cache hit)
+npm http cache string-width@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-width/-/string-width-8.2.1.tgz 0ms (cache hit)
+npm http cache strip-ansi@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/strip-ansi/-/strip-ansi-7.2.0.tgz 0ms (cache hit)
+npm http cache slice-ansi@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/slice-ansi/-/slice-ansi-8.0.0.tgz 0ms (cache hit)
+npm http cache synckit@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/synckit/-/synckit-0.11.12.tgz 0ms (cache hit)
+npm http cache vite@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/vite/-/vite-8.0.12.tgz 0ms (cache hit)
+npm http cache signal-exit@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/signal-exit/-/signal-exit-4.1.0.tgz 0ms (cache hit)
+npm http cache rfdc@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/rfdc/-/rfdc-1.4.1.tgz 0ms (cache hit)
+npm http cache string-argv@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-argv/-/string-argv-0.3.2.tgz 0ms (cache hit)
+npm http cache restore-cursor@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/restore-cursor/-/restore-cursor-5.1.0.tgz 0ms (cache hit)
+npm http cache prettier@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/prettier/-/prettier-3.8.3.tgz 0ms (cache hit)
+npm http cache prettier-linter-helpers@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/prettier-linter-helpers/-/prettier-linter-helpers-1.0.1.tgz 0ms (cache hit)
+npm http cache rolldown@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/rolldown/-/rolldown-1.0.0.tgz 0ms (cache hit)
+npm http cache onetime@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/onetime/-/onetime-7.0.0.tgz 0ms (cache hit)
+npm http cache listr2@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/listr2/-/listr2-9.0.5.tgz 0ms (cache hit)
+npm http cache mimic-function@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/mimic-function/-/mimic-function-5.0.1.tgz 0ms (cache hit)
+npm http cache lint-staged@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/lint-staged/-/lint-staged-16.4.0.tgz 0ms (cache hit)
+npm http cache get-east-asian-width@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/get-east-asian-width/-/get-east-asian-width-1.6.0.tgz 0ms (cache hit)
+npm http cache log-update@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/log-update/-/log-update-6.1.0.tgz 0ms (cache hit)
+npm http cache is-fullwidth-code-point@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/is-fullwidth-code-point/-/is-fullwidth-code-point-5.1.0.tgz 0ms (cache hit)
+npm http cache husky@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/husky/-/husky-9.1.7.tgz 0ms (cache hit)
+npm http cache eventemitter3@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/eventemitter3/-/eventemitter3-5.0.4.tgz 0ms (cache hit)
+npm http cache fast-diff@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/fast-diff/-/fast-diff-1.3.0.tgz 0ms (cache hit)
+npm http cache eslint-plugin-prettier@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/eslint-plugin-prettier/-/eslint-plugin-prettier-5.5.5.tgz 0ms (cache hit)
+npm http cache emoji-regex@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/emoji-regex/-/emoji-regex-10.6.0.tgz 0ms (cache hit)
+npm http cache commander@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/commander/-/commander-14.0.3.tgz 0ms (cache hit)
+npm http cache eslint-config-prettier@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/eslint-config-prettier/-/eslint-config-prettier-10.1.8.tgz 0ms (cache hit)
+npm http cache environment@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/environment/-/environment-1.1.0.tgz 0ms (cache hit)
+npm http cache colorette@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/colorette/-/colorette-2.0.20.tgz 0ms (cache hit)
+npm http cache cli-cursor@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/cli-cursor/-/cli-cursor-5.0.0.tgz 0ms (cache hit)
+npm http cache ansi-escapes@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/ansi-escapes/-/ansi-escapes-7.3.0.tgz 0ms (cache hit)
+npm http cache ansi-regex@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/ansi-regex/-/ansi-regex-6.2.2.tgz 0ms (cache hit)
+npm http cache cli-truncate@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/cli-truncate/-/cli-truncate-5.2.0.tgz 0ms (cache hit)
+npm http cache string-width@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-width/-/string-width-7.2.0.tgz 0ms (cache hit)
+npm http cache ansi-styles@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/ansi-styles/-/ansi-styles-6.2.3.tgz 0ms (cache hit)
+npm http cache ansi-styles@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/ansi-styles/-/ansi-styles-6.2.3.tgz 0ms (cache hit)
+npm http cache ansi-styles@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/ansi-styles/-/ansi-styles-6.2.3.tgz 0ms (cache hit)
+npm silly tarball no local data for @pkgr/core@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@pkgr/core/-/core-0.2.9.tgz. Extracting by manifest.
+npm http cache slice-ansi@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/slice-ansi/-/slice-ansi-7.1.2.tgz 0ms (cache hit)
+npm http cache @rolldown/pluginutils@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@rolldown/pluginutils/-/pluginutils-1.0.0.tgz 0ms (cache hit)
+npm silly tarball no local data for @oxc-project/types@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@oxc-project/types/-/types-0.129.0.tgz. Extracting by manifest.
+npm silly tarball no local data for @rolldown/binding-win32-x64-msvc@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@rolldown/binding-win32-x64-msvc/-/binding-win32-x64-msvc-1.0.0.tgz. Extracting by manifest.
+npm silly tarball no local data for yaml@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/yaml/-/yaml-2.9.0.tgz. Extracting by manifest.
+npm silly tarball no local data for wrap-ansi@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/wrap-ansi/-/wrap-ansi-9.0.2.tgz. Extracting by manifest.
+npm silly tarball no local data for tinyexec@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/tinyexec/-/tinyexec-1.1.2.tgz. Extracting by manifest.
+npm silly tarball no local data for string-width@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-width/-/string-width-8.2.1.tgz. Extracting by manifest.
+npm silly tarball no local data for strip-ansi@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/strip-ansi/-/strip-ansi-7.2.0.tgz. Extracting by manifest.
+npm silly tarball no local data for slice-ansi@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/slice-ansi/-/slice-ansi-8.0.0.tgz. Extracting by manifest.
+npm silly tarball no local data for synckit@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/synckit/-/synckit-0.11.12.tgz. Extracting by manifest.
+npm silly tarball no local data for vite@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/vite/-/vite-8.0.12.tgz. Extracting by manifest.
+npm silly tarball no local data for signal-exit@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/signal-exit/-/signal-exit-4.1.0.tgz. Extracting by manifest.
+npm silly tarball no local data for rfdc@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/rfdc/-/rfdc-1.4.1.tgz. Extracting by manifest.
+npm silly tarball no local data for string-argv@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-argv/-/string-argv-0.3.2.tgz. Extracting by manifest.
+npm silly tarball no local data for restore-cursor@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/restore-cursor/-/restore-cursor-5.1.0.tgz. Extracting by manifest.
+npm silly tarball no local data for prettier@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/prettier/-/prettier-3.8.3.tgz. Extracting by manifest.
+npm silly tarball no local data for prettier-linter-helpers@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/prettier-linter-helpers/-/prettier-linter-helpers-1.0.1.tgz. Extracting by manifest.
+npm silly tarball no local data for rolldown@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/rolldown/-/rolldown-1.0.0.tgz. Extracting by manifest.
+npm silly tarball no local data for onetime@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/onetime/-/onetime-7.0.0.tgz. Extracting by manifest.
+npm silly tarball no local data for listr2@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/listr2/-/listr2-9.0.5.tgz. Extracting by manifest.
+npm silly tarball no local data for mimic-function@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/mimic-function/-/mimic-function-5.0.1.tgz. Extracting by manifest.
+npm silly tarball no local data for lint-staged@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/lint-staged/-/lint-staged-16.4.0.tgz. Extracting by manifest.
+npm silly tarball no local data for get-east-asian-width@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/get-east-asian-width/-/get-east-asian-width-1.6.0.tgz. Extracting by manifest.
+npm silly tarball no local data for log-update@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/log-update/-/log-update-6.1.0.tgz. Extracting by manifest.
+npm silly tarball no local data for is-fullwidth-code-point@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/is-fullwidth-code-point/-/is-fullwidth-code-point-5.1.0.tgz. Extracting by manifest.
+npm silly tarball no local data for husky@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/husky/-/husky-9.1.7.tgz. Extracting by manifest.
+npm silly tarball no local data for eventemitter3@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/eventemitter3/-/eventemitter3-5.0.4.tgz. Extracting by manifest.
+npm silly tarball no local data for fast-diff@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/fast-diff/-/fast-diff-1.3.0.tgz. Extracting by manifest.
+npm silly tarball no local data for eslint-plugin-prettier@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/eslint-plugin-prettier/-/eslint-plugin-prettier-5.5.5.tgz. Extracting by manifest.
+npm silly tarball no local data for emoji-regex@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/emoji-regex/-/emoji-regex-10.6.0.tgz. Extracting by manifest.
+npm silly tarball no local data for commander@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/commander/-/commander-14.0.3.tgz. Extracting by manifest.
+npm silly tarball no local data for eslint-config-prettier@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/eslint-config-prettier/-/eslint-config-prettier-10.1.8.tgz. Extracting by manifest.
+npm silly tarball no local data for environment@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/environment/-/environment-1.1.0.tgz. Extracting by manifest.
+npm silly tarball no local data for colorette@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/colorette/-/colorette-2.0.20.tgz. Extracting by manifest.
+npm silly tarball no local data for cli-cursor@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/cli-cursor/-/cli-cursor-5.0.0.tgz. Extracting by manifest.
+npm silly tarball no local data for ansi-escapes@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/ansi-escapes/-/ansi-escapes-7.3.0.tgz. Extracting by manifest.
+npm silly tarball no local data for ansi-regex@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/ansi-regex/-/ansi-regex-6.2.2.tgz. Extracting by manifest.
+npm silly tarball no local data for cli-truncate@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/cli-truncate/-/cli-truncate-5.2.0.tgz. Extracting by manifest.
+npm silly tarball no local data for string-width@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-width/-/string-width-7.2.0.tgz. Extracting by manifest.
+npm silly tarball no local data for ansi-styles@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/ansi-styles/-/ansi-styles-6.2.3.tgz. Extracting by manifest.
+npm silly tarball no local data for ansi-styles@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/ansi-styles/-/ansi-styles-6.2.3.tgz. Extracting by manifest.
+npm silly tarball no local data for ansi-styles@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/ansi-styles/-/ansi-styles-6.2.3.tgz. Extracting by manifest.
+npm silly tarball no local data for slice-ansi@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/slice-ansi/-/slice-ansi-7.1.2.tgz. Extracting by manifest.
+npm silly tarball no local data for @rolldown/pluginutils@https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@rolldown/pluginutils/-/pluginutils-1.0.0.tgz. Extracting by manifest.
+npm timing reifyNode:node_modules/which Completed in 142ms
+npm timing reifyNode:node_modules/loose-envify Completed in 144ms
+npm timing reifyNode:node_modules/acorn Completed in 160ms
+npm timing reifyNode:node_modules/nanoid Completed in 161ms
+npm timing reifyNode:node_modules/js-yaml Completed in 177ms
+npm timing reifyNode:node_modules/eslint Completed in 1290ms
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/vite/-/vite-8.0.12.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-argv/-/string-argv-0.3.2.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@rolldown/binding-win32-x64-msvc/-/binding-win32-x64-msvc-1.0.0.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@oxc-project/types/-/types-0.129.0.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-width/-/string-width-8.2.1.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/wrap-ansi/-/wrap-ansi-9.0.2.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/rfdc/-/rfdc-1.4.1.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/signal-exit/-/signal-exit-4.1.0.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/slice-ansi/-/slice-ansi-8.0.0.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/strip-ansi/-/strip-ansi-7.2.0.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/yaml/-/yaml-2.9.0.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@pkgr/core/-/core-0.2.9.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/restore-cursor/-/restore-cursor-5.1.0.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/synckit/-/synckit-0.11.12.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/tinyexec/-/tinyexec-1.1.2.tgz attempt 1 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@oxc-project/types/-/types-0.129.0.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@rolldown/binding-win32-x64-msvc/-/binding-win32-x64-msvc-1.0.0.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/tinyexec/-/tinyexec-1.1.2.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/vite/-/vite-8.0.12.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/restore-cursor/-/restore-cursor-5.1.0.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/rfdc/-/rfdc-1.4.1.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-width/-/string-width-8.2.1.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/yaml/-/yaml-2.9.0.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/slice-ansi/-/slice-ansi-8.0.0.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-argv/-/string-argv-0.3.2.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/synckit/-/synckit-0.11.12.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/signal-exit/-/signal-exit-4.1.0.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/wrap-ansi/-/wrap-ansi-9.0.2.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/strip-ansi/-/strip-ansi-7.2.0.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@pkgr/core/-/core-0.2.9.tgz attempt 2 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@rolldown/binding-win32-x64-msvc/-/binding-win32-x64-msvc-1.0.0.tgz attempt 3 failed with ETIMEDOUT
+npm verbose reify failed optional dependency C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb\node_modules\@rolldown\binding-win32-x64-msvc
+npm silly reify mark deleted [
+npm silly reify   'C:\\Users\\pauls\\Dropbox\\Programming\\SkyEco System\\SkyWeb System\\SkyWeb\\node_modules\\@rolldown\\binding-win32-x64-msvc'
+npm silly reify ]
+npm timing reifyNode:node_modules/@rolldown/binding-win32-x64-msvc Completed in 133293ms
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@oxc-project/types/-/types-0.129.0.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/strip-ansi/-/strip-ansi-7.2.0.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/restore-cursor/-/restore-cursor-5.1.0.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/slice-ansi/-/slice-ansi-8.0.0.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/vite/-/vite-8.0.12.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/synckit/-/synckit-0.11.12.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/yaml/-/yaml-2.9.0.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/wrap-ansi/-/wrap-ansi-9.0.2.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-argv/-/string-argv-0.3.2.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/@pkgr/core/-/core-0.2.9.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/rfdc/-/rfdc-1.4.1.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/tinyexec/-/tinyexec-1.1.2.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/string-width/-/string-width-8.2.1.tgz attempt 3 failed with ETIMEDOUT
+npm http fetch GET https://packages.applied-caas-gateway1.internal.api.openai.org/artifactory/api/npm/npm-public/signal-exit/-/signal-exit-4.1.0.tgz attempt 3 failed with ETIMEDOUT
+npm verbose cwd C:\Users\pauls\Dropbox\Programming\SkyEco System\SkyWeb System\SkyWeb
+npm verbose os Windows_NT 10.0.26200
+npm verbose node v24.11.0
+npm verbose npm  v11.6.1
+npm error Exit handler never called!
+npm error This is an error with npm itself. Please report this error at:
+npm error   <https://github.com/npm/cli/issues>
+npm verbose exit 1
+npm verbose code 1
+npm error A complete log of this run can be found in: C:\Users\pauls\AppData\Local\npm-cache\_logs\2026-05-13T21_41_05_964Z-debug-0.log

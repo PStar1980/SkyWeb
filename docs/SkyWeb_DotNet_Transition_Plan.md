@@ -457,10 +457,8 @@ const baseURL =
 Recommended `.env.development` for the copied client:
 
 ```text
-VITE_SKYWEB_CLIENT_PORT=5175
-VITE_SKYWEB_API_ORIGIN=http://localhost:7280
-VITE_SKYWEB_API_BASE_URL=/api
-VITE_SKYSERVER_API_BASE_URL=/api
+VITE_SKYWEB_API_BASE_URL=http://localhost:7280/api
+VITE_SKYSERVER_API_BASE_URL=http://localhost:7280/api
 VITE_MACRO_API_PREFIX=/public/macro
 VITE_SKYWEB_AUTH_APP_CODE=SKYWEB
 VITE_API_TIMEOUT_MS=20000
@@ -880,10 +878,8 @@ apps/web-dotnet/SkyWeb.Client/.env.development
 Suggested values:
 
 ```text
-VITE_SKYWEB_CLIENT_PORT=5175
-VITE_SKYWEB_API_ORIGIN=http://localhost:7280
-VITE_SKYWEB_API_BASE_URL=/api
-VITE_SKYSERVER_API_BASE_URL=/api
+VITE_SKYWEB_API_BASE_URL=http://localhost:7280/api
+VITE_SKYSERVER_API_BASE_URL=http://localhost:7280/api
 VITE_MACRO_API_PREFIX=/public/macro
 VITE_SKYWEB_AUTH_APP_CODE=SKYWEB
 VITE_API_TIMEOUT_MS=20000
@@ -911,7 +907,7 @@ Initial practical bridge:
 /api/skyweb/*     → proxy to SkyServer Node until DN-6/DN-7/DN-8
 ```
 
-Public macro endpoints can either proxy temporarily or become the first native family in DN-4.
+Public macro endpoints become the first native C# route family in DN-4. Auth and `/api/skyweb/*` remain on proxy fallback until their later DN phases.
 
 ## Acceptance Criteria
 
@@ -923,6 +919,10 @@ Public macro endpoints can either proxy temporarily or become the first native f
 ---
 
 # DN-4 — Implement Public Macro REST Endpoints in C#
+
+## DN-4 implementation note
+
+This phase replaces the `/api/public/macro/*` proxy fallback with native ASP.NET Core/C# endpoints. The temporary proxy bridge remains active for `/api/auth/*` and `/api/skyweb/*` until those route families are migrated.
 
 ## Goal
 

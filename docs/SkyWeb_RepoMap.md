@@ -115,6 +115,7 @@ SkyWeb/
 │       │   │           └── Swashbuckle.AspNetCore.SwaggerUI.dll
 │       │   ├── Controllers/
 │       │   │   ├── HealthController.cs
+│       │   │   ├── PublicMacroController.cs
 │       │   │   └── SkyServerProxyController.cs
 │       │   ├── Data/
 │       │   │   └── DbConnectionFactory.cs
@@ -123,6 +124,8 @@ SkyWeb/
 │       │   │       └── HealthResponse.cs
 │       │   ├── Middleware/
 │       │   ├── Models/
+│       │   │   └── Macro/
+│       │   │       └── MacroViewDefinition.cs
 │       │   ├── obj/
 │       │   │   ├── project.assets.json
 │       │   │   ├── project.nuget.cache
@@ -165,6 +168,9 @@ SkyWeb/
 │       │   ├── Properties/
 │       │   │   └── launchSettings.json
 │       │   └── Services/
+│       │       ├── ApiException.cs
+│       │       ├── MacroReadService.cs
+│       │       ├── PublicMacroService.cs
 │       │       └── SkyServerProxyService.cs
 │       └── SkyWeb.Client/
 │           ├── .env.example

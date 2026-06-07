@@ -9,7 +9,7 @@ Detailed phase history now lives in [`change.log`](./change.log) so this README 
 ## Current Status
 
 **Current application phase:** Phase 8.8 — Alert Rule UX Polish  
-**Active transition lane:** DN-3 — .NET Client Wiring + Proxy Bridge
+**Active transition lane:** DN-4 — Public Macro REST Endpoints in C#
 
 The original `apps/web` React/Vite application remains the working SkyWeb Analytics baseline. The new `apps/web-dotnet` lane is being built in parallel so the ASP.NET Core/C# API can be proven route-by-route without disrupting the existing application.
 
@@ -19,22 +19,15 @@ The .NET foundation is active:
 - `/_health`, `/_db/health`, and `/swagger` are available.
 - `SkyWeb.Api` connects to the existing PostgreSQL `skyserver_dev` database.
 - `SkyWeb.Client` is a copied React/Vite client for the .NET migration lane.
-- DN-3 adds a temporary proxy bridge so the .NET-lane client can call `SkyWeb.Api` first, while unported routes fall back to SkyServer Node API.
+- DN-4 replaces the public macro proxy with native ASP.NET Core/C# endpoints while leaving auth and SkyWeb user route families on the temporary SkyServer proxy bridge.
 
-Current DN-3 request flow:
+Current DN-4 request flow:
 
 ```text
 SkyWeb.Client
   → SkyWeb.Api
-      → native C# endpoints where implemented
-      → proxy to SkyServer Node API for not-yet-migrated endpoint families
-```
-
-The existing app and .NET-lane client intentionally use different local ports so they can run side-by-side during the migration:
-
-```text
-apps/web                  http://localhost:5174
-apps/web-dotnet/SkyWeb.Client  http://localhost:5175
+      → native C# public macro endpoints
+      → proxy to SkyServer Node API for auth and SkyWeb user route families
 ```
 
 Proxy fallback is migration scaffolding only. Each route family will be replaced with native C# implementation as the DN phases progress.
@@ -131,23 +124,23 @@ VITE_SKYWEB_SESSION_TOKEN_KEY=skyweb.sessionToken
 VITE_SKYWEB_PUBLIC_MODE=true
 ```
 
-The .NET-lane client has its own example environment file:
+The .NET-lane client has its own environment file:
 
 ```text
-apps/web-dotnet/SkyWeb.Client/.env.example
+apps/web-dotnet/SkyWeb.Client/.env.development
 ```
 
-Defaults should work without creating a local `.env.development`, but local overrides can be added inside `apps/web-dotnet/SkyWeb.Client` if needed. Important .NET-lane variables:
+Important .NET-lane variables:
 
 ```text
-VITE_SKYWEB_CLIENT_PORT=5175
+VITE_SKYWEB_API_BASE_URL=http://localhost:7280/api
+VITE_SKYSERVER_API_BASE_URL=http://localhost:7280/api
 VITE_SKYWEB_API_ORIGIN=http://localhost:7280
-VITE_SKYWEB_API_BASE_URL=/api
-VITE_SKYSERVER_API_BASE_URL=/api
 VITE_SKYSERVER_API_ORIGIN=http://localhost:7171
 VITE_MACRO_API_PREFIX=/public/macro
 VITE_SKYWEB_AUTH_APP_CODE=SKYWEB
 VITE_SKYWEB_SESSION_TOKEN_KEY=skyweb.sessionToken
+VITE_SKYWEB_PUBLIC_MODE=true
 VITE_API_TIMEOUT_MS=20000
 ```
 
@@ -168,8 +161,8 @@ The .NET migration uses a dedicated `DN-*` numbering system so it does not colli
 | DN-0     |     ✅ | Preserve Pre-.NET baseline                                         |
 | DN-1     |     ✅ | Create parallel `.NET` app structure                               |
 | DN-2     |     ✅ | Configure API, CORS, health, DB connection                         |
-| DN-3     |     🔄 | Wire `SkyWeb.Client` to `SkyWeb.Api` with temporary proxy fallback |
-| DN-4     |     🔜 | Implement public macro REST endpoints in C#                        |
+| DN-3     |     ✅ | Wire `SkyWeb.Client` to `SkyWeb.Api` with temporary proxy fallback |
+| DN-4     |     🔄 | Implement public macro REST endpoints in C#                        |
 | DN-5     |     🔜 | Implement authentication in C#                                     |
 | DN-6     |     🔜 | Implement SkyWeb profile and preferences in C#                     |
 | DN-7     |     🔜 | Implement saved views and dashboards in C#                         |
@@ -215,7 +208,7 @@ SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on publi
 - `/account` is protected by the SkyWeb AuthContext and reads `/api/skyweb/profile`.
 - SkyWeb profiles and preferences are staged in the `skyweb` database schema.
 - SkyServer Admin controls which shared users have `SKYWEB` application membership and SkyWeb-specific roles.
-- During DN-3, `SkyWeb.Api` proxies auth and SkyWeb user routes to SkyServer until native C# route families are implemented.
+- During DN-4, `SkyWeb.Api` serves `/api/public/macro/*` natively in C# and still proxies auth/SkyWeb user routes to SkyServer until native C# route families are implemented.
 
 ## Primary Local URLs
 

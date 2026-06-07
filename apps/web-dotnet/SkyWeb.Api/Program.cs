@@ -16,6 +16,8 @@ builder.Services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<DbConnectionFactory>();
+builder.Services.AddScoped<MacroReadService>();
+builder.Services.AddScoped<PublicMacroService>();
 builder.Services.Configure<SkyServerOptions>(builder.Configuration.GetSection("SkyServer"));
 builder.Services.AddHttpClient<SkyServerProxyService>();
 

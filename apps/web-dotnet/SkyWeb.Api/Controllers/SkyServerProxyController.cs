@@ -19,8 +19,6 @@ public sealed class SkyServerProxyController : ControllerBase
     [Route("auth/{**path}")]
     [Route("skyweb")]
     [Route("skyweb/{**path}")]
-    [Route("public/macro")]
-    [Route("public/macro/{**path}")]
     public async Task ProxyToSkyServer(CancellationToken cancellationToken)
     {
         await _proxyService.ProxyAsync(HttpContext, cancellationToken);

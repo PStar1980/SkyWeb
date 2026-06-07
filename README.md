@@ -8,6 +8,8 @@ SkyServer Admin remains the private control plane: ingestion, tools, automation,
 
 **Phase 8.8 — Alert Rule UX Polish**
 
+**.NET transition lane:** DN-0 through DN-2 foundation added. The existing `apps/web` React/Vite app remains the working baseline, while `apps/web-dotnet` now contains the parallel ASP.NET Core/C# API skeleton and copied React client for the migration path.
+
 SkyWeb Analytics has been converted from its original starter/NeoFinTech placeholder into a dedicated public analytics shell, is wired to SkyServer public macro APIs, has a first-pass authenticated member shell, includes editable private member profile and dashboard-preference surfaces backed by SkyServer, consumes those preferences across macro catalog, chart, landing, and density surfaces, includes a polished personalized saved-view watchlist surface, composes pinned saved views into a private `/dashboard` command board, supports first-class user-owned dashboard objects through a protected `/dashboards` builder surface, promotes a selected custom dashboard into the primary `/dashboard` cockpit with dedicated viewer routes, now lets dashboard items render as metric cards, mini charts, latest-row panels, and table previews instead of only saved-view cards, applies dashboard item width/height metadata through a responsive grid layout engine, includes screenshot-ready dashboard presentation routes for clean portfolio captures and PDF/print output, consolidates saved-view management into the main Macro Views catalog so save/remove, pin/unpin, and metadata edits happen directly from the outer card layer, and now consolidates macro navigation behind a Macro dropdown while making `/dashboard` the switchable custom-dashboard cockpit, begins the dashboard-card refactor from view-centric cards to direct indicator-based time-series cards, and redefines macro views as analytical lenses with multi-series chart selection, precision chart axes, hover coordinate tooltips, full-history loading, 50-row paginated data tables, time-based period filters, table-first exploration, a full-width analytics workspace layout for chart/dashboard/table-heavy routes, and the first user-owned macro alert-rule surface for indicator and view-metric threshold watches with scheduled evaluation, event history, an actionable triggered-signal notification queue, a global signal badge, dashboard alert summary, Macro Overview signal strip, and user-owned alert preference controls for in-app surfacing, severity filters, delivery mode staging, quiet-hours staging, future email/browser toggles, and a dedicated `/macro/alerts/signals` signal center with status/severity filtering, sorting, per-signal actions, bulk open-signal acknowledge/dismiss controls, and a polished alert-rule cockpit with search/filter/sort, edit mode, cloning, safer removal confirmation, clearer validation, and direct edit handoff from rule detail pages.
 
 Implemented foundation pieces:
@@ -110,14 +112,18 @@ Implemented foundation pieces:
 ```text
 SkyWeb/
 ├── apps/
-│   └── web/                 # React/Vite frontend
-│       ├── src/
-│       │   ├── components/  # Shared UI components
-│       │   ├── context/     # Auth/session context
-│       │   ├── pages/       # Route pages
-│       │   ├── services/    # API service clients
-│       │   └── utils/       # Formatting helpers
-│       └── vite.config.js
+│   ├── web/                 # Current working React/Vite frontend
+│   │   ├── src/
+│   │   │   ├── components/  # Shared UI components
+│   │   │   ├── context/     # Auth/session context
+│   │   │   ├── pages/       # Route pages
+│   │   │   ├── services/    # API service clients
+│   │   │   └── utils/       # Formatting helpers
+│   │   └── vite.config.js
+│   └── web-dotnet/          # Parallel .NET migration lane
+│       ├── SkyWeb.DotNet.sln
+│       ├── SkyWeb.Api/      # ASP.NET Core / C# API skeleton
+│       └── SkyWeb.Client/   # Copied React/Vite client
 ├── docs/                    # Repo maps and project docs
 ├── .env.example
 └── package.json
@@ -147,6 +153,24 @@ Preview a production build:
 
 ```bash
 npm run web:preview
+```
+
+Run the parallel .NET API skeleton after installing the .NET SDK:
+
+```bash
+npm run dotnet:api
+```
+
+Build the .NET solution:
+
+```bash
+npm run dotnet:build
+```
+
+Run the copied .NET-lane React client:
+
+```bash
+npm run web:dotnet
 ```
 
 ## Environment

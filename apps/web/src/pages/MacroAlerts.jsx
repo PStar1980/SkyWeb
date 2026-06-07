@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import StatCard from '../components/StatCard.jsx';
 import authService from '../services/authService.js';
@@ -37,6 +37,45 @@ const SEVERITY_OPTIONS = [
   ['critical', 'Critical'],
 ];
 
+const STATUS_FILTER_OPTIONS = [
+  ['all', 'All rule states'],
+  ['active', 'Active only'],
+  ['disabled', 'Disabled only'],
+  ['triggered', 'Last triggered'],
+  ['not_triggered', 'Last not triggered'],
+  ['never', 'Never evaluated'],
+  ['error', 'Last errored'],
+];
+
+const TARGET_FILTER_OPTIONS = [
+  ['all', 'All targets'],
+  ['indicator', 'Indicators'],
+  ['view_metric', 'View metrics'],
+];
+
+const ALERT_SORT_OPTIONS = [
+  ['updated', 'Recently updated'],
+  ['title', 'Title A-Z'],
+  ['severity', 'Highest severity'],
+  ['status', 'Status priority'],
+  ['target', 'Target A-Z'],
+];
+
+const SEVERITY_PRIORITY = {
+  low: 1,
+  medium: 2,
+  high: 3,
+  critical: 4,
+};
+
+const STATUS_PRIORITY = {
+  triggered: 5,
+  error: 4,
+  never: 3,
+  not_triggered: 2,
+  disabled: 1,
+};
+
 const DEFAULT_FORM = {
   title: '',
   description: '',
@@ -48,6 +87,14 @@ const DEFAULT_FORM = {
   thresholdValue: '',
   severity: 'medium',
   active: true,
+};
+
+const DEFAULT_FILTERS = {
+  search: '',
+  status: 'all',
+  severity: 'all',
+  targetType: 'all',
+  sort: 'updated',
 };
 
 function getAlertTargetLabel(alert) {
@@ -72,16 +119,191 @@ function getNumericViewColumns(columns = []) {
   return columns.filter((column) => numericTypes.has(String(column.dataType || '').toLowerCase()));
 }
 
+function getAlertRuleTimestamp(alert) {
+  const date = new Date(alert.updatedAt || alert.createdAt || alert.lastEvaluatedAt || '');
+  return Number.isNaN(date.getTime()) ? 0 : date.getTime();
+}
+
+function getNormalizedSearch(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase();
+}
+
+function getFormFromAlert(alert) {
+  return {
+    title: alert.title || '',
+    description: alert.description || '',
+    targetType: alert.targetType || 'indicator',
+    indicatorCode: alert.indicatorCode || '',
+    viewKey: alert.viewKey || '',
+    metricKey: alert.metricKey || '',
+    conditionType: alert.conditionType || 'above',
+    thresholdValue: alert.thresholdValue === null ? '' : String(alert.thresholdValue ?? ''),
+    severity: alert.severity || 'medium',
+    active: Boolean(alert.active),
+  };
+}
+
+function buildAlertPayload(form) {
+  const payload = {
+    title: form.title,
+    description: form.description,
+    targetType: form.targetType,
+    conditionType: form.conditionType,
+    thresholdValue: form.thresholdValue,
+    severity: form.severity,
+    active: form.active,
+  };
+
+  if (form.targetType === 'indicator') {
+    payload.indicatorCode = form.indicatorCode;
+  } else {
+    payload.viewKey = form.viewKey;
+    payload.metricKey = form.metricKey;
+  }
+
+  return payload;
+}
+
+function validateAlertForm(form, numericViewColumns = []) {
+  if (!form.title.trim()) {
+    return 'Alert title is required.';
+  }
+
+  if (form.targetType === 'indicator' && !form.indicatorCode) {
+    return 'Choose an indicator before saving this alert rule.';
+  }
+
+  if (form.targetType === 'view_metric') {
+    if (!form.viewKey) {
+      return 'Choose an analytical view before saving this alert rule.';
+    }
+
+    if (!form.metricKey) {
+      return 'Choose a numeric view metric before saving this alert rule.';
+    }
+
+    if (
+      numericViewColumns.length > 0 &&
+      !numericViewColumns.some((column) => column.fieldName === form.metricKey)
+    ) {
+      return 'The selected view metric is not numeric. Choose a numeric metric for alert evaluation.';
+    }
+  }
+
+  const threshold = Number(form.thresholdValue);
+
+  if (form.thresholdValue === '' || !Number.isFinite(threshold)) {
+    return 'Threshold must be a numeric value.';
+  }
+
+  return '';
+}
+
+function alertMatchesStatus(alert, statusFilter) {
+  if (statusFilter === 'all') {
+    return true;
+  }
+
+  if (statusFilter === 'active') {
+    return alert.active;
+  }
+
+  if (statusFilter === 'disabled') {
+    return !alert.active;
+  }
+
+  return alert.lastStatus === statusFilter;
+}
+
+function filterAlerts(alerts = [], filters = DEFAULT_FILTERS) {
+  const search = getNormalizedSearch(filters.search);
+
+  return alerts.filter((alert) => {
+    if (!alertMatchesStatus(alert, filters.status)) {
+      return false;
+    }
+
+    if (filters.severity !== 'all' && alert.severity !== filters.severity) {
+      return false;
+    }
+
+    if (filters.targetType !== 'all' && alert.targetType !== filters.targetType) {
+      return false;
+    }
+
+    if (!search) {
+      return true;
+    }
+
+    const searchable = [
+      alert.title,
+      alert.description,
+      alert.alertKey,
+      alert.lastMessage,
+      getAlertTargetLabel(alert),
+      alert.indicatorCode,
+      alert.viewKey,
+      alert.metricKey,
+      alert.conditionType,
+      alert.severity,
+      alert.lastStatus,
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+    return searchable.includes(search);
+  });
+}
+
+function sortAlerts(alerts = [], sortMode = 'updated') {
+  return [...alerts].sort((left, right) => {
+    if (sortMode === 'title') {
+      return String(left.title || '').localeCompare(String(right.title || ''));
+    }
+
+    if (sortMode === 'severity') {
+      const severityDifference =
+        (SEVERITY_PRIORITY[right.severity] || 0) - (SEVERITY_PRIORITY[left.severity] || 0);
+
+      return severityDifference || getAlertRuleTimestamp(right) - getAlertRuleTimestamp(left);
+    }
+
+    if (sortMode === 'status') {
+      const leftStatus = left.active ? left.lastStatus : 'disabled';
+      const rightStatus = right.active ? right.lastStatus : 'disabled';
+      const statusDifference =
+        (STATUS_PRIORITY[rightStatus] || 0) - (STATUS_PRIORITY[leftStatus] || 0);
+
+      return statusDifference || getAlertRuleTimestamp(right) - getAlertRuleTimestamp(left);
+    }
+
+    if (sortMode === 'target') {
+      return getAlertTargetLabel(left).localeCompare(getAlertTargetLabel(right));
+    }
+
+    return getAlertRuleTimestamp(right) - getAlertRuleTimestamp(left);
+  });
+}
+
 export default function MacroAlerts() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedEditKey = searchParams.get('edit') || '';
   const [alerts, setAlerts] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [indicators, setIndicators] = useState([]);
   const [views, setViews] = useState([]);
   const [viewColumns, setViewColumns] = useState([]);
   const [form, setForm] = useState(DEFAULT_FORM);
+  const [formMode, setFormMode] = useState('create');
+  const [editingAlertKey, setEditingAlertKey] = useState('');
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [evaluatingKey, setEvaluatingKey] = useState(null);
+  const [pendingRemoveKey, setPendingRemoveKey] = useState('');
   const [notificationActionId, setNotificationActionId] = useState(null);
   const [message, setMessage] = useState('');
   const [error, setError] = useState(null);
@@ -99,6 +321,14 @@ export default function MacroAlerts() {
   const openNotifications = useMemo(
     () => notifications.filter((notification) => notification.notificationStatus === 'open'),
     [notifications],
+  );
+  const filteredAlerts = useMemo(
+    () => sortAlerts(filterAlerts(alerts, filters), filters.sort),
+    [alerts, filters],
+  );
+  const filtersAreActive = useMemo(
+    () => Object.keys(DEFAULT_FILTERS).some((key) => filters[key] !== DEFAULT_FILTERS[key]),
+    [filters],
   );
 
   async function loadAlerts() {
@@ -207,46 +437,131 @@ export default function MacroAlerts() {
     };
   }, [form.targetType, form.viewKey]);
 
+  useEffect(() => {
+    if (loading || !requestedEditKey || editingAlertKey === requestedEditKey) {
+      return;
+    }
+
+    const requestedAlert = alerts.find((alert) => alert.alertKey === requestedEditKey);
+
+    if (!requestedAlert) {
+      return;
+    }
+
+    setForm(getFormFromAlert(requestedAlert));
+    setFormMode('edit');
+    setEditingAlertKey(requestedAlert.alertKey);
+    setMessage(`Editing alert rule "${requestedAlert.title}".`);
+    setError(null);
+  }, [alerts, editingAlertKey, loading, requestedEditKey]);
+
   function updateForm(fieldName, value) {
     setForm((currentForm) => ({
       ...currentForm,
       [fieldName]: value,
     }));
+    setError(null);
+    setMessage('');
   }
 
-  async function handleCreateAlert(event) {
+  function updateFilter(fieldName, value) {
+    setFilters((currentFilters) => ({
+      ...currentFilters,
+      [fieldName]: value,
+    }));
+  }
+
+  function clearFilters() {
+    setFilters(DEFAULT_FILTERS);
+  }
+
+  function clearEditQuery() {
+    if (!requestedEditKey) {
+      return;
+    }
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('edit');
+    setSearchParams(nextParams, { replace: true });
+  }
+
+  function resetFormToCreateMode(options = {}) {
+    setForm((currentForm) => ({
+      ...DEFAULT_FORM,
+      indicatorCode: currentForm.indicatorCode || indicators[0]?.indicatorCode || '',
+      viewKey: currentForm.viewKey || views[0]?.viewKey || '',
+      metricKey: currentForm.metricKey || '',
+      active: options.active ?? DEFAULT_FORM.active,
+    }));
+    setFormMode('create');
+    setEditingAlertKey('');
+    clearEditQuery();
+  }
+
+  function handleEditAlert(alert, options = {}) {
+    setForm(getFormFromAlert(alert));
+    setFormMode('edit');
+    setEditingAlertKey(alert.alertKey);
+    setMessage(`Editing "${alert.title}". Save changes below or cancel to return to create mode.`);
+    setError(null);
+
+    if (options.syncQuery) {
+      setSearchParams({ edit: alert.alertKey }, { replace: true });
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handleCloneAlert(alert) {
+    setForm({
+      ...getFormFromAlert(alert),
+      title: `Copy of ${alert.title || 'macro alert'}`,
+      active: false,
+    });
+    setFormMode('create');
+    setEditingAlertKey('');
+    clearEditQuery();
+    setMessage(
+      'Alert rule cloned into the form. Review it, then save when ready. Clone starts inactive.',
+    );
+    setError(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function handleCancelEdit() {
+    resetFormToCreateMode();
+    setMessage('Edit cancelled. Create mode restored.');
+    setError(null);
+  }
+
+  async function handleSaveAlert(event) {
     event.preventDefault();
     setSaving(true);
     setMessage('');
     setError(null);
 
+    const validationMessage = validateAlertForm(form, numericViewColumns);
+
+    if (validationMessage) {
+      setSaving(false);
+      setError(new Error(validationMessage));
+      return;
+    }
+
     try {
-      const payload = {
-        title: form.title,
-        description: form.description,
-        targetType: form.targetType,
-        conditionType: form.conditionType,
-        thresholdValue: form.thresholdValue,
-        severity: form.severity,
-        active: form.active,
-      };
+      const payload = buildAlertPayload(form);
 
-      if (form.targetType === 'indicator') {
-        payload.indicatorCode = form.indicatorCode;
+      if (formMode === 'edit' && editingAlertKey) {
+        await authService.updateAlert(editingAlertKey, payload);
+        await refreshAlertSurface();
+        resetFormToCreateMode();
+        setMessage('Alert rule updated. Existing event history remains attached.');
       } else {
-        payload.viewKey = form.viewKey;
-        payload.metricKey = form.metricKey;
+        await authService.createAlert(payload);
+        await refreshAlertSurface();
+        resetFormToCreateMode();
+        setMessage('Alert rule created.');
       }
-
-      await authService.createAlert(payload);
-      await refreshAlertSurface();
-      setForm((currentForm) => ({
-        ...DEFAULT_FORM,
-        indicatorCode: currentForm.indicatorCode,
-        viewKey: currentForm.viewKey,
-        metricKey: currentForm.metricKey,
-      }));
-      setMessage('Alert rule created.');
     } catch (saveError) {
       setError(saveError);
     } finally {
@@ -300,15 +615,31 @@ export default function MacroAlerts() {
   }
 
   async function handleRemoveAlert(alert) {
+    const confirmed = window.confirm(
+      `Remove alert rule "${alert.title}"? Event history and open notifications attached to this rule may no longer be reachable from the rule page.`,
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    setPendingRemoveKey(alert.alertKey);
     setMessage('');
     setError(null);
 
     try {
       await authService.removeAlert(alert.alertKey);
       await refreshAlertSurface();
+
+      if (editingAlertKey === alert.alertKey) {
+        resetFormToCreateMode();
+      }
+
       setMessage('Alert removed.');
     } catch (removeError) {
       setError(removeError);
+    } finally {
+      setPendingRemoveKey('');
     }
   }
 
@@ -525,15 +856,33 @@ export default function MacroAlerts() {
 
       {!loading && (
         <section className="skyweb-card skyweb-alert-builder mb-4">
-          <div className="skyweb-card-kicker">Create alert</div>
-          <h2>Define a macro watch</h2>
+          <div className="skyweb-card-kicker">
+            {formMode === 'edit' ? 'Edit alert' : 'Create alert'}
+          </div>
+          <h2>{formMode === 'edit' ? 'Tune an existing macro watch' : 'Define a macro watch'}</h2>
           <p>
-            Start with a direct indicator alert for single-series monitoring, or choose a metric
-            from an analytical view when you need a grouped lens. Severity controls how loudly the
-            signal appears after it fires.
+            {formMode === 'edit'
+              ? 'Update the rule contract below. Existing evaluation history and signal history stay attached to the rule.'
+              : 'Start with a direct indicator alert for single-series monitoring, or choose a metric from an analytical view when you need a grouped lens. Severity controls how loudly the signal appears after it fires.'}
           </p>
 
-          <form onSubmit={handleCreateAlert}>
+          {formMode === 'edit' && (
+            <div className="skyweb-alert-edit-banner">
+              <span>
+                Editing <strong>{editingAlertKey}</strong>. Saving changes keeps historical events
+                in place; cancelling leaves the rule untouched.
+              </span>
+              <button
+                className="skyweb-btn skyweb-btn-secondary"
+                onClick={handleCancelEdit}
+                type="button"
+              >
+                Cancel edit
+              </button>
+            </div>
+          )}
+
+          <form onSubmit={handleSaveAlert}>
             <div className="skyweb-form-grid skyweb-form-grid-three">
               <label>
                 Alert title
@@ -672,9 +1021,27 @@ export default function MacroAlerts() {
               />
             </label>
 
-            <button className="skyweb-btn skyweb-btn-primary" disabled={saving} type="submit">
-              {saving ? 'Creating...' : 'Create alert'}
-            </button>
+            <div className="skyweb-alert-form-actions">
+              <button className="skyweb-btn skyweb-btn-primary" disabled={saving} type="submit">
+                {saving
+                  ? formMode === 'edit'
+                    ? 'Saving...'
+                    : 'Creating...'
+                  : formMode === 'edit'
+                    ? 'Save alert changes'
+                    : 'Create alert'}
+              </button>
+              {formMode === 'edit' && (
+                <button
+                  className="skyweb-btn skyweb-btn-secondary"
+                  disabled={saving}
+                  onClick={handleCancelEdit}
+                  type="button"
+                >
+                  Cancel edit
+                </button>
+              )}
+            </div>
           </form>
         </section>
       )}
@@ -684,8 +1051,88 @@ export default function MacroAlerts() {
           <div className="skyweb-table-header">
             <div>
               <div className="skyweb-card-kicker">Alert inventory</div>
-              <h2>{alerts.length} alert rule(s)</h2>
+              <h2>
+                {filteredAlerts.length} of {alerts.length} alert rule(s)
+              </h2>
+              <p>Search, filter, sort, edit, clone, or remove rules without leaving the cockpit.</p>
             </div>
+          </div>
+
+          <div className="skyweb-alert-inventory-controls">
+            <label>
+              <span>Search</span>
+              <input
+                className="form-control"
+                onChange={(event) => updateFilter('search', event.target.value)}
+                placeholder="Title, key, target, condition..."
+                value={filters.search}
+              />
+            </label>
+            <label>
+              <span>Status</span>
+              <select
+                className="form-select"
+                onChange={(event) => updateFilter('status', event.target.value)}
+                value={filters.status}
+              >
+                {STATUS_FILTER_OPTIONS.map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>Severity</span>
+              <select
+                className="form-select"
+                onChange={(event) => updateFilter('severity', event.target.value)}
+                value={filters.severity}
+              >
+                <option value="all">All severities</option>
+                {SEVERITY_OPTIONS.map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>Target</span>
+              <select
+                className="form-select"
+                onChange={(event) => updateFilter('targetType', event.target.value)}
+                value={filters.targetType}
+              >
+                {TARGET_FILTER_OPTIONS.map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              <span>Sort</span>
+              <select
+                className="form-select"
+                onChange={(event) => updateFilter('sort', event.target.value)}
+                value={filters.sort}
+              >
+                {ALERT_SORT_OPTIONS.map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              className="skyweb-btn skyweb-btn-secondary"
+              disabled={!filtersAreActive}
+              onClick={clearFilters}
+              type="button"
+            >
+              Clear filters
+            </button>
           </div>
 
           {alerts.length === 0 && (
@@ -694,9 +1141,13 @@ export default function MacroAlerts() {
             </EmptyState>
           )}
 
-          {alerts.length > 0 && (
+          {alerts.length > 0 && filteredAlerts.length === 0 && (
+            <div className="skyweb-empty-inline">No alert rules match this filter set.</div>
+          )}
+
+          {filteredAlerts.length > 0 && (
             <div className="skyweb-alert-list">
-              {alerts.map((alert) => (
+              {filteredAlerts.map((alert) => (
                 <article className="skyweb-alert-rule-card" key={alert.alertKey}>
                   <div>
                     <div className="skyweb-alert-card-topline">
@@ -714,6 +1165,7 @@ export default function MacroAlerts() {
                         {getSeverityLabel(alert.severity)}
                       </span>
                       <span className="skyweb-mini-pill">{alert.targetType}</span>
+                      <span className="skyweb-mini-pill">{alert.alertKey}</span>
                     </div>
                     <h3>{alert.title}</h3>
                     <p>{alert.description || 'No alert description yet.'}</p>
@@ -754,6 +1206,20 @@ export default function MacroAlerts() {
                   <div className="skyweb-alert-actions">
                     <button
                       className="skyweb-btn skyweb-btn-secondary"
+                      onClick={() => handleEditAlert(alert, { syncQuery: true })}
+                      type="button"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="skyweb-btn skyweb-btn-secondary"
+                      onClick={() => handleCloneAlert(alert)}
+                      type="button"
+                    >
+                      Clone
+                    </button>
+                    <button
+                      className="skyweb-btn skyweb-btn-secondary"
                       disabled={evaluatingKey === alert.alertKey}
                       onClick={() => handleEvaluateAlert(alert)}
                       type="button"
@@ -769,10 +1235,11 @@ export default function MacroAlerts() {
                     </button>
                     <button
                       className="skyweb-btn skyweb-btn-danger"
+                      disabled={pendingRemoveKey === alert.alertKey}
                       onClick={() => handleRemoveAlert(alert)}
                       type="button"
                     >
-                      Remove
+                      {pendingRemoveKey === alert.alertKey ? 'Removing...' : 'Remove'}
                     </button>
                     <Link
                       className="skyweb-link-action"

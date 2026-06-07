@@ -224,7 +224,6 @@ SkyWeb/
 │                   └── macroStory.js
 ├── docs/
 │   ├── SkyWeb_Analytics_Chart_Migration.md
-│   ├── SkyWeb_DotNet_Getting_Started.md
 │   ├── SkyWeb_DotNet_Transition_Plan.md
 │   ├── SkyWeb_PreDotNet_Baseline.md
 │   └── SkyWeb_RepoMap.md

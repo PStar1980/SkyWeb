@@ -76,9 +76,11 @@ DN-5.1 Stabilize Public Macro Series Reads              [implemented]
 DN-5.2 Fix Indicator Series Regclass/NaN Handling        [done]
 DN-6  Implement SkyWeb Profile and Preferences           [implemented]
 DN-7  Implement Saved Views and Dashboards                [implemented]
-DN-7.1 Stabilize Saved Views/Dashboards Build             [current]
+DN-7.1 Stabilize Saved Views/Dashboards Build             [implemented]
 DN-8  Implement Alerts and Signal Center                    [implemented]
-DN-9.1 ECharts + D3 Chart Engine Foundation                 [current]
+DN-9.1 ECharts + D3 Chart Engine Foundation                 [implemented]
+DN-9.2 Chart Architecture Extraction and Adapters            [implemented]
+DN-9.3 Chart UX Polish and Runtime Hardening                 [current]
 DN-9  ECharts + D3 Migration Polish
 DN-10 Cutover and Legacy Removal
 ```
@@ -1428,6 +1430,21 @@ src/components/charts/
 
 ---
 
+## DN-9.3 implementation note
+
+DN-9.3 polishes the .NET-lane chart experience without changing the page-level chart APIs. The ECharts base wrapper now initializes only when a real DOM container is present, disposes cleanly, resizes through `ResizeObserver` with a window fallback, and surfaces chart render failures through a reusable runtime state panel.
+
+The shared chart utilities now standardize tooltip filtering, adaptive date-axis labels, compact numeric axis labels, dense-series symbol suppression, and value-range handling. Single-series and multi-series option builders use the same hover/crosshair behavior so indicator charts, macro-view charts, and dashboard mini charts feel like one cockpit.
+
+Acceptance checks for DN-9.3:
+
+- Indicator detail charts still render on `/macro/indicators/:indicatorCode`.
+- Macro view multi-series charts still render on `/macro/views/:viewKey`.
+- Dashboard mini charts still render on `/dashboard`.
+- Dense precision charts do not overdraw point symbols.
+- Empty/loading/error chart states are readable and consistent.
+- Tooltips and axis labels remain legible across long histories and shorter periods.
+
 # DN-10 — Cutover and Legacy Removal
 
 ## Goal
@@ -1762,3 +1779,7 @@ That is the clean split.
 ## DN-9.2 — Chart Architecture Extraction and Adapters
 
 The .NET-lane chart work now has reusable ECharts components, shared option/theme utilities, and thin frontend adapters under `SkyWeb.Client/src/components/charts`. Legacy `Sparkline` wrappers remain as compatibility shims until all pages are migrated directly to the new chart components.
+
+## DN-9.3 — Chart UX Polish and Runtime Hardening
+
+The extracted chart layer now has a more durable runtime wrapper, consistent chart state panels, adaptive axis-label behavior, tooltip filtering, and dense-series symbol control. This keeps the .NET-lane charts stable while future DN-9 passes add specialty visualizations and alert overlays.

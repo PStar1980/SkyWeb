@@ -7,6 +7,7 @@ import EChartBase from './EChartBase.jsx';
 export default function MacroLineChart({
   className = '',
   emptyMessage = 'No numeric trend data available.',
+  error = null,
   height = 220,
   label = 'Trend line',
   loading = false,
@@ -35,6 +36,7 @@ export default function MacroLineChart({
       ariaLabel={label}
       className={`skyweb-sparkline skyweb-echarts skyweb-echarts-single skyweb-sparkline-${tone}${precision ? ' skyweb-sparkline-precision skyweb-echarts-precision' : ''} ${className}`}
       emptyMessage={emptyMessage}
+      error={error}
       height={chartHeight}
       loading={loading}
       option={option}

@@ -30,7 +30,7 @@ The optimized execution path is now underway:
 6. Replace current SVG sparkline/chart panels progressively.
 7. Use D3 for specialty helpers once ECharts is stable.
 
-DN-9.1 begins this work by replacing the copied `.NET-lane` `Sparkline.jsx` and `MultiSeriesSparkline.jsx` internals with ECharts renderers while keeping their existing public props stable for parent components. DN-9.2 then extracts that first pass into reusable chart architecture folders so future chart work can target stable ECharts components rather than page-level rendering code.
+DN-9.1 begins this work by replacing the copied `.NET-lane` `Sparkline.jsx` and `MultiSeriesSparkline.jsx` internals with ECharts renderers while keeping their existing public props stable for parent components. DN-9.2 then extracts that first pass into reusable chart architecture folders so future chart work can target stable ECharts components rather than page-level rendering code. DN-9.3 polishes the runtime and chart UX so the extracted components are safer under real dashboard/page conditions.
 ```
 
 This avoids doing the same chart migration twice.
@@ -990,3 +990,17 @@ working React app
 The goal is not merely prettier charts.
 
 The goal is a coherent macro analytics platform that proves full-stack capability across React, C#, PostgreSQL, visualization architecture, API design, and practical product judgment.
+
+---
+
+## DN-9.3 Update — Runtime and UX Polish
+
+DN-9.3 focuses on production feel rather than new chart families:
+
+- `EChartBase.jsx` now initializes only when a renderable chart container exists, resizes through `ResizeObserver`, falls back to window resize when needed, and displays readable chart-runtime errors.
+- `Sparkline.jsx` and `MultiSeriesSparkline.jsx` now pass through `loading`, `error`, and `emptyMessage` props to the ECharts layer.
+- `chartUtils.js` centralizes tooltip filtering, adaptive date-axis labels, compact numeric axis labels, dense-series symbol visibility, and value-range handling.
+- `chartOptions.js` standardizes dashed axis pointers, tooltip rendering, zero lines, latest-point emphasis, precision-grid behavior, and hidden internal legends.
+- `App.css` adds chart state styling for loading, empty, and unavailable chart surfaces.
+
+This keeps the current dashboard, indicator detail, and macro-view pages stable while making the chart core safer for future specialty visuals.

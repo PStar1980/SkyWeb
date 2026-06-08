@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts/core';
 import { LineChart } from 'echarts/charts';
 import {
@@ -21,6 +21,18 @@ echarts.use([
   CanvasRenderer,
 ]);
 
+function ChartRuntimeState({ detail = '', height, icon = '•', title }) {
+  return (
+    <div className="skyweb-sparkline-empty skyweb-echarts-state" style={{ minHeight: height }}>
+      <span aria-hidden="true" className="skyweb-echarts-state-icon">
+        {icon}
+      </span>
+      <span className="skyweb-echarts-state-title">{title}</span>
+      {detail && <span className="skyweb-echarts-state-detail">{detail}</span>}
+    </div>
+  );
+}
+
 export default function EChartBase({
   ariaLabel = 'SkyWeb chart',
   className = '',
@@ -32,9 +44,17 @@ export default function EChartBase({
 }) {
   const containerRef = useRef(null);
   const chartRef = useRef(null);
+  const [renderError, setRenderError] = useState(null);
+
+  const activeError = error || renderError;
+  const shouldRenderChart = Boolean(option && !loading && !activeError);
 
   useEffect(() => {
-    if (!containerRef.current || !option) {
+    setRenderError(null);
+  }, [option]);
+
+  useEffect(() => {
+    if (!shouldRenderChart || !containerRef.current) {
       return undefined;
     }
 
@@ -43,45 +63,70 @@ export default function EChartBase({
       useDirtyRect: true,
     });
 
-    const resizeObserver = new ResizeObserver(() => {
+    const resizeChart = () => {
       chartRef.current?.resize();
-    });
+    };
 
-    resizeObserver.observe(containerRef.current);
+    let resizeObserver = null;
+
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(resizeChart);
+      resizeObserver.observe(containerRef.current);
+    } else {
+      window.addEventListener('resize', resizeChart);
+    }
 
     return () => {
-      resizeObserver.disconnect();
+      resizeObserver?.disconnect();
+      window.removeEventListener('resize', resizeChart);
       chartRef.current?.dispose();
       chartRef.current = null;
     };
-  }, [option]);
+  }, [shouldRenderChart]);
 
   useEffect(() => {
-    chartRef.current?.setOption(option, true);
-  }, [option]);
+    if (!shouldRenderChart || !chartRef.current) {
+      return;
+    }
+
+    if (!option) {
+      chartRef.current.clear();
+      return;
+    }
+
+    try {
+      chartRef.current.setOption(option, true);
+      chartRef.current.resize();
+      setRenderError(null);
+    } catch (chartError) {
+      setRenderError(chartError);
+    }
+  }, [option, shouldRenderChart]);
 
   if (loading) {
     return (
-      <div className="skyweb-sparkline-empty skyweb-echarts-state" style={{ minHeight: height }}>
-        <span>Loading chart...</span>
-      </div>
+      <ChartRuntimeState
+        detail="Preparing the latest chart surface."
+        height={height}
+        icon="⏳"
+        title="Loading chart..."
+      />
     );
   }
 
-  if (error) {
+  if (activeError) {
     return (
-      <div className="skyweb-sparkline-empty skyweb-echarts-state" style={{ minHeight: height }}>
-        <span>{error.message || 'Chart unavailable.'}</span>
-      </div>
+      <ChartRuntimeState
+        detail={activeError.message || 'The chart engine could not render this series.'}
+        height={height}
+        icon="⚠"
+        title="Chart unavailable"
+      />
     );
   }
 
   if (!option) {
-    return (
-      <div className="skyweb-sparkline-empty skyweb-echarts-state" style={{ minHeight: height }}>
-        <span>{emptyMessage}</span>
-      </div>
-    );
+    return <ChartRuntimeState height={height} icon="∅" title={emptyMessage} />;
   }
 
   return (

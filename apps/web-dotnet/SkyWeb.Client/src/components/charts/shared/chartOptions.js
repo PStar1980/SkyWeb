@@ -1,16 +1,32 @@
-import { formatNumber } from '../../../utils/formatters.js';
 import { chartPalette, chartSurface, getToneColor } from './chartTheme.js';
-import { formatChartTooltip, getValueRange, shouldShowDataZoom } from './chartUtils.js';
+import {
+  formatAxisDateLabel,
+  formatAxisValue,
+  formatChartTooltip,
+  getAxisLabelInterval,
+  getValueRange,
+  shouldShowDataZoom,
+  shouldShowSymbols,
+} from './chartUtils.js';
 
 function getCommonTooltip(fallbackLabel) {
   return {
     trigger: 'axis',
     confine: true,
+    appendToBody: true,
     backgroundColor: chartSurface.tooltipBackground,
     borderColor: chartSurface.tooltipBorder,
     borderWidth: 1,
     className: 'skyweb-echarts-tooltip-shell',
     formatter: (params) => formatChartTooltip(params, fallbackLabel),
+    axisPointer: {
+      type: 'line',
+      lineStyle: {
+        color: chartSurface.hoverLine,
+        type: 'dashed',
+        width: 1,
+      },
+    },
     textStyle: {
       color: chartSurface.text,
       fontFamily: 'inherit',
@@ -20,6 +36,8 @@ function getCommonTooltip(fallbackLabel) {
 }
 
 function getCategoryAxis(xLabels = [], precision = false) {
+  const pointCount = xLabels.length;
+
   return {
     type: 'category',
     boundaryGap: false,
@@ -32,7 +50,9 @@ function getCategoryAxis(xLabels = [], precision = false) {
     axisLabel: {
       show: precision,
       color: chartSurface.mutedText,
+      formatter: (value) => formatAxisDateLabel(value, pointCount),
       hideOverlap: true,
+      interval: getAxisLabelInterval(pointCount, precision),
       margin: 14,
       fontSize: 11,
     },
@@ -56,7 +76,7 @@ function getValueAxis(range, precision = false) {
     axisLabel: {
       show: precision,
       color: chartSurface.mutedText,
-      formatter: (value) => formatNumber(value),
+      formatter: (value) => formatAxisValue(value, range),
       fontSize: 11,
     },
     splitLine: {
@@ -80,6 +100,7 @@ function getZeroMarkLine(range) {
       type: 'dashed',
       width: 1,
     },
+    label: { show: false },
     data: [{ yAxis: 0 }],
   };
 }
@@ -93,8 +114,36 @@ function getDataZoom(pointCount, precision = false) {
     {
       type: 'inside',
       throttle: 80,
+      zoomOnMouseWheel: true,
+      moveOnMouseMove: true,
+      moveOnMouseWheel: false,
     },
   ];
+}
+
+function getLatestPointSeries(points = []) {
+  const latestPoint = points.at(-1);
+
+  if (!latestPoint) {
+    return null;
+  }
+
+  return {
+    name: 'Latest',
+    type: 'line',
+    data: points.map((point) => (point.index === latestPoint.index ? point.numericValue : null)),
+    showSymbol: true,
+    symbol: 'circle',
+    symbolSize: 8,
+    lineStyle: { opacity: 0 },
+    itemStyle: {
+      color: '#ffffff',
+      borderColor: chartSurface.pointBorder,
+      borderWidth: 2,
+    },
+    tooltip: { show: false },
+    z: 6,
+  };
 }
 
 export function buildMacroLineOption({
@@ -112,7 +161,9 @@ export function buildMacroLineOption({
   const range = getValueRange(values);
   const color = getToneColor(tone);
   const xLabels = points.map((point) => point.label);
-  const latestPoint = points.at(-1);
+  const pointCount = points.length;
+  const showSymbols = shouldShowSymbols(pointCount, precision);
+  const latestPointSeries = getLatestPointSeries(points);
 
   return {
     animation: false,
@@ -123,10 +174,10 @@ export function buildMacroLineOption({
       right: padding.right,
       bottom: padding.bottom,
       left: padding.left,
-      containLabel: false,
+      containLabel: precision,
     },
     tooltip: getCommonTooltip(label),
-    dataZoom: getDataZoom(points.length, precision),
+    dataZoom: getDataZoom(pointCount, precision),
     xAxis: getCategoryAxis(xLabels, precision),
     yAxis: getValueAxis(range, precision),
     series: [
@@ -136,9 +187,9 @@ export function buildMacroLineOption({
         data: points.map((point) => point.numericValue),
         smooth: true,
         sampling: 'lttb',
-        showSymbol: precision,
+        showSymbol: showSymbols,
         symbol: 'circle',
-        symbolSize: precision ? 4 : 0,
+        symbolSize: showSymbols ? 4 : 0,
         lineStyle: {
           width: precision ? 3 : 4,
           color,
@@ -156,30 +207,13 @@ export function buildMacroLineOption({
             },
         emphasis: {
           focus: 'series',
+          lineStyle: {
+            width: precision ? 4 : 5,
+          },
         },
         markLine: getZeroMarkLine(range),
       },
-      ...(latestPoint && !precision
-        ? [
-            {
-              name: 'Latest',
-              type: 'line',
-              data: points.map((point) =>
-                point.index === latestPoint.index ? point.numericValue : null,
-              ),
-              showSymbol: true,
-              symbol: 'circle',
-              symbolSize: 8,
-              lineStyle: { opacity: 0 },
-              itemStyle: {
-                color: '#ffffff',
-                borderColor: chartSurface.pointBorder,
-                borderWidth: 2,
-              },
-              tooltip: { show: false },
-            },
-          ]
-        : []),
+      ...(latestPointSeries ? [latestPointSeries] : []),
     ],
   };
 }
@@ -202,6 +236,7 @@ export function buildMultiSeriesMacroOption({
   const values = seriesList.flatMap((series) => series.points.map((point) => point.numericValue));
   const range = getValueRange(values);
   const maxPointCount = Math.max(...seriesList.map((series) => series.points.length), 0);
+  const showSymbols = shouldShowSymbols(maxPointCount, precision);
 
   return {
     animation: false,
@@ -212,10 +247,13 @@ export function buildMultiSeriesMacroOption({
       right: padding.right,
       bottom: padding.bottom,
       left: padding.left,
-      containLabel: false,
+      containLabel: precision,
     },
     tooltip: getCommonTooltip(label),
     dataZoom: getDataZoom(maxPointCount, precision),
+    legend: {
+      show: false,
+    },
     xAxis: getCategoryAxis(xLabels, precision),
     yAxis: getValueAxis(range, precision),
     series: seriesList.map((series, index) => {
@@ -228,9 +266,9 @@ export function buildMultiSeriesMacroOption({
         data: xLabels.map((labelValue) => pointMap.get(labelValue) ?? null),
         smooth: true,
         sampling: 'lttb',
-        showSymbol: precision,
+        showSymbol: showSymbols,
         symbol: 'circle',
-        symbolSize: precision ? 4 : 0,
+        symbolSize: showSymbols ? 4 : 0,
         connectNulls: false,
         lineStyle: {
           width: precision ? 3 : 4,
@@ -249,6 +287,9 @@ export function buildMultiSeriesMacroOption({
             },
         emphasis: {
           focus: 'series',
+          lineStyle: {
+            width: precision ? 4 : 5,
+          },
         },
         markLine: index === 0 ? getZeroMarkLine(range) : undefined,
       };

@@ -2,6 +2,16 @@
 
 Detailed implementation history was moved out of `README.md` so the README can stay focused on current operation, architecture, and roadmap.
 
+## DN-9.3 — Chart UX Polish and Runtime Hardening
+
+- Hardened the ECharts base wrapper so charts initialize only when the DOM container is present, resize safely, and surface render failures through a reusable chart state panel.
+- Added consistent chart loading, empty, and unavailable states for single-series and multi-series charts.
+- Improved tooltip behavior with body-confined rendering, dashed crosshair axis pointers, latest-point filtering, and clearer value formatting.
+- Standardized precision chart axis labels with adaptive date formatting, interval thinning, compact numeric labels, and safer value-range handling.
+- Reduced symbol noise on dense precision charts while preserving hover behavior and latest-point emphasis.
+- Extended the compatibility wrappers so chart errors/loading states can be passed through without broad page rewiring.
+- Updated README, repo map, chart migration docs, chart audit docs, and transition docs to mark DN-9.3 as active.
+
 ## DN-9.2 — Chart Architecture Extraction and Adapters
 
 - Added reusable .NET-lane chart architecture under `apps/web-dotnet/SkyWeb.Client/src/components/charts/`.

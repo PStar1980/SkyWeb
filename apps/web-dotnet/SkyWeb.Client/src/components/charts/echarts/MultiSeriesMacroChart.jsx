@@ -7,6 +7,7 @@ import EChartBase from './EChartBase.jsx';
 export default function MultiSeriesMacroChart({
   className = '',
   emptyMessage = 'No numeric comparison data available.',
+  error = null,
   height = 240,
   label = 'Series comparison',
   loading = false,
@@ -33,6 +34,7 @@ export default function MultiSeriesMacroChart({
       ariaLabel={label}
       className={`skyweb-sparkline skyweb-echarts skyweb-echarts-multi${precision ? ' skyweb-sparkline-precision skyweb-echarts-precision' : ''} ${className}`}
       emptyMessage={emptyMessage}
+      error={error}
       height={chartHeight}
       loading={loading}
       option={option}

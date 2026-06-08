@@ -4891,3 +4891,50 @@
 .skyweb-echarts-state {
   width: 100%;
 }
+
+/* DN-9.3 chart UX polish + runtime hardening */
+.skyweb-echarts-base {
+  isolation: isolate;
+}
+
+.skyweb-echarts-state {
+  align-content: center;
+  gap: 0.35rem;
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.skyweb-echarts-state-icon {
+  display: inline-grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid rgba(138, 163, 202, 0.2);
+  border-radius: 999px;
+  background: rgba(112, 183, 255, 0.08);
+  color: rgba(220, 232, 255, 0.82);
+  font-size: 0.95rem;
+}
+
+.skyweb-echarts-state-title {
+  color: rgba(255, 255, 255, 0.86);
+  font-weight: 800;
+}
+
+.skyweb-echarts-state-detail {
+  max-width: 32rem;
+  color: rgba(220, 232, 255, 0.58);
+  font-size: 0.82rem;
+}
+
+.skyweb-chart-stage-precision .skyweb-echarts-state {
+  min-height: 340px;
+}
+
+.skyweb-echarts-tooltip-shell {
+  pointer-events: none !important;
+}
+
+.skyweb-echarts-tooltip .skyweb-echarts-tooltip-empty {
+  color: rgba(220, 232, 255, 0.58);
+}

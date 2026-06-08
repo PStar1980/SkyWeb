@@ -10,6 +10,7 @@ export const chartSurface = {
   mutedText: 'rgba(220, 232, 255, 0.58)',
   gridLine: 'rgba(138, 163, 202, 0.1)',
   gridLineStrong: 'rgba(138, 163, 202, 0.28)',
+  hoverLine: 'rgba(220, 232, 255, 0.42)',
   splitLine: 'rgba(138, 163, 202, 0.08)',
   tooltipBackground: 'rgba(8, 14, 28, 0.96)',
   tooltipBorder: 'rgba(138, 163, 202, 0.24)',

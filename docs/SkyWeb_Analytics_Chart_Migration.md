@@ -30,7 +30,7 @@ The optimized execution path is now underway:
 6. Replace current SVG sparkline/chart panels progressively.
 7. Use D3 for specialty helpers once ECharts is stable.
 
-DN-9.1 begins this work by replacing the copied `.NET-lane` `Sparkline.jsx` and `MultiSeriesSparkline.jsx` internals with ECharts renderers while keeping their existing public props stable for parent components.
+DN-9.1 begins this work by replacing the copied `.NET-lane` `Sparkline.jsx` and `MultiSeriesSparkline.jsx` internals with ECharts renderers while keeping their existing public props stable for parent components. DN-9.2 then extracts that first pass into reusable chart architecture folders so future chart work can target stable ECharts components rather than page-level rendering code.
 ```
 
 This avoids doing the same chart migration twice.
@@ -861,22 +861,55 @@ Designed and implemented an interactive macroeconomic analytics layer using Reac
 
 ---
 
+## DN-9.2 Implementation Note — Chart Architecture Extraction
+
+DN-9.2 formalizes the chart layer added in DN-9.1. The copied `.NET-lane` client now has a dedicated chart architecture folder:
+
+```text
+apps/web-dotnet/SkyWeb.Client/src/components/charts/
+  adapters/
+    alertOverlayAdapter.js
+    dashboardChartAdapter.js
+    indicatorSeriesAdapter.js
+    viewSeriesAdapter.js
+  echarts/
+    EChartBase.jsx
+    MacroLineChart.jsx
+    MultiSeriesMacroChart.jsx
+  shared/
+    chartOptions.js
+    chartTheme.js
+    chartTypes.js
+    chartUtils.js
+```
+
+The legacy-compatible wrappers remain:
+
+```text
+components/Sparkline.jsx
+components/MultiSeriesSparkline.jsx
+```
+
+Those wrappers now delegate to the reusable ECharts components. This keeps the current pages stable while allowing the next DN-9 passes to target the new chart layer directly.
+
+---
+
 ## 8. Optimized Final Execution Checklist
 
 ```text
 [ ] Complete SkyWeb .NET transition baseline.
 [ ] Confirm SkyWeb.Api + SkyWeb.Client build successfully.
 [ ] Confirm C# API returns one working macro series.
-[ ] Audit copied chart components in SkyWeb.Client.
+[x] Audit copied chart components in SkyWeb.Client.
 [ ] Define chart DTOs in SkyWeb.Api.
-[ ] Install echarts and echarts-for-react in SkyWeb.Client.
-[ ] Create EChartBase.
-[ ] Create shared chart theme/options/utils.
-[ ] Create MacroLineChart.
-[ ] Migrate MacroIndicatorDetail first.
-[ ] Create MultiSeriesMacroChart.
-[ ] Migrate ChartPanel.
-[ ] Add thin frontend adapters.
+[x] Install echarts and d3 in SkyWeb.Client.
+[x] Create EChartBase.
+[x] Create shared chart theme/options/utils.
+[x] Create MacroLineChart.
+[x] Preserve MacroIndicatorDetail through existing ChartPanel wrapper.
+[x] Create MultiSeriesMacroChart.
+[x] Preserve ChartPanel through Sparkline/MultiSeriesSparkline compatibility wrappers.
+[x] Add thin frontend adapters.
 [ ] Migrate DashboardItemVisualization and dashboard cards.
 [ ] Add alert overlays.
 [ ] Add chart interaction polish.

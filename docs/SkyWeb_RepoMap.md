@@ -214,7 +214,23 @@ SkyWeb/
 │               │   ├── StatCard.jsx
 │               │   ├── StoryCard.jsx
 │               │   ├── TrendMetricCard.jsx
-│               │   └── ViewCard.jsx
+│               │   ├── ViewCard.jsx
+│               │   └── charts/
+│               │       ├── adapters/
+│               │       │   ├── alertOverlayAdapter.js
+│               │       │   ├── dashboardChartAdapter.js
+│               │       │   ├── indicatorSeriesAdapter.js
+│               │       │   └── viewSeriesAdapter.js
+│               │       ├── d3/
+│               │       ├── echarts/
+│               │       │   ├── EChartBase.jsx
+│               │       │   ├── MacroLineChart.jsx
+│               │       │   └── MultiSeriesMacroChart.jsx
+│               │       └── shared/
+│               │           ├── chartOptions.js
+│               │           ├── chartTheme.js
+│               │           ├── chartTypes.js
+│               │           └── chartUtils.js
 │               ├── constants/
 │               │   ├── branding.js
 │               │   └── dashboardModes.js
@@ -251,6 +267,7 @@ SkyWeb/
 │                   └── macroStory.js
 ├── docs/
 │   ├── SkyWeb_Analytics_Chart_Migration.md
+│   ├── SkyWeb_Chart_Audit_PostDotNet.md
 │   ├── SkyWeb_DotNet_Transition_Plan.md
 │   ├── SkyWeb_PreDotNet_Baseline.md
 │   └── SkyWeb_RepoMap.md

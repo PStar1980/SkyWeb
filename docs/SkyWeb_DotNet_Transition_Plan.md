@@ -1758,3 +1758,7 @@ SkyServer remains the Node.js / Temporal-ready automation control plane.
 ```
 
 That is the clean split.
+
+## DN-9.2 — Chart Architecture Extraction and Adapters
+
+The .NET-lane chart work now has reusable ECharts components, shared option/theme utilities, and thin frontend adapters under `SkyWeb.Client/src/components/charts`. Legacy `Sparkline` wrappers remain as compatibility shims until all pages are migrated directly to the new chart components.

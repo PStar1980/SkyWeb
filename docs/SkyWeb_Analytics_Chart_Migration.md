@@ -19,7 +19,7 @@ D3.js           = specialty/custom visualization layer
 
 However, because SkyWeb is now planned to move through a parallel `.NET` implementation first, the chart migration should **not** be performed inside the current legacy `apps/web` app unless needed for a temporary hotfix.
 
-The optimized execution path is:
+The optimized execution path is now underway:
 
 ```text
 1. Complete the SkyWeb .NET transition first.
@@ -28,7 +28,9 @@ The optimized execution path is:
 4. Use C# DTO/API contracts to produce chart-friendly JSON.
 5. Add ECharts abstraction layer.
 6. Replace current SVG sparkline/chart panels progressively.
-7. Add D3 only after ECharts is stable.
+7. Use D3 for specialty helpers once ECharts is stable.
+
+DN-9.1 begins this work by replacing the copied `.NET-lane` `Sparkline.jsx` and `MultiSeriesSparkline.jsx` internals with ECharts renderers while keeping their existing public props stable for parent components.
 ```
 
 This avoids doing the same chart migration twice.
@@ -94,7 +96,6 @@ Current `package.json` dependencies include React, Axios, Bootstrap, React Boots
 
 ```text
 - echarts
-- echarts-for-react
 - d3
 - recharts
 - chart.js
@@ -471,8 +472,9 @@ If the new client still uses the root-level SkyWeb `package.json`, install from 
 ## Deliverable
 
 ```text
-SkyWeb.Client package.json updated
-SkyWeb.Client package-lock.json updated
+Root package.json updated
+Root package-lock.json updated
+apps/web-dotnet/SkyWeb.Client chart components migrated first
 ```
 
 ---

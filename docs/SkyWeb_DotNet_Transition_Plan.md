@@ -77,8 +77,9 @@ DN-5.2 Fix Indicator Series Regclass/NaN Handling        [done]
 DN-6  Implement SkyWeb Profile and Preferences           [implemented]
 DN-7  Implement Saved Views and Dashboards                [implemented]
 DN-7.1 Stabilize Saved Views/Dashboards Build             [current]
-DN-8  Implement Alerts and Signal Center
-DN-9  ECharts + D3 Migration
+DN-8  Implement Alerts and Signal Center                    [implemented]
+DN-9.1 ECharts + D3 Chart Engine Foundation                 [current]
+DN-9  ECharts + D3 Migration Polish
 DN-10 Cutover and Legacy Removal
 ```
 
@@ -1362,6 +1363,14 @@ That preserves the existing SkyServer worker/evaluator as the source of truth fo
 
 # DN-9 — ECharts + D3 Migration
 
+## DN-9.1 implementation note
+
+DN-9.1 starts the chart migration inside `apps/web-dotnet/SkyWeb.Client` rather than the legacy `apps/web` baseline. It replaces the copied SVG `Sparkline.jsx` and `MultiSeriesSparkline.jsx` renderers with Apache ECharts-powered chart components while preserving the existing component APIs used by `ChartPanel.jsx` and `DashboardItemVisualization.jsx`. D3 is used for numeric range/tick calculation before handing chart options to ECharts.
+
+This keeps the migration low-risk: the page-level React code does not need a broad rewrite, the legacy app remains untouched as rollback reference, and the .NET-lane client gets the professional chart engine first.
+
+DN-9.1 also clears the nullable warning in `SkyWebAlertsService.CreateAlertRuleAsync` that surfaced during DN-8 validation.
+
 ## Goal
 
 Upgrade charting after API stability is proven.
@@ -1370,7 +1379,7 @@ Upgrade charting after API stability is proven.
 
 ```powershell
 cd apps\web-dotnet\SkyWeb.Client
-npm install echarts echarts-for-react d3
+npm install echarts d3
 ```
 
 ## Recommended chart folder structure
@@ -1413,8 +1422,9 @@ src/components/charts/
 - Indicator detail chart renders with ECharts.
 - Macro view detail multi-series chart renders with ECharts.
 - Dashboard chart cards render with ECharts.
-- Tooltips, axes, zoom, and responsive resizing work.
-- Old chart components can be removed after replacement is complete.
+- Tooltips, axes, and responsive resizing work.
+- Legacy `apps/web` SVG chart components remain available as rollback baseline.
+- Old `.NET-lane` SVG rendering internals have been replaced without changing the parent component call sites.
 
 ---
 

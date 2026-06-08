@@ -4850,3 +4850,34 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* DN-9 ECharts + D3 chart engine */
+.skyweb-echarts {
+  overflow: hidden;
+}
+
+.skyweb-echarts canvas {
+  border-radius: inherit;
+}
+
+.skyweb-echarts-precision {
+  cursor: crosshair;
+}
+
+.skyweb-echarts-tooltip-shell {
+  border-radius: 0.75rem !important;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.28) !important;
+}
+
+.skyweb-echarts-tooltip {
+  min-width: 8rem;
+  line-height: 1.45;
+}
+
+.skyweb-echarts-tooltip strong {
+  color: #ffffff;
+}
+
+.skyweb-echarts-tooltip span {
+  color: rgba(220, 232, 255, 0.72);
+}

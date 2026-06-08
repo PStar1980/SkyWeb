@@ -224,7 +224,12 @@ public sealed class SkyWebAlertsService
                 alert.Active
             });
 
-        return (await GetAlertRuleAsync(userId, createdAlertKey))!;
+        var persistedAlertKey = createdAlertKey ?? alertKey;
+        return await GetAlertRuleAsync(userId, persistedAlertKey)
+            ?? throw new ApiException(
+                StatusCodes.Status500InternalServerError,
+                "Alert rule was created but could not be reloaded.",
+                new { alertKey = persistedAlertKey });
     }
 
     public async Task<object> UpdateAlertRuleAsync(Guid userId, string alertKey, JsonElement body)

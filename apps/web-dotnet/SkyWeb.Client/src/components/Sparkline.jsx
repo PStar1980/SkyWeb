@@ -1,5 +1,12 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
+import * as echarts from 'echarts/core';
+import { LineChart } from 'echarts/charts';
+import { GridComponent, MarkLineComponent, TooltipComponent } from 'echarts/components';
+import { CanvasRenderer } from 'echarts/renderers';
+import { extent, ticks } from 'd3';
 import { formatNumber } from '../utils/formatters.js';
+
+echarts.use([LineChart, GridComponent, MarkLineComponent, TooltipComponent, CanvasRenderer]);
 
 const DEFAULT_PADDING = 18;
 const PRECISION_PADDING = {
@@ -7,6 +14,13 @@ const PRECISION_PADDING = {
   right: 62,
   bottom: 38,
   left: 68,
+};
+
+const TONE_COLORS = {
+  default: '#70b7ff',
+  flat: '#70b7ff',
+  up: '#67e8a5',
+  down: '#ffb86b',
 };
 
 function getPadding(padding, precision = false) {
@@ -23,220 +37,67 @@ function getPadding(padding, precision = false) {
     return PRECISION_PADDING;
   }
 
+  const resolvedPadding = Number.isFinite(Number(padding)) ? Number(padding) : DEFAULT_PADDING;
+
   return {
-    top: padding,
-    right: padding,
-    bottom: padding,
-    left: padding,
+    top: resolvedPadding,
+    right: resolvedPadding,
+    bottom: resolvedPadding,
+    left: resolvedPadding,
   };
 }
 
-function normalizePoints(points = [], width, height, padding) {
-  const safePoints = points.filter((point) => Number.isFinite(Number(point.value)));
+function normalizePoints(points = []) {
+  return points
+    .map((point, index) => {
+      const numericValue = Number(point?.value);
 
-  if (!safePoints.length) {
-    return {
-      max: null,
-      min: null,
-      points: [],
-      zeroY: null,
-      yTicks: [],
-      xTicks: [],
-    };
+      if (!Number.isFinite(numericValue)) {
+        return null;
+      }
+
+      return {
+        ...point,
+        index,
+        label: point?.label || point?.date || `Point ${index + 1}`,
+        numericValue,
+      };
+    })
+    .filter(Boolean);
+}
+
+function getValueRange(values = []) {
+  const [rawMin, rawMax] = extent(values);
+
+  if (!Number.isFinite(rawMin) || !Number.isFinite(rawMax)) {
+    return { max: 1, min: 0, tickValues: [0, 0.25, 0.5, 0.75, 1] };
   }
 
-  const values = safePoints.map((point) => Number(point.value));
-  const rawMin = Math.min(...values);
-  const rawMax = Math.max(...values);
   const rawSpan = rawMax - rawMin || Math.max(Math.abs(rawMax), 1);
-  const yMargin = rawSpan * 0.08;
-  const min = rawMin - yMargin;
-  const max = rawMax + yMargin;
-  const span = max - min || 1;
-  const xSpan = Math.max(safePoints.length - 1, 1);
-  const innerWidth = width - padding.left - padding.right;
-  const innerHeight = height - padding.top - padding.bottom;
-  const zeroY = min < 0 && max > 0 ? padding.top + (1 - (0 - min) / span) * innerHeight : null;
-  const normalizedPoints = safePoints.map((point, index) => {
-    const x = padding.left + (index / xSpan) * innerWidth;
-    const y = padding.top + (1 - (Number(point.value) - min) / span) * innerHeight;
-
-    return {
-      ...point,
-      x,
-      y,
-      numericValue: Number(point.value),
-    };
-  });
-  const yTickCount = 5;
-  const yTicks = Array.from({ length: yTickCount }, (_, index) => {
-    const ratio = yTickCount === 1 ? 0 : index / (yTickCount - 1);
-    const value = max - ratio * span;
-    const y = padding.top + ratio * innerHeight;
-
-    return { value, y };
-  });
-  const xTickCount = Math.min(5, safePoints.length);
-  const xTicks = Array.from({ length: xTickCount }, (_, index) => {
-    const pointIndex =
-      xTickCount === 1 ? 0 : Math.round((index / (xTickCount - 1)) * (safePoints.length - 1));
-    const point = normalizedPoints[pointIndex];
-
-    return {
-      point,
-      x: point?.x ?? padding.left,
-    };
-  });
+  const margin = rawSpan * 0.08;
+  const min = rawMin - margin;
+  const max = rawMax + margin;
 
   return {
     max,
     min,
-    points: normalizedPoints,
-    zeroY,
-    yTicks,
-    xTicks,
+    tickValues: ticks(min, max, 4),
   };
 }
 
-function buildPath(points = []) {
-  return points
-    .map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`)
-    .join(' ');
-}
+function formatTooltip(params = []) {
+  const items = Array.isArray(params) ? params : [params];
+  const firstItem = items[0];
+  const title = firstItem?.axisValueLabel || firstItem?.name || 'Point';
+  const body = items
+    .map((item) => {
+      const value = Array.isArray(item.value) ? item.value.at(-1) : item.value;
+      const marker = item.marker || '';
+      return `${marker}<span>${item.seriesName || 'Value'}:</span> <strong>${formatNumber(value)}</strong>`;
+    })
+    .join('<br/>');
 
-function buildAreaPath(points = [], height, padding) {
-  if (!points.length) {
-    return '';
-  }
-
-  const linePath = buildPath(points);
-  const first = points[0];
-  const last = points[points.length - 1];
-  const floor = height - padding.bottom;
-
-  return `${linePath} L ${last.x.toFixed(2)} ${floor} L ${first.x.toFixed(2)} ${floor} Z`;
-}
-
-function getNearestPoint(points = [], xCoordinate) {
-  if (!points.length) {
-    return null;
-  }
-
-  return points.reduce((nearest, point) => {
-    if (!nearest) {
-      return point;
-    }
-
-    return Math.abs(point.x - xCoordinate) < Math.abs(nearest.x - xCoordinate) ? point : nearest;
-  }, null);
-}
-
-function getSvgCoordinates(event, width, height) {
-  const rect = event.currentTarget.getBoundingClientRect();
-  const x = ((event.clientX - rect.left) / rect.width) * width;
-  const y = ((event.clientY - rect.top) / rect.height) * height;
-
-  return { x, y };
-}
-
-function AxisLabels({ normalized, width, height, padding, precision }) {
-  if (!precision) {
-    return null;
-  }
-
-  return (
-    <>
-      {normalized.yTicks.map((tick) => (
-        <g key={`y-${tick.y.toFixed(2)}`}>
-          <line
-            className="skyweb-sparkline-gridline skyweb-sparkline-gridline-major"
-            x1={padding.left}
-            x2={width - padding.right}
-            y1={tick.y}
-            y2={tick.y}
-          />
-          <text
-            className="skyweb-sparkline-axis-label skyweb-sparkline-y-label"
-            dominantBaseline="middle"
-            textAnchor="end"
-            x={padding.left - 10}
-            y={tick.y}
-          >
-            {formatNumber(tick.value)}
-          </text>
-        </g>
-      ))}
-      {normalized.xTicks.map((tick, index) => (
-        <g key={`x-${index}-${tick.point?.label || 'point'}`}>
-          <line
-            className="skyweb-sparkline-gridline skyweb-sparkline-gridline-vertical"
-            x1={tick.x}
-            x2={tick.x}
-            y1={padding.top}
-            y2={height - padding.bottom}
-          />
-          <text
-            className="skyweb-sparkline-axis-label skyweb-sparkline-x-label"
-            textAnchor={
-              index === 0 ? 'start' : index === normalized.xTicks.length - 1 ? 'end' : 'middle'
-            }
-            x={tick.x}
-            y={height - 10}
-          >
-            {tick.point?.label || '—'}
-          </text>
-        </g>
-      ))}
-      <line
-        className="skyweb-sparkline-axis-line"
-        x1={padding.left}
-        x2={padding.left}
-        y1={padding.top}
-        y2={height - padding.bottom}
-      />
-      <line
-        className="skyweb-sparkline-axis-line"
-        x1={padding.left}
-        x2={width - padding.right}
-        y1={height - padding.bottom}
-        y2={height - padding.bottom}
-      />
-    </>
-  );
-}
-
-function Tooltip({ height, padding, point, width }) {
-  if (!point) {
-    return null;
-  }
-
-  const tooltipWidth = 154;
-  const tooltipHeight = 58;
-  const x =
-    point.x > width - padding.right - tooltipWidth - 14
-      ? point.x - tooltipWidth - 14
-      : point.x + 14;
-  const y = point.y < padding.top + tooltipHeight + 8 ? point.y + 14 : point.y - tooltipHeight - 12;
-
-  return (
-    <g className="skyweb-sparkline-tooltip" pointerEvents="none">
-      <line
-        className="skyweb-sparkline-hover-line"
-        x1={point.x}
-        x2={point.x}
-        y1={padding.top}
-        y2={height - padding.bottom}
-      />
-      <circle className="skyweb-sparkline-hover-point" cx={point.x} cy={point.y} r="6" />
-      <rect height={tooltipHeight} rx="9" width={tooltipWidth} x={x} y={y} />
-      <text x={x + 10} y={y + 20}>
-        <tspan className="skyweb-sparkline-tooltip-label">{point.label || 'Point'}</tspan>
-        <tspan className="skyweb-sparkline-tooltip-value" dy="18" x={x + 10}>
-          {formatNumber(point.numericValue ?? point.value)}
-        </tspan>
-      </text>
-    </g>
-  );
+  return `<div class="skyweb-echarts-tooltip"><strong>${title}</strong><br/>${body}</div>`;
 }
 
 export default function Sparkline({
@@ -248,22 +109,188 @@ export default function Sparkline({
   tone = 'default',
   precision = false,
 }) {
-  const resolvedPadding = useMemo(() => getPadding(padding, precision), [padding, precision]);
-  const normalized = useMemo(
-    () =>
-      normalizePoints(points, width, precision ? Math.max(height, 300) : height, resolvedPadding),
-    [height, points, precision, resolvedPadding, width],
-  );
+  const containerRef = useRef(null);
+  const chartRef = useRef(null);
   const chartHeight = precision ? Math.max(height, 300) : height;
-  const normalizedPoints = normalized.points;
-  const path = buildPath(normalizedPoints);
-  const areaPath = buildAreaPath(normalizedPoints, chartHeight, resolvedPadding);
-  const firstPoint = normalizedPoints[0];
-  const lastPoint = normalizedPoints[normalizedPoints.length - 1];
-  const midY = chartHeight / 2;
-  const [hoverPoint, setHoverPoint] = useState(null);
+  const resolvedPadding = useMemo(() => getPadding(padding, precision), [padding, precision]);
+  const safePoints = useMemo(() => normalizePoints(points), [points]);
+  const option = useMemo(() => {
+    if (!safePoints.length) {
+      return null;
+    }
 
-  if (!normalizedPoints.length) {
+    const values = safePoints.map((point) => point.numericValue);
+    const range = getValueRange(values);
+    const color = TONE_COLORS[tone] || TONE_COLORS.default;
+    const xLabels = safePoints.map((point) => point.label);
+    const latestPoint = safePoints.at(-1);
+
+    return {
+      animation: false,
+      backgroundColor: 'transparent',
+      color: [color],
+      grid: {
+        top: resolvedPadding.top,
+        right: resolvedPadding.right,
+        bottom: resolvedPadding.bottom,
+        left: resolvedPadding.left,
+        containLabel: false,
+      },
+      tooltip: {
+        trigger: 'axis',
+        confine: true,
+        backgroundColor: 'rgba(8, 14, 28, 0.96)',
+        borderColor: 'rgba(138, 163, 202, 0.24)',
+        borderWidth: 1,
+        className: 'skyweb-echarts-tooltip-shell',
+        formatter: formatTooltip,
+        textStyle: {
+          color: '#dce8ff',
+          fontFamily: 'inherit',
+          fontSize: 12,
+        },
+      },
+      xAxis: {
+        type: 'category',
+        boundaryGap: false,
+        data: xLabels,
+        axisLine: {
+          show: precision,
+          lineStyle: { color: 'rgba(138, 163, 202, 0.28)' },
+        },
+        axisTick: { show: false },
+        axisLabel: {
+          show: precision,
+          color: 'rgba(220, 232, 255, 0.58)',
+          hideOverlap: true,
+          margin: 14,
+          fontSize: 11,
+        },
+        splitLine: {
+          show: precision,
+          lineStyle: { color: 'rgba(138, 163, 202, 0.08)' },
+        },
+      },
+      yAxis: {
+        type: 'value',
+        min: range.min,
+        max: range.max,
+        axisLine: {
+          show: precision,
+          lineStyle: { color: 'rgba(138, 163, 202, 0.28)' },
+        },
+        axisTick: { show: false },
+        axisLabel: {
+          show: precision,
+          color: 'rgba(220, 232, 255, 0.58)',
+          formatter: (value) => formatNumber(value),
+          fontSize: 11,
+        },
+        splitLine: {
+          show: true,
+          lineStyle: { color: 'rgba(138, 163, 202, 0.1)' },
+        },
+      },
+      series: [
+        {
+          name: label,
+          type: 'line',
+          data: safePoints.map((point) => point.numericValue),
+          smooth: true,
+          sampling: 'lttb',
+          showSymbol: precision,
+          symbol: 'circle',
+          symbolSize: precision ? 4 : 0,
+          lineStyle: {
+            width: precision ? 3 : 4,
+            color,
+          },
+          itemStyle: {
+            color,
+            borderColor: 'rgba(5, 10, 20, 0.95)',
+            borderWidth: 2,
+          },
+          areaStyle: precision
+            ? undefined
+            : {
+                color,
+                opacity: 0.12,
+              },
+          emphasis: {
+            focus: 'series',
+          },
+          markLine:
+            range.min < 0 && range.max > 0
+              ? {
+                  animation: false,
+                  symbol: 'none',
+                  silent: true,
+                  lineStyle: {
+                    color: 'rgba(220, 232, 255, 0.28)',
+                    type: 'dashed',
+                    width: 1,
+                  },
+                  data: [{ yAxis: 0 }],
+                }
+              : undefined,
+        },
+        ...(latestPoint && !precision
+          ? [
+              {
+                name: 'Latest',
+                type: 'line',
+                data: safePoints.map((point) =>
+                  point.index === latestPoint.index ? point.numericValue : null,
+                ),
+                showSymbol: true,
+                symbol: 'circle',
+                symbolSize: 8,
+                lineStyle: { opacity: 0 },
+                itemStyle: {
+                  color: '#ffffff',
+                  borderColor: 'rgba(5, 10, 20, 0.95)',
+                  borderWidth: 2,
+                },
+                tooltip: { show: false },
+              },
+            ]
+          : []),
+      ],
+    };
+  }, [label, precision, resolvedPadding, safePoints, tone]);
+
+  useEffect(() => {
+    if (!containerRef.current || !option) {
+      return undefined;
+    }
+
+    chartRef.current = echarts.init(containerRef.current, null, {
+      renderer: 'canvas',
+      useDirtyRect: true,
+      width: precision ? undefined : width,
+      height: chartHeight,
+    });
+
+    chartRef.current.setOption(option, true);
+
+    const resizeObserver = new ResizeObserver(() => {
+      chartRef.current?.resize();
+    });
+
+    resizeObserver.observe(containerRef.current);
+
+    return () => {
+      resizeObserver.disconnect();
+      chartRef.current?.dispose();
+      chartRef.current = null;
+    };
+  }, [chartHeight, option, precision, width]);
+
+  useEffect(() => {
+    chartRef.current?.setOption(option, true);
+  }, [option]);
+
+  if (!safePoints.length) {
     return (
       <div className="skyweb-sparkline-empty">
         <span>No numeric trend data available.</span>
@@ -271,82 +298,13 @@ export default function Sparkline({
     );
   }
 
-  function handlePointerMove(event) {
-    if (!precision) {
-      return;
-    }
-
-    const coordinates = getSvgCoordinates(event, width, chartHeight);
-    setHoverPoint(getNearestPoint(normalizedPoints, coordinates.x));
-  }
-
   return (
-    <svg
+    <div
       aria-label={label}
-      className={`skyweb-sparkline skyweb-sparkline-${tone}${precision ? ' skyweb-sparkline-precision' : ''}`}
-      onMouseLeave={() => setHoverPoint(null)}
-      onPointerMove={handlePointerMove}
-      preserveAspectRatio="none"
+      className={`skyweb-sparkline skyweb-echarts skyweb-echarts-single skyweb-sparkline-${tone}${precision ? ' skyweb-sparkline-precision skyweb-echarts-precision' : ''}`}
+      ref={containerRef}
       role="img"
-      viewBox={`0 0 ${width} ${chartHeight}`}
-    >
-      <AxisLabels
-        height={chartHeight}
-        normalized={normalized}
-        padding={resolvedPadding}
-        precision={precision}
-        width={width}
-      />
-      {!precision && (
-        <>
-          <line
-            className="skyweb-sparkline-gridline"
-            x1={resolvedPadding.left}
-            x2={width - resolvedPadding.right}
-            y1={resolvedPadding.top}
-            y2={resolvedPadding.top}
-          />
-          <line
-            className="skyweb-sparkline-gridline"
-            x1={resolvedPadding.left}
-            x2={width - resolvedPadding.right}
-            y1={midY}
-            y2={midY}
-          />
-          <line
-            className="skyweb-sparkline-gridline"
-            x1={resolvedPadding.left}
-            x2={width - resolvedPadding.right}
-            y1={chartHeight - resolvedPadding.bottom}
-            y2={chartHeight - resolvedPadding.bottom}
-          />
-        </>
-      )}
-      {normalized.zeroY !== null && (
-        <line
-          className="skyweb-sparkline-zero"
-          x1={resolvedPadding.left}
-          x2={width - resolvedPadding.right}
-          y1={normalized.zeroY}
-          y2={normalized.zeroY}
-        />
-      )}
-      <path className="skyweb-sparkline-area" d={areaPath} />
-      <path className="skyweb-sparkline-line" d={path} />
-      {firstPoint && (
-        <circle
-          className="skyweb-sparkline-point-muted"
-          cx={firstPoint.x}
-          cy={firstPoint.y}
-          r="4"
-        />
-      )}
-      {lastPoint && (
-        <circle className="skyweb-sparkline-point" cx={lastPoint.x} cy={lastPoint.y} r="5" />
-      )}
-      {precision && (
-        <Tooltip height={chartHeight} padding={resolvedPadding} point={hoverPoint} width={width} />
-      )}
-    </svg>
+      style={{ height: `${chartHeight}px` }}
+    />
   );
 }

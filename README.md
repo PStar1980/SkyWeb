@@ -9,7 +9,7 @@ Detailed phase history now lives in [`change.log`](./change.log) so this README 
 ## Current Status
 
 **Current application phase:** Phase 8.8 — Alert Rule UX Polish  
-**Active transition lane:** DN-8 — Alerts and Signal Center in C#
+**Active transition lane:** DN-9.1 — ECharts + D3 Chart Engine Foundation
 
 The original `apps/web` React/Vite application remains the working SkyWeb Analytics baseline. The new `apps/web-dotnet` lane is being built in parallel so the ASP.NET Core/C# API can be proven route-by-route without disrupting the existing application.
 
@@ -26,8 +26,9 @@ The .NET foundation is active:
 - DN-7 replaces `/api/skyweb/saved-views` and `/api/skyweb/dashboards` with native ASP.NET Core/C# endpoints.
 - DN-7.1 fixes the initial C# dashboard service build blocker caused by local variable shadowing and clears a nullable saved-view handoff warning.
 - DN-8 replaces alert-rule CRUD, event history, alert notifications, and Signal Center queue actions with native ASP.NET Core/C# endpoints while keeping evaluate-now routed through SkyServer worker logic for now.
+- DN-9.1 begins the chart migration inside `SkyWeb.Client` by replacing the copied SVG sparkline renderers with Apache ECharts-powered single-series and multi-series charts, using D3 for value-range/tick calculations.
 
-Current DN-8 request flow:
+Current DN-9.1 request flow:
 
 ```text
 SkyWeb.Client
@@ -180,7 +181,8 @@ The .NET migration uses a dedicated `DN-*` numbering system so it does not colli
 | DN-7     |     ✅ | Implement saved views and dashboards in C#                             |
 | DN-7.1   |     ✅ | Stabilize saved views/dashboards build                                 |
 | DN-8     |     ✅ | Implement alerts and Signal Center in C#                               |
-| DN-9     |     🔜 | Migrate charts to Apache ECharts + D3                                  |
+| DN-9.1   |     ✅ | Add ECharts + D3 chart engine foundation in `SkyWeb.Client`            |
+| DN-9     |     🚧 | Complete chart migration polish and specialty visuals                  |
 | DN-10    |     🔜 | Cutover and legacy removal                                             |
 
 ## SkyWeb Feature Roadmap

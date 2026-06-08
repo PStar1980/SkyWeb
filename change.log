@@ -1,36 +1,29 @@
-# SkyWeb Change Log
+# SkyWeb Analytics Change Log
 
-Detailed phase and transition history for SkyWeb Analytics. The README stays focused on current status and developer commands.
+This file carries the detailed implementation history so `README.md` can stay focused on current state, local development, and roadmap.
 
-## DN-7.1 — Saved Views/Dashboards Build Stabilization
+## Phase 8 — Macro Alerts
 
-- Fixed `SkyWebDashboardsService.UpdateDashboardItemAsync` local variable shadowing that caused CS0136 during `dotnet build`.
-- Cleared the nullable saved-view handoff warning in `SkyWebSavedViewsService.SaveViewAsync` by falling back to the normalized requested view key.
-- Kept the DN-7 endpoint contract unchanged; this is a compile/build stabilization patch only.
+- Phase 8.1: Added alert-rule foundation: create rules, conditions, and manual evaluation.
+- Phase 8.2: Added alert detail page and evaluation history.
+- Phase 8.3: Wired scheduled alert evaluation visibility from SkyServer worker/admin surfaces.
+- Phase 8.4: Added triggered notification queue with acknowledge/dismiss lifecycle.
+- Phase 8.5: Added global Signals pill, dashboard alert card, Macro Overview signal strip, lifecycle wording, and severity styling.
+- Phase 8.6: Added alert-preference contract for in-app surfacing, severity channels, delivery mode, digest cadence, staged email/browser toggles, and quiet hours.
+- Phase 8.7: Added dedicated Signal Center with status/severity filters, sorting, and bulk acknowledge/dismiss actions.
+- Phase 8.8: Added alert-rule UX polish: search/filter/sort, inline edit mode, clone rule, safer remove confirmation, validation, and alert-detail edit handoff.
 
-## DN-7 — Saved Views and Dashboards in C#
+## .NET Transition Lane
 
-- Added native C# saved-view endpoints.
-- Added native C# dashboard and dashboard-item endpoints.
-- Narrowed the SkyServer proxy bridge to alerts and signal queues only.
-
-## DN-6 — SkyWeb Profile and Preferences in C#
-
-- Added native C# profile, dashboard preferences, and alert preference endpoints.
-
-## DN-5.2 — Indicator Series Regclass/NaN Fix
-
-- Cast PostgreSQL `to_regclass` checks to text.
-- Scrubbed PostgreSQL numeric `NaN` values to JSON-safe nulls for indicator series responses.
-
-## DN-5 — Authentication in C#
-
-- Added native C# login, logout, change-password, me, and permissions endpoints.
-
-## DN-4 — Public Macro REST Endpoints in C#
-
-- Added native public macro summary, views, columns, latest, indicators, and series endpoints.
-
-## Phase 8.8 — Alert Rule UX Polish
-
-- Added alert rule search/filter/sort, inline edit, clone, safer remove confirmation, and validation polish.
+- DN-0: Preserved the pre-.NET baseline and documented the current route/page surface.
+- DN-1: Created the parallel `apps/web-dotnet` structure with `SkyWeb.Api` and `SkyWeb.Client`.
+- DN-2: Added ASP.NET Core health, database health, Swagger, CORS, Dapper/Npgsql connection setup, and camelCase JSON behavior.
+- DN-3: Wired `SkyWeb.Client` through `SkyWeb.Api` with temporary proxy fallback to SkyServer.
+- DN-4: Replaced `/api/public/macro/*` proxy routes with native ASP.NET Core/C# endpoints.
+- DN-5: Replaced `/api/auth/*` proxy routes with native ASP.NET Core/C# authentication and session handling.
+- DN-5.1: Stabilized public macro series reads for dashboard mini-chart usage.
+- DN-5.2: Fixed indicator-table `regclass` materialization and scrubbed PostgreSQL numeric `NaN` values before JSON serialization.
+- DN-6: Replaced profile, preferences, and alert-preferences proxy routes with native ASP.NET Core/C# endpoints.
+- DN-7: Replaced saved-view and dashboard proxy routes with native ASP.NET Core/C# endpoints.
+- DN-7.1: Fixed the first DN-7 C# compile blocker and cleared a saved-view nullable handoff warning.
+- DN-8: Replaced alert-rule CRUD, event history reads, alert-notification status updates, and Signal Center queue actions with native ASP.NET Core/C# endpoints. Alert evaluate-now endpoints remain proxied to SkyServer so the existing evaluator/worker remains the write source for evaluation events.

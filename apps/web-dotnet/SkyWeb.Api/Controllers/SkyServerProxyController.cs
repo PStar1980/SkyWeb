@@ -14,12 +14,9 @@ public sealed class SkyServerProxyController : ControllerBase
         _proxyService = proxyService;
     }
 
-    [AcceptVerbs("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")]
-    [Route("skyweb/alerts")]
-    [Route("skyweb/alerts/{**path}")]
-    [Route("skyweb/alert-notifications")]
-    [Route("skyweb/alert-notifications/{**path}")]
-    public async Task ProxyToSkyServer(CancellationToken cancellationToken)
+    [HttpPost("skyweb/alerts/evaluate")]
+    [HttpPost("skyweb/alerts/{alertKey}/evaluate")]
+    public async Task ProxyAlertEvaluationToSkyServer(CancellationToken cancellationToken)
     {
         await _proxyService.ProxyAsync(HttpContext, cancellationToken);
     }

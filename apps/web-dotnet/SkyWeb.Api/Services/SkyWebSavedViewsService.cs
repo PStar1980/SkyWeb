@@ -92,7 +92,8 @@ public sealed class SkyWebSavedViewsService
                 savedView.SortOrder
             });
 
-        var hydrated = await GetSavedViewAsync(userId, row.ViewKey, viewByKey);
+        var returnedViewKey = row.ViewKey ?? savedView.ViewKey;
+        var hydrated = await GetSavedViewAsync(userId, returnedViewKey, viewByKey);
         return hydrated ?? SanitizeSavedView(row, viewByKey);
     }
 

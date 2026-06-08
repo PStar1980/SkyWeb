@@ -1,46 +1,36 @@
 # SkyWeb Change Log
 
-Detailed implementation notes for SkyWeb Analytics. The README now stays focused on current status, commands, and roadmap.
+Detailed phase and transition history for SkyWeb Analytics. The README stays focused on current status and developer commands.
+
+## DN-7.1 — Saved Views/Dashboards Build Stabilization
+
+- Fixed `SkyWebDashboardsService.UpdateDashboardItemAsync` local variable shadowing that caused CS0136 during `dotnet build`.
+- Cleared the nullable saved-view handoff warning in `SkyWebSavedViewsService.SaveViewAsync` by falling back to the normalized requested view key.
+- Kept the DN-7 endpoint contract unchanged; this is a compile/build stabilization patch only.
 
 ## DN-7 — Saved Views and Dashboards in C#
 
-- Added native ASP.NET Core/C# endpoints for `GET/POST/PATCH/DELETE /api/skyweb/saved-views`.
-- Added native ASP.NET Core/C# endpoints for dashboard CRUD under `/api/skyweb/dashboards`.
-- Added native ASP.NET Core/C# endpoints for dashboard item add/update/remove under `/api/skyweb/dashboards/{dashboardKey}/items`.
-- Preserved saved macro view response shapes, pin/sort behavior, and macro-view enrichment.
-- Preserved dashboard response shapes, default-dashboard behavior, dashboard item layout fields, direct indicator items, and saved-view validation.
-- Narrowed the temporary SkyServer proxy bridge to alert rules and alert notifications only.
+- Added native C# saved-view endpoints.
+- Added native C# dashboard and dashboard-item endpoints.
+- Narrowed the SkyServer proxy bridge to alerts and signal queues only.
 
 ## DN-6 — SkyWeb Profile and Preferences in C#
 
-- Added native ASP.NET Core/C# endpoints for `GET/PATCH /api/skyweb/profile`.
-- Added native ASP.NET Core/C# endpoints for `GET/PATCH /api/skyweb/preferences`.
-- Added native ASP.NET Core/C# endpoints for `GET/PATCH /api/skyweb/alert-preferences`.
-- Added native SkyWeb permission enforcement for profile, dashboard preferences, and alert preferences.
-- Added C# profile service preserving `skyweb.user_profiles` and `skyweb.vw_user_profiles` contracts.
-- Added C# preference service preserving `skyweb.user_preferences` and `skyweb.vw_user_preferences` contracts.
-- Preserved default insertion, JSONB storage, validation, and existing React response shapes.
-- Kept saved views, dashboards, alert rules, alert notifications, and Signal Center on the temporary SkyServer proxy for DN-7/DN-8.
+- Added native C# profile, dashboard preferences, and alert preference endpoints.
 
 ## DN-5.2 — Indicator Series Regclass/NaN Fix
 
-- Cast PostgreSQL `to_regclass(...)` checks to `text` before Dapper/Npgsql materialization.
-- Scrubbed PostgreSQL numeric `NaN` values into JSON-safe `null` values for indicator series responses.
-- Stabilized native C# indicator-series reads used by dashboard mini charts.
+- Cast PostgreSQL `to_regclass` checks to text.
+- Scrubbed PostgreSQL numeric `NaN` values to JSON-safe nulls for indicator series responses.
 
 ## DN-5 — Authentication in C#
 
-- Added native `/api/auth/login`, `/api/auth/logout`, `/api/auth/change-password`, `/api/auth/me`, and `/api/auth/permissions`.
-- Preserved opaque bearer-token sessions using SHA-256 session-token hashes in `auth.sessions`.
-- Preserved permission reads from `auth.vw_user_permissions` and login/audit event writes.
+- Added native C# login, logout, change-password, me, and permissions endpoints.
 
 ## DN-4 — Public Macro REST Endpoints in C#
 
-- Replaced `/api/public/macro/*` proxy fallback with native ASP.NET Core/C# endpoints.
-- Kept auth and SkyWeb user features on proxy fallback during the migration.
+- Added native public macro summary, views, columns, latest, indicators, and series endpoints.
 
-## DN-0 to DN-3 — .NET Transition Foundation
+## Phase 8.8 — Alert Rule UX Polish
 
-- Added `apps/web-dotnet/SkyWeb.Api` and `apps/web-dotnet/SkyWeb.Client`.
-- Added health, DB health, Swagger, CORS, and local dev scripts.
-- Wired the copied React client to `SkyWeb.Api` with a temporary proxy bridge to SkyServer.
+- Added alert rule search/filter/sort, inline edit, clone, safer remove confirmation, and validation polish.

@@ -1,11 +1,16 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ChartPanel from '../components/ChartPanel.jsx';
+import {
+  alertRuleMatchesView,
+  buildChartAlertOverlays,
+} from '../components/charts/adapters/alertOverlayAdapter.js';
 import StatCard from '../components/StatCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import { usePreferences } from '../context/PreferencesContext.jsx';
 import { useSavedViews } from '../context/SavedViewsContext.jsx';
+import authService from '../services/authService.js';
 import macroService from '../services/macroService.js';
 import { getDateRangeFromRows } from '../utils/charting.js';
 import {
@@ -106,6 +111,8 @@ export default function MacroViewDetail() {
   const [noteDraft, setNoteDraft] = useState('');
   const [savingNote, setSavingNote] = useState(false);
   const [tablePage, setTablePage] = useState(0);
+  const [alertOverlays, setAlertOverlays] = useState({ events: [], thresholds: [] });
+  const [alertOverlayLoading, setAlertOverlayLoading] = useState(false);
 
   const displayColumns = useMemo(() => {
     if (columns.length > 0) {
@@ -156,6 +163,85 @@ export default function MacroViewDetail() {
   useEffect(() => {
     setTablePage(0);
   }, [viewKey, rows.length]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadAlertOverlays() {
+      setAlertOverlays({ events: [], thresholds: [] });
+
+      if (!isAuthenticated) {
+        setAlertOverlayLoading(false);
+        return;
+      }
+
+      setAlertOverlayLoading(true);
+
+      try {
+        const alertsPayload = await authService.listAlerts({
+          active: 'true',
+          targetType: 'view_metric',
+        });
+        const matchingAlerts = (alertsPayload.items || []).filter((alertRule) =>
+          alertRuleMatchesView(alertRule, viewKey),
+        );
+        if (!matchingAlerts.length) {
+          if (active) {
+            setAlertOverlays({ events: [], thresholds: [] });
+          }
+          return;
+        }
+
+        const alertKeys = new Set(matchingAlerts.map((alertRule) => alertRule.alertKey));
+        const eventEntries = await Promise.all(
+          matchingAlerts.map(async (alertRule) => {
+            const payload = await authService.listAlertEvents(alertRule.alertKey, { limit: 100 });
+            return [alertRule.alertKey, payload.items || []];
+          }),
+        );
+        const notificationsPayload = await authService.listAlertNotifications({
+          limit: 100,
+          status: 'all',
+        });
+        const notificationsByAlertKey = (notificationsPayload.items || []).reduce(
+          (accumulator, notification) => {
+            if (!alertKeys.has(notification.alertKey)) {
+              return accumulator;
+            }
+
+            accumulator[notification.alertKey] = accumulator[notification.alertKey] || [];
+            accumulator[notification.alertKey].push(notification);
+            return accumulator;
+          },
+          {},
+        );
+
+        if (active) {
+          setAlertOverlays(
+            buildChartAlertOverlays({
+              alertRules: matchingAlerts,
+              eventsByAlertKey: Object.fromEntries(eventEntries),
+              notificationsByAlertKey,
+            }),
+          );
+        }
+      } catch {
+        if (active) {
+          setAlertOverlays({ events: [], thresholds: [] });
+        }
+      } finally {
+        if (active) {
+          setAlertOverlayLoading(false);
+        }
+      }
+    }
+
+    loadAlertOverlays();
+
+    return () => {
+      active = false;
+    };
+  }, [isAuthenticated, viewKey]);
 
   useEffect(() => {
     let active = true;
@@ -310,6 +396,8 @@ export default function MacroViewDetail() {
           )}
 
           <ChartPanel
+            alertOverlayLoading={alertOverlayLoading}
+            alertOverlays={alertOverlays}
             columns={columns}
             defaultWindowSize={preferences.defaultChartWindow}
             multiSeries

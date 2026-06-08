@@ -244,7 +244,6 @@ public sealed class MacroReadService
 
         var whereClause = BuildWhereClause(clauses);
         var relationSql = GetRelationSql(view.SchemaName, view.ViewName);
-        var selectList = await GetSafeSelectListAsync(view.SchemaName, view.ViewName);
         var sortDirection = IsAscending(filters) ? "ASC" : "DESC";
 
         using var connection = _connectionFactory.CreateConnection();
@@ -262,7 +261,7 @@ public sealed class MacroReadService
 
         var rows = await connection.QueryAsync(
             $@"
-                SELECT {selectList}
+                SELECT *
                 FROM {relationSql}
                 {whereClause}
                 ORDER BY date {sortDirection}
@@ -284,12 +283,11 @@ public sealed class MacroReadService
     {
         var view = GetMacroViewDefinition(viewKey);
         var relationSql = GetRelationSql(view.SchemaName, view.ViewName);
-        var selectList = await GetSafeSelectListAsync(view.SchemaName, view.ViewName);
 
         using var connection = _connectionFactory.CreateConnection();
         var row = await connection.QueryFirstOrDefaultAsync(
             $@"
-                SELECT {selectList}
+                SELECT *
                 FROM {relationSql}
                 WHERE date IS NOT NULL
                 ORDER BY date DESC
@@ -432,7 +430,7 @@ public sealed class MacroReadService
             $@"
                 SELECT
                     edate,
-                    CASE WHEN value::text = 'NaN' THEN NULL ELSE value END AS value
+                    NULLIF(value::text, 'NaN')::double precision AS value
                 FROM {relationSql}
                 {whereClause}
                 ORDER BY edate {sortDirection}
@@ -449,39 +447,6 @@ public sealed class MacroReadService
             offset,
             items = rows.Select(SanitizeIndicatorSeriesRow).ToList()
         };
-    }
-
-    private async Task<string> GetSafeSelectListAsync(string schemaName, string objectName)
-    {
-        using var connection = _connectionFactory.CreateConnection();
-        var columns = await connection.QueryAsync(
-            @"
-                SELECT
-                    column_name,
-                    data_type
-                FROM information_schema.columns
-                WHERE table_schema = @SchemaName
-                  AND table_name = @ObjectName
-                ORDER BY ordinal_position
-            ",
-            new { SchemaName = schemaName, ObjectName = objectName });
-
-        var selectList = columns
-            .Select(row => BuildSafeColumnSelectExpression(
-                Convert.ToString(GetValue(row, "column_name")) ?? string.Empty,
-                Convert.ToString(GetValue(row, "data_type")) ?? string.Empty))
-            .Where(expression => !string.IsNullOrWhiteSpace(expression))
-            .ToList();
-
-        if (selectList.Count == 0)
-        {
-            throw new ApiException(
-                StatusCodes.Status500InternalServerError,
-                "No readable columns were found for macro relation.",
-                new { schemaName, objectName });
-        }
-
-        return string.Join(", ", selectList);
     }
 
     private async Task<object> GetViewStatsAsync(MacroViewDefinition view)
@@ -553,7 +518,7 @@ public sealed class MacroReadService
         var relationSql = GetRelationSql("macro", indicatorCode);
         using var connection = _connectionFactory.CreateConnection();
         var relationName = await connection.ExecuteScalarAsync<string?>(
-            "SELECT to_regclass(@RelationName) AS relation_name",
+            "SELECT to_regclass(@RelationName)::text AS relation_name",
             new { RelationName = relationSql });
 
         if (string.IsNullOrWhiteSpace(relationName))
@@ -836,28 +801,6 @@ public sealed class MacroReadService
         parameters.Add(parameterName, $"%{normalizedSearchText}%");
         var placeholder = $"@{parameterName}";
         clauses.Add($"({string.Join(" OR ", columns.Select(columnName => $"{columnName} ILIKE {placeholder}"))})");
-    }
-
-    private static string BuildSafeColumnSelectExpression(string columnName, string dataType)
-    {
-        if (string.IsNullOrWhiteSpace(columnName))
-        {
-            return string.Empty;
-        }
-
-        var quotedColumn = QuoteIdentifier(columnName);
-        if (!IsNaNCapableNumericType(dataType))
-        {
-            return quotedColumn;
-        }
-
-        return $"CASE WHEN {quotedColumn}::text = 'NaN' THEN NULL ELSE {quotedColumn} END AS {quotedColumn}";
-    }
-
-    private static bool IsNaNCapableNumericType(string? dataType)
-    {
-        var normalized = (dataType ?? string.Empty).Trim().ToLowerInvariant();
-        return normalized is "numeric" or "decimal" or "real" or "double precision";
     }
 
     private static string BuildWhereClause(IReadOnlyCollection<string> clauses)

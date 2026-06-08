@@ -22,20 +22,38 @@ public sealed class SkyWebController : ControllerBase
         "SKYWEB_PROFILE_WRITE"
     };
 
+    private static readonly string[] DashboardReadPermissions =
+    {
+        "SKYWEB_DASHBOARD_READ",
+        "SKYWEB_PROFILE_READ"
+    };
+
+    private static readonly string[] DashboardWritePermissions =
+    {
+        "SKYWEB_DASHBOARD_WRITE",
+        "SKYWEB_PROFILE_WRITE"
+    };
+
     private readonly SkyWebAuthorizationService _authorizationService;
     private readonly SkyWebProfileService _profileService;
     private readonly SkyWebPreferencesService _preferencesService;
+    private readonly SkyWebSavedViewsService _savedViewsService;
+    private readonly SkyWebDashboardsService _dashboardsService;
     private readonly ILogger<SkyWebController> _logger;
 
     public SkyWebController(
         SkyWebAuthorizationService authorizationService,
         SkyWebProfileService profileService,
         SkyWebPreferencesService preferencesService,
+        SkyWebSavedViewsService savedViewsService,
+        SkyWebDashboardsService dashboardsService,
         ILogger<SkyWebController> logger)
     {
         _authorizationService = authorizationService;
         _profileService = profileService;
         _preferencesService = preferencesService;
+        _savedViewsService = savedViewsService;
+        _dashboardsService = dashboardsService;
         _logger = logger;
     }
 
@@ -166,6 +184,276 @@ public sealed class SkyWebController : ControllerBase
         catch (Exception ex)
         {
             return HandleException(ex, "Native SkyWeb alert preference update failed.");
+        }
+    }
+
+
+    [HttpGet("saved-views")]
+    public async Task<IActionResult> ListSavedViews()
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardReadPermissions);
+
+            var items = await _savedViewsService.ListSavedViewsAsync(authContext!.User.UserId);
+            return Ok(new
+            {
+                ok = true,
+                total = items.Count,
+                items
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb saved-view list failed.");
+        }
+    }
+
+    [HttpPost("saved-views")]
+    public async Task<IActionResult> SaveSavedView([FromBody] JsonElement body)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardWritePermissions);
+
+            var item = await _savedViewsService.SaveViewAsync(authContext!.User.UserId, body);
+            return Ok(new
+            {
+                ok = true,
+                item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb saved-view save failed.");
+        }
+    }
+
+    [HttpPatch("saved-views/{viewKey}")]
+    public async Task<IActionResult> UpdateSavedView(string viewKey, [FromBody] JsonElement body)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardWritePermissions);
+
+            var item = await _savedViewsService.UpdateSavedViewAsync(authContext!.User.UserId, viewKey, body);
+            return Ok(new
+            {
+                ok = true,
+                item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb saved-view update failed.");
+        }
+    }
+
+    [HttpDelete("saved-views/{viewKey}")]
+    public async Task<IActionResult> RemoveSavedView(string viewKey)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardWritePermissions);
+
+            var result = await _savedViewsService.RemoveSavedViewAsync(authContext!.User.UserId, viewKey);
+            return Ok(new
+            {
+                ok = true,
+                removed = result.Removed,
+                viewKey = result.ViewKey
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb saved-view remove failed.");
+        }
+    }
+
+    [HttpGet("dashboards")]
+    public async Task<IActionResult> ListDashboards()
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardReadPermissions);
+
+            var items = await _dashboardsService.ListDashboardsAsync(authContext!.User.UserId);
+            return Ok(new
+            {
+                ok = true,
+                total = items.Count,
+                items
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb dashboard list failed.");
+        }
+    }
+
+    [HttpPost("dashboards")]
+    public async Task<IActionResult> CreateDashboard([FromBody] JsonElement body)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardWritePermissions);
+
+            var item = await _dashboardsService.CreateDashboardAsync(authContext!.User.UserId, body);
+            return Ok(new
+            {
+                ok = true,
+                item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb dashboard create failed.");
+        }
+    }
+
+    [HttpGet("dashboards/{dashboardKey}")]
+    public async Task<IActionResult> GetDashboard(string dashboardKey)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardReadPermissions);
+
+            var item = await _dashboardsService.GetDashboardAsync(authContext!.User.UserId, dashboardKey);
+            if (item is null)
+            {
+                return NotFound(new
+                {
+                    ok = false,
+                    error = "Dashboard not found."
+                });
+            }
+
+            return Ok(new
+            {
+                ok = true,
+                item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb dashboard read failed.");
+        }
+    }
+
+    [HttpPatch("dashboards/{dashboardKey}")]
+    public async Task<IActionResult> UpdateDashboard(string dashboardKey, [FromBody] JsonElement body)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardWritePermissions);
+
+            var item = await _dashboardsService.UpdateDashboardAsync(authContext!.User.UserId, dashboardKey, body);
+            return Ok(new
+            {
+                ok = true,
+                item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb dashboard update failed.");
+        }
+    }
+
+    [HttpDelete("dashboards/{dashboardKey}")]
+    public async Task<IActionResult> RemoveDashboard(string dashboardKey)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardWritePermissions);
+
+            var result = await _dashboardsService.RemoveDashboardAsync(authContext!.User.UserId, dashboardKey);
+            return Ok(new
+            {
+                ok = true,
+                removed = result.Removed,
+                dashboardKey = result.DashboardKey
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb dashboard remove failed.");
+        }
+    }
+
+    [HttpPost("dashboards/{dashboardKey}/items")]
+    public async Task<IActionResult> AddDashboardItem(string dashboardKey, [FromBody] JsonElement body)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardWritePermissions);
+
+            var result = await _dashboardsService.AddDashboardItemAsync(authContext!.User.UserId, dashboardKey, body);
+            return Ok(new
+            {
+                ok = true,
+                dashboard = result.Dashboard,
+                item = result.Item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb dashboard item add failed.");
+        }
+    }
+
+    [HttpPatch("dashboards/{dashboardKey}/items/{itemId}")]
+    public async Task<IActionResult> UpdateDashboardItem(string dashboardKey, string itemId, [FromBody] JsonElement body)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardWritePermissions);
+
+            var result = await _dashboardsService.UpdateDashboardItemAsync(authContext!.User.UserId, dashboardKey, itemId, body);
+            return Ok(new
+            {
+                ok = true,
+                dashboard = result.Dashboard,
+                item = result.Item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb dashboard item update failed.");
+        }
+    }
+
+    [HttpDelete("dashboards/{dashboardKey}/items/{itemId}")]
+    public async Task<IActionResult> RemoveDashboardItem(string dashboardKey, string itemId)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequireAnyPermission(authContext, DashboardWritePermissions);
+
+            var result = await _dashboardsService.RemoveDashboardItemAsync(authContext!.User.UserId, dashboardKey, itemId);
+            return Ok(new
+            {
+                ok = true,
+                dashboard = result.Dashboard,
+                itemId = result.ItemId,
+                removed = result.Removed
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb dashboard item remove failed.");
         }
     }
 

@@ -184,9 +184,11 @@ SkyWeb/
 │       │       ├── PublicMacroService.cs
 │       │       ├── SkyServerProxyService.cs
 │       │       ├── SkyWebAuthorizationService.cs
+│       │       ├── SkyWebDashboardsService.cs
 │       │       ├── SkyWebJson.cs
 │       │       ├── SkyWebPreferencesService.cs
-│       │       └── SkyWebProfileService.cs
+│       │       ├── SkyWebProfileService.cs
+│       │       └── SkyWebSavedViewsService.cs
 │       └── SkyWeb.Client/
 │           ├── .env.example
 │           ├── index.html

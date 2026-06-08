@@ -114,11 +114,78 @@ internal static class SkyWebJson
         {
             return new Dictionary<string, object?>();
         }
+        catch (NotSupportedException)
+        {
+            return new Dictionary<string, object?>();
+        }
     }
 
     public static string SerializeObject(IReadOnlyDictionary<string, object?> value)
     {
         return JsonSerializer.Serialize(value, JsonOptions);
+    }
+
+
+    public static IReadOnlyDictionary<string, object?> ObjectToDictionary(object? value)
+    {
+        if (value is null)
+        {
+            return new Dictionary<string, object?>();
+        }
+
+        try
+        {
+            var json = JsonSerializer.Serialize(value, JsonOptions);
+            return ParseObjectJson(json);
+        }
+        catch (JsonException)
+        {
+            return new Dictionary<string, object?>();
+        }
+        catch (NotSupportedException)
+        {
+            return new Dictionary<string, object?>();
+        }
+    }
+
+    public static IReadOnlyList<IReadOnlyDictionary<string, object?>> GetObjectArrayProperty(object? value, string propertyName)
+    {
+        if (value is null)
+        {
+            return Array.Empty<IReadOnlyDictionary<string, object?>>();
+        }
+
+        try
+        {
+            var json = JsonSerializer.Serialize(value, JsonOptions);
+            using var document = JsonDocument.Parse(json);
+
+            if (document.RootElement.ValueKind != JsonValueKind.Object ||
+                !TryGetProperty(document.RootElement, propertyName, out var property) ||
+                property.ValueKind != JsonValueKind.Array)
+            {
+                return Array.Empty<IReadOnlyDictionary<string, object?>>();
+            }
+
+            var output = new List<IReadOnlyDictionary<string, object?>>();
+            foreach (var item in property.EnumerateArray())
+            {
+                if (item.ValueKind == JsonValueKind.Object)
+                {
+                    output.Add(ConvertObject(item));
+                }
+            }
+
+            return output;
+        }
+        catch (JsonException)
+        {
+            return Array.Empty<IReadOnlyDictionary<string, object?>>();
+        }
+        catch (NotSupportedException)
+        {
+            return Array.Empty<IReadOnlyDictionary<string, object?>>();
+        }
     }
 
     private static Dictionary<string, object?> ConvertObject(JsonElement element)

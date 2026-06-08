@@ -73,8 +73,8 @@ DN-3  Wire SkyWeb.Client to SkyWeb.Api
 DN-4  Implement Public Macro REST Endpoints in C#        [implemented]
 DN-5  Implement Authentication in C#                   [implemented]
 DN-5.1 Stabilize Public Macro Series Reads              [implemented]
-DN-5.2 Fix Indicator Series Regclass/NaN Handling        [current]
-DN-6  Implement SkyWeb Profile and Preferences
+DN-5.2 Fix Indicator Series Regclass/NaN Handling        [done]
+DN-6  Implement SkyWeb Profile and Preferences           [current]
 DN-7  Implement Saved Views and Dashboards
 DN-8  Implement Alerts and Signal Center
 DN-9  ECharts + D3 Migration
@@ -1159,6 +1159,30 @@ Use a C# permission filter/attribute or service method.
 - Preferences load and save.
 - Alert preferences load and save.
 - Existing React contexts continue to work.
+
+## DN-6 implementation note
+
+DN-6 moves the first authenticated SkyWeb user-owned route family into native ASP.NET Core/C#:
+
+```text
+GET   /api/skyweb/profile
+PATCH /api/skyweb/profile
+GET   /api/skyweb/preferences
+PATCH /api/skyweb/preferences
+GET   /api/skyweb/alert-preferences
+PATCH /api/skyweb/alert-preferences
+```
+
+These endpoints keep the existing React response contract and database objects:
+
+```text
+skyweb.user_profiles
+skyweb.user_preferences
+skyweb.vw_user_profiles
+skyweb.vw_user_preferences
+```
+
+The .NET implementation preserves SkyWeb session enforcement, permission checks, default preference insertion, preference validation, and JSONB storage. The remaining `/api/skyweb/*` families continue through the temporary SkyServer proxy until DN-7 and DN-8.
 
 ---
 

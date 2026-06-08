@@ -1,50 +1,37 @@
 # SkyWeb Change Log
 
-Detailed implementation history for SkyWeb Analytics. The README keeps the current architecture, commands, and roadmap readable; this file carries the running phase log.
+Detailed implementation notes for SkyWeb Analytics. The README now stays focused on current status, commands, and roadmap.
 
-## Phase 8 — Macro Alerts
+## DN-6 — SkyWeb Profile and Preferences in C#
 
-- Phase 8.1: Alert rule foundation, condition creation, and manual evaluation.
-- Phase 8.2: Alert detail page and evaluation history.
-- Phase 8.3: Scheduled alert evaluation visibility from the SkyServer worker.
-- Phase 8.4: Triggered notification queue with acknowledge/dismiss behavior.
-- Phase 8.5: Global Signals pill, dashboard alert card, Macro Overview signal strip, lifecycle wording, and severity styling.
-- Phase 8.6: Alert preferences and delivery-prep contract.
-- Phase 8.7: Dedicated Signal Center.
-- Phase 8.8: Alert-rule search/filter/sort, inline edit, clone, remove confirmation, validation, and detail-page edit handoff.
+- Added native ASP.NET Core/C# endpoints for `GET/PATCH /api/skyweb/profile`.
+- Added native ASP.NET Core/C# endpoints for `GET/PATCH /api/skyweb/preferences`.
+- Added native ASP.NET Core/C# endpoints for `GET/PATCH /api/skyweb/alert-preferences`.
+- Added native SkyWeb permission enforcement for profile, dashboard preferences, and alert preferences.
+- Added C# profile service preserving `skyweb.user_profiles` and `skyweb.vw_user_profiles` contracts.
+- Added C# preference service preserving `skyweb.user_preferences` and `skyweb.vw_user_preferences` contracts.
+- Preserved default insertion, JSONB storage, validation, and existing React response shapes.
+- Kept saved views, dashboards, alert rules, alert notifications, and Signal Center on the temporary SkyServer proxy for DN-7/DN-8.
 
-## DN-0 to DN-2 — .NET Foundation
+## DN-5.2 — Indicator Series Regclass/NaN Fix
 
-- Preserved the pre-.NET baseline.
-- Added parallel `apps/web-dotnet` structure with `SkyWeb.Api` and `SkyWeb.Client`.
-- Added API health, DB health, Swagger, CORS, Dapper/Npgsql, and PostgreSQL connection wiring.
+- Cast PostgreSQL `to_regclass(...)` checks to `text` before Dapper/Npgsql materialization.
+- Scrubbed PostgreSQL numeric `NaN` values into JSON-safe `null` values for indicator series responses.
+- Stabilized native C# indicator-series reads used by dashboard mini charts.
 
-## DN-3 — .NET Client Wiring + Proxy Bridge
+## DN-5 — Authentication in C#
 
-- Wired the copied `.NET` lane React client to `SkyWeb.Api`.
-- Added temporary proxy fallback so `SkyWeb.Client -> SkyWeb.Api -> SkyServer` could run while route families migrate.
-- Moved the .NET-lane client to port `5175` so it can run beside the existing SkyWeb app on `5174`.
+- Added native `/api/auth/login`, `/api/auth/logout`, `/api/auth/change-password`, `/api/auth/me`, and `/api/auth/permissions`.
+- Preserved opaque bearer-token sessions using SHA-256 session-token hashes in `auth.sessions`.
+- Preserved permission reads from `auth.vw_user_permissions` and login/audit event writes.
 
-## DN-4 — Native Public Macro API
+## DN-4 — Public Macro REST Endpoints in C#
 
-- Replaced `/api/public/macro/*` proxy behavior with native ASP.NET Core/C# endpoints.
-- Kept `/api/auth/*` and `/api/skyweb/*` on proxy fallback at this stage.
+- Replaced `/api/public/macro/*` proxy fallback with native ASP.NET Core/C# endpoints.
+- Kept auth and SkyWeb user features on proxy fallback during the migration.
 
-## DN-5 — Native Auth API
+## DN-0 to DN-3 — .NET Transition Foundation
 
-- Replaced `/api/auth/*` proxy behavior with native ASP.NET Core/C# authentication endpoints.
-- Mirrored opaque bearer-token behavior using SHA-256 token hashes in `auth.sessions`.
-- Read user permissions from `auth.vw_user_permissions`.
-- Preserved SkyWeb `appCode: SKYWEB` membership behavior.
-- Left `/api/skyweb/*` on proxy fallback until DN-6 through DN-8.
-
-## DN-5.1 — Public Macro Series Stabilization
-
-- Began hardening native public macro reads for dashboard mini-chart usage.
-- Preserved the public macro response contract while investigating indicator-series 500s.
-
-## DN-5.2 — Indicator Series Regclass Fix
-
-- Fixed PostgreSQL `to_regclass(...)` materialization by casting the result to `text` before reading it through Dapper/Npgsql.
-- Scrubbed numeric `NaN` indicator-series values to `null` by casting through text before returning JSON.
-- Targeted endpoints: `/api/public/macro/indicators/{indicatorCode}/series`.
+- Added `apps/web-dotnet/SkyWeb.Api` and `apps/web-dotnet/SkyWeb.Client`.
+- Added health, DB health, Swagger, CORS, and local dev scripts.
+- Wired the copied React client to `SkyWeb.Api` with a temporary proxy bridge to SkyServer.

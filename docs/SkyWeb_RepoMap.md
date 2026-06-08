@@ -117,14 +117,17 @@ SkyWeb/
 │       │   │   ├── AuthController.cs
 │       │   │   ├── HealthController.cs
 │       │   │   ├── PublicMacroController.cs
-│       │   │   └── SkyServerProxyController.cs
+│       │   │   ├── SkyServerProxyController.cs
+│       │   │   └── SkyWebController.cs
 │       │   ├── Data/
 │       │   │   └── DbConnectionFactory.cs
 │       │   ├── DTOs/
 │       │   │   ├── Auth/
 │       │   │   │   └── AuthDtos.cs
-│       │   │   └── Health/
-│       │   │       └── HealthResponse.cs
+│       │   │   ├── Health/
+│       │   │   │   └── HealthResponse.cs
+│       │   │   └── SkyWeb/
+│       │   │       └── SkyWebDtos.cs
 │       │   ├── Middleware/
 │       │   │   └── AuthMiddleware.cs
 │       │   ├── Models/
@@ -179,7 +182,11 @@ SkyWeb/
 │       │       ├── AuthTokenService.cs
 │       │       ├── MacroReadService.cs
 │       │       ├── PublicMacroService.cs
-│       │       └── SkyServerProxyService.cs
+│       │       ├── SkyServerProxyService.cs
+│       │       ├── SkyWebAuthorizationService.cs
+│       │       ├── SkyWebJson.cs
+│       │       ├── SkyWebPreferencesService.cs
+│       │       └── SkyWebProfileService.cs
 │       └── SkyWeb.Client/
 │           ├── .env.example
 │           ├── index.html

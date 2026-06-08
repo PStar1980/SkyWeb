@@ -9,7 +9,7 @@ Detailed phase history now lives in [`change.log`](./change.log) so this README 
 ## Current Status
 
 **Current application phase:** Phase 8.8 — Alert Rule UX Polish  
-**Active transition lane:** DN-5.2 — Indicator Series Stabilization
+**Active transition lane:** DN-6 — SkyWeb Profile and Preferences in C#
 
 The original `apps/web` React/Vite application remains the working SkyWeb Analytics baseline. The new `apps/web-dotnet` lane is being built in parallel so the ASP.NET Core/C# API can be proven route-by-route without disrupting the existing application.
 
@@ -22,15 +22,17 @@ The .NET foundation is active:
 - DN-4 replaced the public macro proxy with native ASP.NET Core/C# endpoints.
 - DN-5 replaces `/api/auth/*` with native ASP.NET Core/C# authentication while leaving `/api/skyweb/*` on the temporary SkyServer proxy bridge.
 - DN-5.2 hardens native indicator-series reads by casting PostgreSQL `regclass` checks to text and scrubbing numeric `NaN` values before JSON serialization.
+- DN-6 replaces the core `/api/skyweb/profile`, `/api/skyweb/preferences`, and `/api/skyweb/alert-preferences` proxy routes with native ASP.NET Core/C# endpoints.
 
-Current DN-5.2 request flow:
+Current DN-6 request flow:
 
 ```text
 SkyWeb.Client
   → SkyWeb.Api
       → native C# public macro endpoints
       → native C# auth/session endpoints
-      → proxy to SkyServer Node API for remaining SkyWeb user route families
+      → native C# SkyWeb profile/preferences/alert-preferences endpoints
+      → proxy to SkyServer Node API for saved views, dashboards, alerts, and signal queues
 ```
 
 Proxy fallback is migration scaffolding only. Each route family will be replaced with native C# implementation as the DN phases progress.
@@ -168,8 +170,8 @@ The .NET migration uses a dedicated `DN-*` numbering system so it does not colli
 | DN-4     |     ✅ | Implement public macro REST endpoints in C#                            |
 | DN-5     |     ✅ | Implement authentication in C#                                         |
 | DN-5.1   |     ✅ | Stabilize public macro series reads                                    |
-| DN-5.2   |     🔄 | Fix indicator-table `regclass` materialization and `NaN` series values |
-| DN-6     |     🔜 | Implement SkyWeb profile and preferences in C#                         |
+| DN-5.2   |     ✅ | Fix indicator-table `regclass` materialization and `NaN` series values |
+| DN-6     |     🔄 | Implement SkyWeb profile and preferences in C#                         |
 | DN-7     |     🔜 | Implement saved views and dashboards in C#                             |
 | DN-8     |     🔜 | Implement alerts and Signal Center in C#                               |
 | DN-9     |     🔜 | Migrate charts to Apache ECharts + D3                                  |
@@ -213,7 +215,7 @@ SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on publi
 - `/account` is protected by the SkyWeb AuthContext and reads `/api/skyweb/profile`.
 - SkyWeb profiles and preferences are staged in the `skyweb` database schema.
 - SkyServer Admin controls which shared users have `SKYWEB` application membership and SkyWeb-specific roles.
-- During DN-5+, `SkyWeb.Api` serves `/api/public/macro/*` and `/api/auth/*` natively in C#. Remaining `/api/skyweb/*` user route families still proxy to SkyServer until DN-6 through DN-8.
+- During DN-6+, `SkyWeb.Api` serves `/api/public/macro/*`, `/api/auth/*`, `/api/skyweb/profile`, `/api/skyweb/preferences`, and `/api/skyweb/alert-preferences` natively in C#. Saved views, dashboards, alerts, and signal queues still proxy to SkyServer until DN-7 and DN-8.
 
 ## Primary Local URLs
 

@@ -4881,3 +4881,13 @@
 .skyweb-echarts-tooltip span {
   color: rgba(220, 232, 255, 0.72);
 }
+
+/* DN-9.2 chart architecture extraction */
+.skyweb-echarts-base {
+  width: 100%;
+  min-width: 0;
+}
+
+.skyweb-echarts-state {
+  width: 100%;
+}

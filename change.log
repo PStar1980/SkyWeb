@@ -1,66 +1,67 @@
 # SkyWeb Analytics Change Log
 
-Detailed implementation notes for SkyWeb feature phases and the .NET transition lane.
+Detailed implementation history was moved out of `README.md` so the README can stay focused on current operation, architecture, and roadmap.
+
+## DN-9.2 — Chart Architecture Extraction and Adapters
+
+- Added reusable .NET-lane chart architecture under `apps/web-dotnet/SkyWeb.Client/src/components/charts/`.
+- Added `echarts/EChartBase.jsx`, `MacroLineChart.jsx`, and `MultiSeriesMacroChart.jsx`.
+- Added shared chart modules for theme tokens, option builders, normalization helpers, and chart constants.
+- Added thin adapter modules for indicator series, view series, dashboard chart payloads, and future alert overlays.
+- Refactored `Sparkline.jsx` and `MultiSeriesSparkline.jsx` into compatibility wrappers so existing pages continue to work while the chart layer becomes reusable.
+- Added `.NET-lane` ECharts base styles in `App.css`.
+- Updated README, repo map, chart migration docs, and transition docs to mark DN-9.2 as the active chart architecture pass.
 
 ## DN-9.1 — ECharts + D3 Chart Engine Foundation
 
-- Added Apache ECharts and D3 to the root SkyWeb package dependencies for the .NET migration lane.
-- Replaced `apps/web-dotnet/SkyWeb.Client/src/components/Sparkline.jsx` with an ECharts-backed single-series line chart while preserving the existing component API used by chart panels and dashboard cards.
-- Replaced `apps/web-dotnet/SkyWeb.Client/src/components/MultiSeriesSparkline.jsx` with an ECharts-backed multi-series comparison chart while preserving the existing component API used by `ChartPanel.jsx`.
-- Used D3 `extent` and `ticks` helpers to compute stable y-axis ranges and tick values before handing options to ECharts.
-- Added ECharts tooltip and chart-container styling to the .NET-lane client stylesheet.
-- Cleared the DN-8 nullable build warning in `SkyWebAlertsService.CreateAlertRuleAsync` by safely falling back to the generated alert key and throwing an explicit reload error if the created row cannot be read back.
-- Preserved the legacy `apps/web` chart components as rollback baseline; DN-9.1 targets only `apps/web-dotnet/SkyWeb.Client`.
+- Added ECharts and D3 dependencies.
+- Replaced copied SVG sparkline internals in `SkyWeb.Client` with ECharts-backed single-series and multi-series charts.
+- Preserved parent component APIs for `ChartPanel`, dashboard mini charts, and indicator/detail pages.
+- Used D3 for value-range/tick calculations.
 
 ## DN-8 — Alerts and Signal Center in C#
 
-- Moved alert-rule CRUD, event history, alert-notification reads, acknowledge/dismiss actions, and Signal Center queue updates into native ASP.NET Core/C#.
-- Kept alert evaluation routes proxied to SkyServer because the worker/evaluator remains the source of truth for writing evaluation events and notifications.
+- Moved alert-rule CRUD, event history, alert notifications, and Signal Center queue actions into native ASP.NET Core/C#.
+- Kept alert evaluation routes proxied to SkyServer so the existing evaluator/worker remains the evaluation source of truth.
 
 ## DN-7.1 — Saved Views/Dashboards Build Stabilization
 
-- Fixed the initial C# dashboard service build blocker caused by local variable shadowing.
-- Cleared a nullable saved-view handoff warning.
+- Fixed dashboard service local variable shadowing build blocker.
+- Cleared a saved-view nullable handoff warning.
 
 ## DN-7 — Saved Views and Dashboards in C#
 
-- Moved saved-view CRUD, dashboard CRUD, and dashboard item CRUD into native ASP.NET Core/C#.
-- Preserved enrichment with macro view metadata, indicator details, stats, default dashboards, layout presets, and item positioning.
+- Moved saved-view and dashboard route families into native ASP.NET Core/C#.
+- Preserved dashboard item support for saved-view cards and direct indicator cards.
 
 ## DN-6 — SkyWeb Profile and Preferences in C#
 
-- Moved profile, member preferences, and alert preferences into native ASP.NET Core/C#.
-- Preserved existing permission checks, default preference insertion, validation, and JSONB storage.
+- Moved profile, preferences, and alert-preferences route families into native ASP.NET Core/C#.
 
 ## DN-5.2 — Indicator Series Regclass/NaN Fix
 
-- Cast PostgreSQL `to_regclass(...)` results to text before C# materialization.
-- Scrubbed PostgreSQL numeric `NaN` values into JSON-safe nulls for indicator series responses.
+- Cast PostgreSQL `to_regclass` checks to text before Dapper/Npgsql materialization.
+- Scrubbed numeric `NaN` values into JSON-safe nulls for indicator-series responses.
 
 ## DN-5.1 — Public Macro Series Stabilization
 
-- Hardened native C# public macro reads for indicator series and macro dashboard chart cards.
+- Hardened native C# macro reads for dashboard mini-chart series.
 
 ## DN-5 — Authentication in C#
 
-- Moved login, logout, change-password, `/me`, and permissions into native ASP.NET Core/C#.
-- Preserved opaque bearer tokens, SHA-256 session token storage, sliding expiry, login events, audit events, and app-scoped permissions.
+- Implemented native ASP.NET Core/C# auth endpoints for login, logout, change-password, me, and permissions.
 
 ## DN-4 — Public Macro REST Endpoints in C#
 
-- Moved public macro summary, views, columns, latest rows, view detail, indicators, indicator detail, and indicator series endpoints into native ASP.NET Core/C#.
+- Replaced public macro proxy endpoints with native ASP.NET Core/C# reads.
 
-## DN-3 — .NET Client Wiring + Proxy Bridge
-
-- Wired `SkyWeb.Client` to `SkyWeb.Api` and added temporary proxy fallback to SkyServer.
-- Moved the .NET-lane client to port 5175 for side-by-side testing with the legacy app.
-
-## DN-0 to DN-2 — .NET Foundation
+## DN-0 through DN-3 — .NET Transition Foundation
 
 - Preserved the pre-.NET baseline.
-- Added the parallel `apps/web-dotnet` structure.
-- Added ASP.NET Core health, DB health, CORS, Swagger, PostgreSQL connection factory, and development setup docs.
+- Created the parallel `apps/web-dotnet` lane.
+- Added health, DB health, Swagger, CORS, and temporary proxy fallback.
+- Wired copied `SkyWeb.Client` to `SkyWeb.Api` on port 5175.
 
 ## Phase 8 — Macro Alerts
 
-- Built alert rules, evaluation history, scheduler visibility, triggered notification queue, global signal surfacing, alert preferences, dedicated Signal Center, and alert-rule UX polish.
+- Added alert rules, evaluation history, triggered signal queue, app-wide signal surfacing, alert preferences, dedicated Signal Center, and alert-rule UX polish.

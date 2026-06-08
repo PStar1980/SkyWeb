@@ -72,7 +72,8 @@ DN-2  Configure API, CORS, Health, DB Connection
 DN-3  Wire SkyWeb.Client to SkyWeb.Api
 DN-4  Implement Public Macro REST Endpoints in C#        [implemented]
 DN-5  Implement Authentication in C#                   [implemented]
-DN-5.1 Stabilize Public Macro Series Reads              [current]
+DN-5.1 Stabilize Public Macro Series Reads              [implemented]
+DN-5.2 Fix Indicator Series Regclass/NaN Handling        [current]
 DN-6  Implement SkyWeb Profile and Preferences
 DN-7  Implement Saved Views and Dashboards
 DN-8  Implement Alerts and Signal Center
@@ -1009,6 +1010,10 @@ Preserve these behaviors initially.
 
 This phase replaces the `/api/auth/*` proxy fallback with native ASP.NET Core/C# endpoints while preserving the existing opaque bearer-token contract. Sessions remain stored in `auth.sessions` as SHA-256 token hashes, permissions are still read from `auth.vw_user_permissions`, and login/audit events continue to write into the existing auth schema. The remaining `/api/skyweb/*` route families stay on the proxy bridge until DN-6 through DN-8.
 
+## DN-5.2 stabilization note
+
+The native C# indicator-series endpoint needs to account for PostgreSQL-specific types and values that Node handled more loosely. `to_regclass(...)` returns `regclass`, which Npgsql should not materialize through `System.Object`; cast it to `text` before reading. Indicator value columns can also contain PostgreSQL numeric `NaN`, which should surface to the React client as `null` rather than causing JSON or numeric materialization failures.
+
 ## Goal
 
 Allow the new SkyWeb.Client to log in through SkyWeb.Api.
@@ -1102,31 +1107,6 @@ or a typed scoped service.
 - Expired/invalid token returns 401.
 - Frontend auth-expired event still works.
 - `/account` loads current profile after login.
-
----
-
-# DN-5.1 — Stabilize Public Macro Series Reads
-
-## Goal
-
-Harden the native C# public macro endpoints before migrating more authenticated SkyWeb route families. The dashboard mini-chart cards are now driven through `SkyWeb.Api`, so sparse market series must not produce C# materialization or JSON serialization failures.
-
-## Scope
-
-- Keep `/api/public/macro/*` native in `SkyWeb.Api`.
-- Project PostgreSQL non-finite numeric values such as `NaN` as `null` before Npgsql/Dapper materialization.
-- Apply safe projections to indicator series, macro view rows, and latest-row reads.
-- Preserve the existing public macro response contract: `ok`, `items`, `indicator`, `stats`, `total`, `limit`, and `offset`.
-- Leave `/api/skyweb/*` on the temporary SkyServer proxy bridge until DN-6 through DN-8.
-
-## Acceptance Criteria
-
-```text
-GET /api/public/macro/indicators/DGS7/series?limit=90
-GET /api/public/macro/indicators/DGS10/series?limit=90
-GET /api/public/macro/views/rates-curve?limit=5
-http://localhost:5175/dashboard mini chart cards render without 500 responses
-```
 
 ---
 

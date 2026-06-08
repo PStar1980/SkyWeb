@@ -9,7 +9,7 @@ Detailed phase history now lives in [`change.log`](./change.log) so this README 
 ## Current Status
 
 **Current application phase:** Phase 8.8 — Alert Rule UX Polish  
-**Active transition lane:** DN-7.1 — Saved Views/Dashboards Build Stabilization
+**Active transition lane:** DN-8 — Alerts and Signal Center in C#
 
 The original `apps/web` React/Vite application remains the working SkyWeb Analytics baseline. The new `apps/web-dotnet` lane is being built in parallel so the ASP.NET Core/C# API can be proven route-by-route without disrupting the existing application.
 
@@ -25,8 +25,9 @@ The .NET foundation is active:
 - DN-6 replaces the core `/api/skyweb/profile`, `/api/skyweb/preferences`, and `/api/skyweb/alert-preferences` proxy routes with native ASP.NET Core/C# endpoints.
 - DN-7 replaces `/api/skyweb/saved-views` and `/api/skyweb/dashboards` with native ASP.NET Core/C# endpoints.
 - DN-7.1 fixes the initial C# dashboard service build blocker caused by local variable shadowing and clears a nullable saved-view handoff warning.
+- DN-8 replaces alert-rule CRUD, event history, alert notifications, and Signal Center queue actions with native ASP.NET Core/C# endpoints while keeping evaluate-now routed through SkyServer worker logic for now.
 
-Current DN-7.1 request flow:
+Current DN-8 request flow:
 
 ```text
 SkyWeb.Client
@@ -35,7 +36,8 @@ SkyWeb.Client
       → native C# auth/session endpoints
       → native C# SkyWeb profile/preferences/alert-preferences endpoints
       → native C# saved-view and dashboard endpoints
-      → proxy to SkyServer Node API for alerts and signal queues
+      → native C# alert-rule, event-history, alert-notification, and Signal Center endpoints
+      → proxy to SkyServer Node API for evaluate-now alert execution
 ```
 
 Proxy fallback is migration scaffolding only. Each route family will be replaced with native C# implementation as the DN phases progress.
@@ -175,8 +177,9 @@ The .NET migration uses a dedicated `DN-*` numbering system so it does not colli
 | DN-5.1   |     ✅ | Stabilize public macro series reads                                    |
 | DN-5.2   |     ✅ | Fix indicator-table `regclass` materialization and `NaN` series values |
 | DN-6     |     ✅ | Implement SkyWeb profile and preferences in C#                         |
-| DN-7     |     🔄 | Implement saved views and dashboards in C#                             |
-| DN-8     |     🔜 | Implement alerts and Signal Center in C#                               |
+| DN-7     |     ✅ | Implement saved views and dashboards in C#                             |
+| DN-7.1   |     ✅ | Stabilize saved views/dashboards build                                 |
+| DN-8     |     ✅ | Implement alerts and Signal Center in C#                               |
 | DN-9     |     🔜 | Migrate charts to Apache ECharts + D3                                  |
 | DN-10    |     🔜 | Cutover and legacy removal                                             |
 
@@ -218,7 +221,7 @@ SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on publi
 - `/account` is protected by the SkyWeb AuthContext and reads `/api/skyweb/profile`.
 - SkyWeb profiles and preferences are staged in the `skyweb` database schema.
 - SkyServer Admin controls which shared users have `SKYWEB` application membership and SkyWeb-specific roles.
-- During DN-7+, `SkyWeb.Api` serves `/api/public/macro/*`, `/api/auth/*`, `/api/skyweb/profile`, `/api/skyweb/preferences`, `/api/skyweb/alert-preferences`, `/api/skyweb/saved-views`, and `/api/skyweb/dashboards` natively in C#. Alerts and signal queues still proxy to SkyServer until DN-8.
+- During DN-8, `SkyWeb.Api` serves `/api/public/macro/*`, `/api/auth/*`, `/api/skyweb/profile`, `/api/skyweb/preferences`, `/api/skyweb/alert-preferences`, `/api/skyweb/saved-views`, `/api/skyweb/dashboards`, `/api/skyweb/alerts`, and `/api/skyweb/alert-notifications` natively in C#. Alert evaluation endpoints still proxy to SkyServer so the existing worker/evaluator remains the source of truth for evaluation writes.
 
 ## Primary Local URLs
 

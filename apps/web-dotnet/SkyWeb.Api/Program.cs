@@ -25,6 +25,7 @@ builder.Services.AddScoped<SkyWebProfileService>();
 builder.Services.AddScoped<SkyWebPreferencesService>();
 builder.Services.AddScoped<SkyWebSavedViewsService>();
 builder.Services.AddScoped<SkyWebDashboardsService>();
+builder.Services.AddScoped<SkyWebAlertsService>();
 builder.Services.Configure<AuthOptions>(builder.Configuration.GetSection("Auth"));
 builder.Services.Configure<SkyServerOptions>(builder.Configuration.GetSection("SkyServer"));
 builder.Services.AddHttpClient<SkyServerProxyService>();

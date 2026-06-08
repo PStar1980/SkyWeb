@@ -1330,6 +1330,36 @@ SkyWeb.Api
 
 ---
 
+## DN-8 implementation note
+
+DN-8 moves the alert cockpit and Signal Center read/write surface into native ASP.NET Core/C#:
+
+```text
+GET    /api/skyweb/alerts
+POST   /api/skyweb/alerts
+GET    /api/skyweb/alerts/{alertKey}
+PATCH  /api/skyweb/alerts/{alertKey}
+DELETE /api/skyweb/alerts/{alertKey}
+GET    /api/skyweb/alerts/{alertKey}/events
+
+GET    /api/skyweb/alert-notifications
+PATCH  /api/skyweb/alert-notifications/{notificationId}/acknowledge
+PATCH  /api/skyweb/alert-notifications/{notificationId}/dismiss
+POST   /api/skyweb/alert-notifications/acknowledge-all
+POST   /api/skyweb/alert-notifications/dismiss-all
+```
+
+Alert evaluation remains intentionally proxied for this pass:
+
+```text
+POST /api/skyweb/alerts/evaluate
+POST /api/skyweb/alerts/{alertKey}/evaluate
+```
+
+That preserves the existing SkyServer worker/evaluator as the source of truth for event and notification creation while the .NET lane takes ownership of user-facing alert CRUD, event history reads, notification status updates, and Signal Center queue actions.
+
+---
+
 # DN-9 — ECharts + D3 Migration
 
 ## Goal

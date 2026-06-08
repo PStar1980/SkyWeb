@@ -34,11 +34,16 @@ public sealed class SkyWebController : ControllerBase
         "SKYWEB_PROFILE_WRITE"
     };
 
+
+    private const string AlertReadPermission = "SKYWEB_ALERT_READ";
+    private const string AlertWritePermission = "SKYWEB_ALERT_WRITE";
+
     private readonly SkyWebAuthorizationService _authorizationService;
     private readonly SkyWebProfileService _profileService;
     private readonly SkyWebPreferencesService _preferencesService;
     private readonly SkyWebSavedViewsService _savedViewsService;
     private readonly SkyWebDashboardsService _dashboardsService;
+    private readonly SkyWebAlertsService _alertsService;
     private readonly ILogger<SkyWebController> _logger;
 
     public SkyWebController(
@@ -47,6 +52,7 @@ public sealed class SkyWebController : ControllerBase
         SkyWebPreferencesService preferencesService,
         SkyWebSavedViewsService savedViewsService,
         SkyWebDashboardsService dashboardsService,
+        SkyWebAlertsService alertsService,
         ILogger<SkyWebController> logger)
     {
         _authorizationService = authorizationService;
@@ -54,6 +60,7 @@ public sealed class SkyWebController : ControllerBase
         _preferencesService = preferencesService;
         _savedViewsService = savedViewsService;
         _dashboardsService = dashboardsService;
+        _alertsService = alertsService;
         _logger = logger;
     }
 
@@ -455,6 +462,262 @@ public sealed class SkyWebController : ControllerBase
         {
             return HandleException(ex, "Native SkyWeb dashboard item remove failed.");
         }
+    }
+
+
+
+    [HttpGet("alerts")]
+    public async Task<IActionResult> ListAlerts()
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertReadPermission);
+
+            var items = await _alertsService.ListAlertRulesAsync(authContext!.User.UserId, ToQueryDictionary());
+            return Ok(new
+            {
+                ok = true,
+                total = items.Count,
+                items
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-rule list failed.");
+        }
+    }
+
+    [HttpPost("alerts")]
+    public async Task<IActionResult> CreateAlert([FromBody] JsonElement body)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertWritePermission);
+
+            var item = await _alertsService.CreateAlertRuleAsync(authContext!.User.UserId, body);
+            return Ok(new
+            {
+                ok = true,
+                item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-rule create failed.");
+        }
+    }
+
+    [HttpGet("alerts/{alertKey}/events")]
+    public async Task<IActionResult> ListAlertEvents(string alertKey)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertReadPermission);
+
+            var items = await _alertsService.ListAlertEventsAsync(authContext!.User.UserId, alertKey, ToQueryDictionary());
+            return Ok(new
+            {
+                ok = true,
+                total = items.Count,
+                items
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-rule event list failed.");
+        }
+    }
+
+    [HttpGet("alerts/{alertKey}")]
+    public async Task<IActionResult> GetAlert(string alertKey)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertReadPermission);
+
+            var item = await _alertsService.GetAlertRuleAsync(authContext!.User.UserId, alertKey);
+            if (item is null)
+            {
+                return NotFound(new
+                {
+                    ok = false,
+                    error = "Alert rule not found."
+                });
+            }
+
+            return Ok(new
+            {
+                ok = true,
+                item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-rule read failed.");
+        }
+    }
+
+    [HttpPatch("alerts/{alertKey}")]
+    public async Task<IActionResult> UpdateAlert(string alertKey, [FromBody] JsonElement body)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertWritePermission);
+
+            var item = await _alertsService.UpdateAlertRuleAsync(authContext!.User.UserId, alertKey, body);
+            return Ok(new
+            {
+                ok = true,
+                item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-rule update failed.");
+        }
+    }
+
+    [HttpDelete("alerts/{alertKey}")]
+    public async Task<IActionResult> RemoveAlert(string alertKey)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertWritePermission);
+
+            var result = await _alertsService.RemoveAlertRuleAsync(authContext!.User.UserId, alertKey);
+            return Ok(new
+            {
+                ok = true,
+                removed = result.Removed,
+                alertKey = result.AlertKey
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-rule remove failed.");
+        }
+    }
+
+    [HttpGet("alert-notifications")]
+    public async Task<IActionResult> ListAlertNotifications()
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertReadPermission);
+
+            var result = await _alertsService.ListAlertNotificationsAsync(authContext!.User.UserId, ToQueryDictionary());
+            return Ok(new
+            {
+                ok = true,
+                total = result.Total,
+                summary = result.Summary,
+                items = result.Items
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-notification list failed.");
+        }
+    }
+
+    [HttpPatch("alert-notifications/{notificationId}/acknowledge")]
+    public async Task<IActionResult> AcknowledgeAlertNotification(string notificationId)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertWritePermission);
+
+            var item = await _alertsService.AcknowledgeAlertNotificationAsync(authContext!.User.UserId, notificationId);
+            return Ok(new
+            {
+                ok = true,
+                item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-notification acknowledge failed.");
+        }
+    }
+
+    [HttpPatch("alert-notifications/{notificationId}/dismiss")]
+    public async Task<IActionResult> DismissAlertNotification(string notificationId)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertWritePermission);
+
+            var item = await _alertsService.DismissAlertNotificationAsync(authContext!.User.UserId, notificationId);
+            return Ok(new
+            {
+                ok = true,
+                item
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-notification dismiss failed.");
+        }
+    }
+
+    [HttpPost("alert-notifications/acknowledge-all")]
+    public async Task<IActionResult> AcknowledgeAllAlertNotifications([FromBody] JsonElement body)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertWritePermission);
+
+            var result = await _alertsService.AcknowledgeAllAlertNotificationsAsync(authContext!.User.UserId, body);
+            return Ok(new
+            {
+                ok = true,
+                acknowledgedCount = result.AcknowledgedCount
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-notification bulk acknowledge failed.");
+        }
+    }
+
+    [HttpPost("alert-notifications/dismiss-all")]
+    public async Task<IActionResult> DismissAllAlertNotifications([FromBody] JsonElement body)
+    {
+        try
+        {
+            var authContext = GetAuthContext();
+            _authorizationService.RequirePermission(authContext, AlertWritePermission);
+
+            var result = await _alertsService.DismissAllAlertNotificationsAsync(authContext!.User.UserId, body);
+            return Ok(new
+            {
+                ok = true,
+                dismissedCount = result.DismissedCount
+            });
+        }
+        catch (Exception ex)
+        {
+            return HandleException(ex, "Native SkyWeb alert-notification bulk dismiss failed.");
+        }
+    }
+
+
+    private Dictionary<string, string?> ToQueryDictionary()
+    {
+        return Request.Query.ToDictionary(
+            entry => entry.Key,
+            entry => (string?)entry.Value.ToString(),
+            StringComparer.OrdinalIgnoreCase);
     }
 
     private AuthContextDto? GetAuthContext()

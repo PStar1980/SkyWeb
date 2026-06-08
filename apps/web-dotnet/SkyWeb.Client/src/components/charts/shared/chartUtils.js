@@ -118,6 +118,63 @@ export function getReferenceSeries(seriesList = []) {
   );
 }
 
+export function getNearestPoint(points = [], event = {}) {
+  if (!points.length) {
+    return null;
+  }
+
+  const eventLabel = event.label || (event.date ? formatDate(event.date) : null);
+  const exactPoint = eventLabel ? points.find((point) => point.label === eventLabel) : null;
+
+  if (exactPoint) {
+    return exactPoint;
+  }
+
+  const eventTime = event.sortTime ?? getPointTime({ date: event.date });
+
+  if (!Number.isFinite(eventTime)) {
+    return points.at(-1) || null;
+  }
+
+  const pointTimes = points.map((point) => point.sortTime).filter((time) => Number.isFinite(time));
+  const minPointTime = Math.min(...pointTimes);
+  const maxPointTime = Math.max(...pointTimes);
+
+  if (pointTimes.length && (eventTime < minPointTime || eventTime > maxPointTime)) {
+    return null;
+  }
+
+  return points.reduce((nearest, point) => {
+    if (!Number.isFinite(point.sortTime)) {
+      return nearest;
+    }
+
+    if (!nearest) {
+      return point;
+    }
+
+    const currentDistance = Math.abs(point.sortTime - eventTime);
+    const nearestDistance = Math.abs(nearest.sortTime - eventTime);
+    return currentDistance < nearestDistance ? point : nearest;
+  }, null);
+}
+
+export function formatOverlayLabel(threshold = {}) {
+  const label = threshold.label || 'Alert threshold';
+  const value = formatNumber(threshold.value);
+
+  return `${label}: ${value}`;
+}
+
+function escapeHtml(value = '') {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 function getVisibleTooltipItems(params = []) {
   const items = Array.isArray(params) ? params : [params];
 
@@ -139,11 +196,24 @@ export function formatChartTooltip(params = [], fallbackLabel = 'Value') {
     .map((item) => {
       const value = Array.isArray(item.value) ? item.value.at(-1) : item.value;
       const marker = item.marker || '';
+      const alertEvent = item.data?.alertEvent;
+
+      if (alertEvent) {
+        const status = alertEvent.eventStatus
+          ? ` · ${String(alertEvent.eventStatus).replace(/_/g, ' ')}`
+          : '';
+        const titleText = alertEvent.alertTitle || 'Alert event';
+        const message = alertEvent.message
+          ? `<span class="skyweb-echarts-tooltip-alert-message">${escapeHtml(alertEvent.message)}</span>`
+          : '';
+        return `${marker}<span>${escapeHtml(`${titleText}${status}`)}:</span> <strong>${formatNumber(value)}</strong>${message}`;
+      }
+
       return `${marker}<span>${item.seriesName || fallbackLabel}:</span> <strong>${formatNumber(value)}</strong>`;
     })
     .join('<br/>');
 
-  return `<div class="skyweb-echarts-tooltip"><strong>${title}</strong><br/>${body || 'No value'}</div>`;
+  return `<div class="skyweb-echarts-tooltip"><strong>${title}</strong><br/>${body || '<span class="skyweb-echarts-tooltip-empty">No value</span>'}</div>`;
 }
 
 export function formatAxisDateLabel(value, pointCount = 0) {

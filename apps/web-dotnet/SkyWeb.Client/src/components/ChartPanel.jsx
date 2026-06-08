@@ -1,5 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { normalizeChartPeriodPreference } from '../context/PreferencesContext.jsx';
+import {
+  countAlertOverlays,
+  filterAlertOverlaysByMetricKeys,
+  hasAlertOverlays,
+} from './charts/adapters/alertOverlayAdapter.js';
 import { getPreferredSeriesKey, getSeriesCatalog, summarizeSeries } from '../utils/charting.js';
 import { formatNumber } from '../utils/formatters.js';
 import MetricQuickCard from './MetricQuickCard.jsx';
@@ -82,6 +87,8 @@ function getPeriodedSeries(series = [], periodKey = '3Y', latestDate = null) {
 }
 
 export default function ChartPanel({
+  alertOverlayLoading = false,
+  alertOverlays = {},
   rows = [],
   columns = [],
   title = 'Trend preview',
@@ -98,6 +105,7 @@ export default function ChartPanel({
   const [selectedKey, setSelectedKey] = useState('');
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [period, setPeriod] = useState(initialPeriod);
+  const [showAlertOverlays, setShowAlertOverlays] = useState(true);
   const activeKey = seriesKeys.includes(selectedKey) ? selectedKey : preferredKey;
   const activeMetric = catalog.find((item) => item.key === activeKey) || catalog[0] || null;
   const safeSelectedKeys = useMemo(() => {
@@ -148,6 +156,20 @@ export default function ChartPanel({
     .at(-1);
   const selectedPeriodLabel =
     PERIOD_OPTIONS.find((option) => option.value === period)?.label || 'Max';
+  const selectedOverlayMetricKeys = useMemo(
+    () => (multiSeries ? safeSelectedKeys : [activeKey]),
+    [activeKey, multiSeries, safeSelectedKeys],
+  );
+  const availableAlertOverlayCount = countAlertOverlays(alertOverlays);
+  const alertOverlaysAvailable = hasAlertOverlays(alertOverlays);
+  const visibleAlertOverlays = useMemo(
+    () =>
+      showAlertOverlays
+        ? filterAlertOverlaysByMetricKeys(alertOverlays, selectedOverlayMetricKeys)
+        : { events: [], thresholds: [] },
+    [alertOverlays, selectedOverlayMetricKeys, showAlertOverlays],
+  );
+  const visibleAlertOverlayCount = countAlertOverlays(visibleAlertOverlays);
 
   function toggleSeriesKey(key) {
     setSelectedKeys((currentKeys) => {
@@ -167,6 +189,12 @@ export default function ChartPanel({
   useEffect(() => {
     setPeriod(initialPeriod);
   }, [initialPeriod]);
+
+  useEffect(() => {
+    if (!alertOverlaysAvailable) {
+      setShowAlertOverlays(true);
+    }
+  }, [alertOverlaysAvailable]);
 
   useEffect(() => {
     if (!multiSeries || !catalog.length) {
@@ -229,6 +257,15 @@ export default function ChartPanel({
               ))}
             </select>
           </label>
+          {alertOverlaysAvailable && (
+            <button
+              className={`skyweb-chart-overlay-toggle${showAlertOverlays ? ' active' : ''}`}
+              onClick={() => setShowAlertOverlays((currentValue) => !currentValue)}
+              type="button"
+            >
+              {showAlertOverlays ? 'Alert overlays on' : 'Alert overlays off'}
+            </button>
+          )}
         </div>
       </div>
 
@@ -288,6 +325,14 @@ export default function ChartPanel({
             <span>
               {firstMultiPoint?.label || '—'} → {lastMultiPoint?.label || '—'}
             </span>
+            {alertOverlayLoading && <span>Loading alert overlays</span>}
+            {alertOverlaysAvailable && (
+              <span>
+                {showAlertOverlays
+                  ? `${formatNumber(visibleAlertOverlayCount)} alert overlay(s)`
+                  : `${formatNumber(availableAlertOverlayCount)} alert overlay(s) hidden`}
+              </span>
+            )}
           </>
         ) : (
           <>
@@ -298,6 +343,14 @@ export default function ChartPanel({
               {displaySeries[0]?.label || '—'} →{' '}
               {displaySeries[displaySeries.length - 1]?.label || '—'}
             </span>
+            {alertOverlayLoading && <span>Loading alert overlays</span>}
+            {alertOverlaysAvailable && (
+              <span>
+                {showAlertOverlays
+                  ? `${formatNumber(visibleAlertOverlayCount)} alert overlay(s)`
+                  : `${formatNumber(availableAlertOverlayCount)} alert overlay(s) hidden`}
+              </span>
+            )}
           </>
         )}
       </div>
@@ -307,6 +360,7 @@ export default function ChartPanel({
           {multiSeries ? (
             <>
               <MultiSeriesSparkline
+                alertOverlays={visibleAlertOverlays}
                 height={340}
                 label={`${title} selected series comparison`}
                 precision
@@ -325,6 +379,7 @@ export default function ChartPanel({
             </>
           ) : (
             <Sparkline
+              alertOverlays={visibleAlertOverlays}
               height={340}
               label={`${selectedLabel} trend`}
               points={displaySeries}

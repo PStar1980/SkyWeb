@@ -2,6 +2,7 @@ import MultiSeriesMacroChart from './charts/echarts/MultiSeriesMacroChart.jsx';
 import { COMPACT_MULTI_CHART_HEIGHT, DEFAULT_CHART_PADDING } from './charts/shared/chartTypes.js';
 
 export default function MultiSeriesSparkline({
+  alertOverlays = {},
   className = '',
   emptyMessage = 'No numeric comparison data available.',
   error = null,
@@ -14,6 +15,7 @@ export default function MultiSeriesSparkline({
 }) {
   return (
     <MultiSeriesMacroChart
+      alertOverlays={alertOverlays}
       className={className}
       emptyMessage={emptyMessage}
       error={error}

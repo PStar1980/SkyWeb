@@ -5,6 +5,7 @@ import { getChartPadding, normalizeChartSeries } from '../shared/chartUtils.js';
 import EChartBase from './EChartBase.jsx';
 
 export default function MultiSeriesMacroChart({
+  alertOverlays = {},
   className = '',
   emptyMessage = 'No numeric comparison data available.',
   error = null,
@@ -21,12 +22,13 @@ export default function MultiSeriesMacroChart({
   const option = useMemo(
     () =>
       buildMultiSeriesMacroOption({
+        alertOverlays,
         label,
         padding: resolvedPadding,
         precision,
         seriesList: safeSeries,
       }),
-    [label, precision, resolvedPadding, safeSeries],
+    [alertOverlays, label, precision, resolvedPadding, safeSeries],
   );
 
   return (

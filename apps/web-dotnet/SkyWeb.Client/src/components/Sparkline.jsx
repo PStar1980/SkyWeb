@@ -2,6 +2,7 @@ import MacroLineChart from './charts/echarts/MacroLineChart.jsx';
 import { COMPACT_CHART_HEIGHT, DEFAULT_CHART_PADDING } from './charts/shared/chartTypes.js';
 
 export default function Sparkline({
+  alertOverlays = {},
   className = '',
   emptyMessage = 'No numeric trend data available.',
   error = null,
@@ -15,6 +16,7 @@ export default function Sparkline({
 }) {
   return (
     <MacroLineChart
+      alertOverlays={alertOverlays}
       className={className}
       emptyMessage={emptyMessage}
       error={error}

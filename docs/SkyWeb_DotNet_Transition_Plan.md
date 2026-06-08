@@ -80,7 +80,8 @@ DN-7.1 Stabilize Saved Views/Dashboards Build             [implemented]
 DN-8  Implement Alerts and Signal Center                    [implemented]
 DN-9.1 ECharts + D3 Chart Engine Foundation                 [implemented]
 DN-9.2 Chart Architecture Extraction and Adapters            [implemented]
-DN-9.3 Chart UX Polish and Runtime Hardening                 [current]
+DN-9.3 Chart UX Polish and Runtime Hardening                 [implemented]
+DN-9.4 Alert Overlays and Chart Annotations                  [current]
 DN-9  ECharts + D3 Migration Polish
 DN-10 Cutover and Legacy Removal
 ```
@@ -1783,3 +1784,22 @@ The .NET-lane chart work now has reusable ECharts components, shared option/them
 ## DN-9.3 — Chart UX Polish and Runtime Hardening
 
 The extracted chart layer now has a more durable runtime wrapper, consistent chart state panels, adaptive axis-label behavior, tooltip filtering, and dense-series symbol control. This keeps the .NET-lane charts stable while future DN-9 passes add specialty visualizations and alert overlays.
+
+## DN-9.4 implementation note
+
+DN-9.4 connects the alert intelligence layer into the extracted ECharts chart system. The .NET-lane indicator and macro-view detail pages now fetch matching authenticated alert rules, recent rule events, and notification statuses, normalize them through the alert overlay adapter, and pass them into the reusable chart components.
+
+The chart option builders now support:
+
+- severity-aware horizontal threshold lines;
+- alert event / notification scatter markers;
+- tooltips that identify alert title, status, value, and message;
+- a chart-level overlay toggle so the user can hide overlays without losing the chart view.
+
+Acceptance checks for DN-9.4:
+
+- `/macro/indicators/:indicatorCode` loads normally while signed out.
+- Signed-in indicator detail pages show alert overlay counts when matching active indicator alerts exist.
+- `/macro/views/:viewKey` loads matching view-metric overlays only for selected chart series.
+- Overlay toggle hides/shows threshold lines and markers without reloading page data.
+- Dashboard mini charts remain restrained and do not inherit detail-chart overlays.

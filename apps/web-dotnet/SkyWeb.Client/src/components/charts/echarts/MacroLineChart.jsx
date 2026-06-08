@@ -5,6 +5,7 @@ import { getChartPadding, normalizeChartPoints } from '../shared/chartUtils.js';
 import EChartBase from './EChartBase.jsx';
 
 export default function MacroLineChart({
+  alertOverlays = {},
   className = '',
   emptyMessage = 'No numeric trend data available.',
   error = null,
@@ -22,13 +23,14 @@ export default function MacroLineChart({
   const option = useMemo(
     () =>
       buildMacroLineOption({
+        alertOverlays,
         label,
         padding: resolvedPadding,
         points: safePoints,
         precision,
         tone,
       }),
-    [label, precision, resolvedPadding, safePoints, tone],
+    [alertOverlays, label, precision, resolvedPadding, safePoints, tone],
   );
 
   return (

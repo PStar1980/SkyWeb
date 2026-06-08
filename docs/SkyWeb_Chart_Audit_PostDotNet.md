@@ -1,6 +1,6 @@
 # SkyWeb Chart Audit — Post-.NET Lane
 
-**Audit slice:** DN-9.3 — Chart UX Polish and Runtime Hardening  
+**Audit slice:** DN-9.4 — Alert Overlays and Chart Annotations  
 **Target client:** `apps/web-dotnet/SkyWeb.Client`
 
 ## Current Chart Components
@@ -86,3 +86,7 @@ Low-to-medium. The main risk is changing chart component props used across dashb
 - Axis labels thin automatically on long histories, while tooltip labels keep the full point context.
 - Dense precision charts suppress point symbols to prevent visual noise, but hover/crosshair behavior remains active.
 - Dashboard mini charts, indicator detail charts, and macro-view multi-series charts all share the same option and theme utilities.
+
+## DN-9.4 Notes
+
+The chart layer now accepts alert overlay payloads without forcing page-level chart rewrites. `ChartPanel` filters overlays to the currently selected indicator metric or selected macro-view series and passes only visible overlays into the ECharts wrappers. The reusable option builders render threshold lines and alert event markers, while mini dashboard charts remain clean by design.

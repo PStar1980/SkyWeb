@@ -4938,3 +4938,42 @@
 .skyweb-echarts-tooltip .skyweb-echarts-tooltip-empty {
   color: rgba(220, 232, 255, 0.58);
 }
+
+/* DN-9.4 alert overlays + chart annotations */
+.skyweb-chart-overlay-toggle {
+  align-self: end;
+  min-height: 2.45rem;
+  border: 1px solid rgba(255, 184, 107, 0.28);
+  border-radius: 999px;
+  background: rgba(5, 10, 20, 0.52);
+  color: rgba(255, 222, 186, 0.86);
+  font-size: 0.8rem;
+  font-weight: 900;
+  padding: 0.55rem 0.82rem;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    transform 160ms ease;
+}
+
+.skyweb-chart-overlay-toggle:hover,
+.skyweb-chart-overlay-toggle.active {
+  border-color: rgba(255, 184, 107, 0.56);
+  background: rgba(255, 184, 107, 0.12);
+  color: #ffd7a2;
+  transform: translateY(-1px);
+}
+
+.skyweb-chart-overlay-toggle:not(.active) {
+  border-color: rgba(138, 163, 202, 0.18);
+  color: rgba(220, 232, 255, 0.58);
+}
+
+.skyweb-echarts-tooltip .skyweb-echarts-tooltip-alert-message {
+  display: block;
+  max-width: 18rem;
+  margin-top: 0.25rem;
+  color: rgba(220, 232, 255, 0.58);
+  font-size: 0.74rem;
+}

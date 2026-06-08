@@ -2,6 +2,15 @@
 
 Detailed implementation notes for SkyWeb Analytics. The README now stays focused on current status, commands, and roadmap.
 
+## DN-7 — Saved Views and Dashboards in C#
+
+- Added native ASP.NET Core/C# endpoints for `GET/POST/PATCH/DELETE /api/skyweb/saved-views`.
+- Added native ASP.NET Core/C# endpoints for dashboard CRUD under `/api/skyweb/dashboards`.
+- Added native ASP.NET Core/C# endpoints for dashboard item add/update/remove under `/api/skyweb/dashboards/{dashboardKey}/items`.
+- Preserved saved macro view response shapes, pin/sort behavior, and macro-view enrichment.
+- Preserved dashboard response shapes, default-dashboard behavior, dashboard item layout fields, direct indicator items, and saved-view validation.
+- Narrowed the temporary SkyServer proxy bridge to alert rules and alert notifications only.
+
 ## DN-6 — SkyWeb Profile and Preferences in C#
 
 - Added native ASP.NET Core/C# endpoints for `GET/PATCH /api/skyweb/profile`.

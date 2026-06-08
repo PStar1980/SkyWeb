@@ -74,8 +74,8 @@ DN-4  Implement Public Macro REST Endpoints in C#        [implemented]
 DN-5  Implement Authentication in C#                   [implemented]
 DN-5.1 Stabilize Public Macro Series Reads              [implemented]
 DN-5.2 Fix Indicator Series Regclass/NaN Handling        [done]
-DN-6  Implement SkyWeb Profile and Preferences           [current]
-DN-7  Implement Saved Views and Dashboards
+DN-6  Implement SkyWeb Profile and Preferences           [implemented]
+DN-7  Implement Saved Views and Dashboards                [current]
 DN-8  Implement Alerts and Signal Center
 DN-9  ECharts + D3 Migration
 DN-10 Cutover and Legacy Removal

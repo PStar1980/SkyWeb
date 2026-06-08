@@ -460,14 +460,14 @@ public sealed class SkyWebDashboardsService
 
         if (patch.Count == 0)
         {
-            var dashboard = await GetDashboardAsync(userId, normalizedDashboardKey);
-            var existingItem = dashboard?.Items.FirstOrDefault(dashboardItem => dashboardItem.ItemId == normalizedItemId);
-            if (dashboard is null || existingItem is null)
+            var currentDashboard = await GetDashboardAsync(userId, normalizedDashboardKey);
+            var existingItem = currentDashboard?.Items.FirstOrDefault(dashboardItem => dashboardItem.ItemId == normalizedItemId);
+            if (currentDashboard is null || existingItem is null)
             {
                 throw new ApiException(StatusCodes.Status404NotFound, "Dashboard item not found.", new { dashboardKey = normalizedDashboardKey, itemId = normalizedItemId });
             }
 
-            return new DashboardMutationResult(Dashboard: dashboard, Item: existingItem);
+            return new DashboardMutationResult(Dashboard: currentDashboard, Item: existingItem);
         }
 
         var assignments = new List<string>();

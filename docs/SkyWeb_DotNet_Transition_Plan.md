@@ -75,7 +75,8 @@ DN-5  Implement Authentication in C#                   [implemented]
 DN-5.1 Stabilize Public Macro Series Reads              [implemented]
 DN-5.2 Fix Indicator Series Regclass/NaN Handling        [done]
 DN-6  Implement SkyWeb Profile and Preferences           [implemented]
-DN-7  Implement Saved Views and Dashboards                [current]
+DN-7  Implement Saved Views and Dashboards                [implemented]
+DN-7.1 Stabilize Saved Views/Dashboards Build             [current]
 DN-8  Implement Alerts and Signal Center
 DN-9  ECharts + D3 Migration
 DN-10 Cutover and Legacy Removal
@@ -1230,6 +1231,25 @@ skyweb.vw_saved_macro_views
 - Dashboard viewer works.
 - Presentation route still renders.
 - Dashboard item visualization modes still render.
+
+---
+
+# DN-7.1 — Stabilize Saved Views/Dashboards Build
+
+## Goal
+
+Clear the first DN-7 C# compile blocker before runtime validation.
+
+## Fixes
+
+- Rename the no-op dashboard item update local variable from `dashboard` to `currentDashboard` to avoid C# local-variable shadowing in `SkyWebDashboardsService.UpdateDashboardItemAsync`.
+- Use the normalized requested saved view key when the `RETURNING` row maps `ViewKey` as nullable, clearing the nullable warning in `SkyWebSavedViewsService.SaveViewAsync`.
+
+## Acceptance Criteria
+
+- `dotnet build apps/web-dotnet/SkyWeb.DotNet.sln` succeeds.
+- `npm run dotnet:api` starts successfully.
+- Saved views and dashboard pages remain ready for DN-7 runtime testing.
 
 ---
 

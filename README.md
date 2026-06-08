@@ -9,7 +9,7 @@ Detailed phase history now lives in [`change.log`](./change.log) so this README 
 ## Current Status
 
 **Current application phase:** Phase 8.8 — Alert Rule UX Polish  
-**Active transition lane:** DN-7 — Saved Views and Dashboards in C#
+**Active transition lane:** DN-7.1 — Saved Views/Dashboards Build Stabilization
 
 The original `apps/web` React/Vite application remains the working SkyWeb Analytics baseline. The new `apps/web-dotnet` lane is being built in parallel so the ASP.NET Core/C# API can be proven route-by-route without disrupting the existing application.
 
@@ -24,8 +24,9 @@ The .NET foundation is active:
 - DN-5.2 hardens native indicator-series reads by casting PostgreSQL `regclass` checks to text and scrubbing numeric `NaN` values before JSON serialization.
 - DN-6 replaces the core `/api/skyweb/profile`, `/api/skyweb/preferences`, and `/api/skyweb/alert-preferences` proxy routes with native ASP.NET Core/C# endpoints.
 - DN-7 replaces `/api/skyweb/saved-views` and `/api/skyweb/dashboards` with native ASP.NET Core/C# endpoints.
+- DN-7.1 fixes the initial C# dashboard service build blocker caused by local variable shadowing and clears a nullable saved-view handoff warning.
 
-Current DN-7 request flow:
+Current DN-7.1 request flow:
 
 ```text
 SkyWeb.Client

@@ -3,8 +3,14 @@ import { Link, useParams } from 'react-router-dom';
 import ChartPanel from '../components/ChartPanel.jsx';
 import StatCard from '../components/StatCard.jsx';
 import { EmptyState, ErrorState, LoadingState } from '../components/PageState.jsx';
+import { useAuth } from '../context/AuthContext.jsx';
 import { usePreferences } from '../context/PreferencesContext.jsx';
+import authService from '../services/authService.js';
 import macroService from '../services/macroService.js';
+import {
+  alertRuleMatchesIndicator,
+  buildChartAlertOverlays,
+} from '../components/charts/adapters/alertOverlayAdapter.js';
 import { getDateRangeFromRows } from '../utils/charting.js';
 import { formatCategory, formatDate, formatNumber, formatValue } from '../utils/formatters.js';
 
@@ -39,6 +45,7 @@ function getLatestPoint(rows = []) {
 
 export default function MacroIndicatorDetail() {
   const { indicatorCode } = useParams();
+  const { isAuthenticated } = useAuth();
   const { preferences } = usePreferences();
   const [indicator, setIndicator] = useState(null);
   const [stats, setStats] = useState(null);
@@ -47,6 +54,8 @@ export default function MacroIndicatorDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [tablePage, setTablePage] = useState(0);
+  const [alertOverlays, setAlertOverlays] = useState({ events: [], thresholds: [] });
+  const [alertOverlayLoading, setAlertOverlayLoading] = useState(false);
 
   const tablePageCount = useMemo(() => getPageCount(rows), [rows]);
   const safeTablePage = Math.min(tablePage, tablePageCount - 1);
@@ -102,6 +111,85 @@ export default function MacroIndicatorDetail() {
   useEffect(() => {
     setTablePage(0);
   }, [indicatorCode, rows.length]);
+
+  useEffect(() => {
+    let active = true;
+
+    async function loadAlertOverlays() {
+      setAlertOverlays({ events: [], thresholds: [] });
+
+      if (!isAuthenticated) {
+        setAlertOverlayLoading(false);
+        return;
+      }
+
+      setAlertOverlayLoading(true);
+
+      try {
+        const alertsPayload = await authService.listAlerts({
+          active: 'true',
+          targetType: 'indicator',
+        });
+        const matchingAlerts = (alertsPayload.items || []).filter((alertRule) =>
+          alertRuleMatchesIndicator(alertRule, indicatorCode),
+        );
+        if (!matchingAlerts.length) {
+          if (active) {
+            setAlertOverlays({ events: [], thresholds: [] });
+          }
+          return;
+        }
+
+        const alertKeys = new Set(matchingAlerts.map((alertRule) => alertRule.alertKey));
+        const eventEntries = await Promise.all(
+          matchingAlerts.map(async (alertRule) => {
+            const payload = await authService.listAlertEvents(alertRule.alertKey, { limit: 100 });
+            return [alertRule.alertKey, payload.items || []];
+          }),
+        );
+        const notificationsPayload = await authService.listAlertNotifications({
+          limit: 100,
+          status: 'all',
+        });
+        const notificationsByAlertKey = (notificationsPayload.items || []).reduce(
+          (accumulator, notification) => {
+            if (!alertKeys.has(notification.alertKey)) {
+              return accumulator;
+            }
+
+            accumulator[notification.alertKey] = accumulator[notification.alertKey] || [];
+            accumulator[notification.alertKey].push(notification);
+            return accumulator;
+          },
+          {},
+        );
+
+        if (active) {
+          setAlertOverlays(
+            buildChartAlertOverlays({
+              alertRules: matchingAlerts,
+              eventsByAlertKey: Object.fromEntries(eventEntries),
+              notificationsByAlertKey,
+            }),
+          );
+        }
+      } catch {
+        if (active) {
+          setAlertOverlays({ events: [], thresholds: [] });
+        }
+      } finally {
+        if (active) {
+          setAlertOverlayLoading(false);
+        }
+      }
+    }
+
+    loadAlertOverlays();
+
+    return () => {
+      active = false;
+    };
+  }, [indicatorCode, isAuthenticated]);
 
   return (
     <>
@@ -180,6 +268,8 @@ export default function MacroIndicatorDetail() {
           </section>
 
           <ChartPanel
+            alertOverlayLoading={alertOverlayLoading}
+            alertOverlays={alertOverlays}
             columns={SERIES_COLUMNS}
             defaultWindowSize={preferences.defaultChartWindow}
             rows={rows}

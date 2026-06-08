@@ -1,12 +1,8 @@
 # SkyWeb Change Log
 
-## 2026-06-08 — DN-9.4 Alert Overlays and Chart Annotations
+## DN-9.4.1 — Alert Overlay Page Wiring Fix
 
-- Added chart alert overlay plumbing in the .NET-lane client.
-- Indicator detail charts can now load matching active indicator alert rules and annotate thresholds/events when the user is signed in.
-- Macro-view detail charts can now load matching active view-metric alert rules and annotate selected series with relevant thresholds/events.
-- Added reusable alert overlay adapter helpers for threshold normalization, alert event/notification mapping, metric-key filtering, and overlay counts.
-- Extended the reusable ECharts chart option builders with severity-aware threshold mark lines and alert event scatter markers.
-- Added a chart-level alert overlay toggle and meta-strip overlay count.
-- Hardened alert tooltip rendering with escaped alert event messages.
-
+- Restored page-level alert overlay loading for the .NET-lane indicator detail page.
+- Restored page-level alert overlay loading for the .NET-lane macro-view detail page.
+- Indicator charts now fetch matching authenticated alert rules, rule event history, and notification history before passing overlays into ChartPanel.
+- Macro-view charts now fetch matching active view-metric alerts and filter overlays to selected chart series.

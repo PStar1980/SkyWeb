@@ -31,63 +31,6 @@ SkyWeb/
 │       ├── pre-rebase
 │       └── prepare-commit-msg
 ├── apps/
-│   ├── web/
-│   │   ├── index.html
-│   │   ├── vite.config.js
-│   │   └── src/
-│   │       ├── App.css
-│   │       ├── App.jsx
-│   │       ├── index.css
-│   │       ├── main.jsx
-│   │       ├── components/
-│   │       │   ├── ChartPanel.jsx
-│   │       │   ├── DashboardItemVisualization.jsx
-│   │       │   ├── DashboardSurface.jsx
-│   │       │   ├── MacroViewCatalogCard.jsx
-│   │       │   ├── MetricQuickCard.jsx
-│   │       │   ├── MultiSeriesSparkline.jsx
-│   │       │   ├── Navbar.jsx
-│   │       │   ├── PageState.jsx
-│   │       │   ├── ProtectedRoute.jsx
-│   │       │   ├── Sparkline.jsx
-│   │       │   ├── StatCard.jsx
-│   │       │   ├── StoryCard.jsx
-│   │       │   ├── TrendMetricCard.jsx
-│   │       │   └── ViewCard.jsx
-│   │       ├── constants/
-│   │       │   ├── branding.js
-│   │       │   └── dashboardModes.js
-│   │       ├── context/
-│   │       │   ├── AuthContext.jsx
-│   │       │   ├── DashboardsContext.jsx
-│   │       │   ├── PreferencesContext.jsx
-│   │       │   └── SavedViewsContext.jsx
-│   │       ├── pages/
-│   │       │   ├── Account.jsx
-│   │       │   ├── DashboardBuilder.jsx
-│   │       │   ├── DashboardViewer.jsx
-│   │       │   ├── Home.jsx
-│   │       │   ├── Login.jsx
-│   │       │   ├── MacroAlertDetail.jsx
-│   │       │   ├── MacroAlertPreferences.jsx
-│   │       │   ├── MacroAlerts.jsx
-│   │       │   ├── MacroAlertSignals.jsx
-│   │       │   ├── MacroIndicatorDetail.jsx
-│   │       │   ├── MacroIndicators.jsx
-│   │       │   ├── MacroOverview.jsx
-│   │       │   ├── MacroViewDetail.jsx
-│   │       │   ├── MacroViews.jsx
-│   │       │   ├── MemberDashboard.jsx
-│   │       │   └── SavedViews.jsx
-│   │       ├── services/
-│   │       │   ├── api.js
-│   │       │   ├── authService.js
-│   │       │   └── macroService.js
-│   │       └── utils/
-│   │           ├── alertSignals.js
-│   │           ├── charting.js
-│   │           ├── formatters.js
-│   │           └── macroStory.js
 │   └── web-dotnet/
 │       ├── SkyWeb.DotNet.sln
 │       ├── SkyWeb.Api/

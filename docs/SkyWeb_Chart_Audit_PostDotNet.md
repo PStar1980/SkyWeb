@@ -1,6 +1,6 @@
 # SkyWeb Chart Audit — Post-.NET Lane
 
-**Audit slice:** DN-9.4 — Alert Overlays and Chart Annotations  
+**Audit slice:** DN-9.4.2 — Alert Overlay Polish and Indicator Chart Cleanup  
 **Target client:** `apps/web-dotnet/SkyWeb.Client`
 
 ## Current Chart Components
@@ -90,3 +90,10 @@ Low-to-medium. The main risk is changing chart component props used across dashb
 ## DN-9.4 Notes
 
 The chart layer now accepts alert overlay payloads without forcing page-level chart rewrites. `ChartPanel` filters overlays to the currently selected indicator metric or selected macro-view series and passes only visible overlays into the ECharts wrappers. The reusable option builders render threshold lines and alert event markers, while mini dashboard charts remain clean by design.
+
+## DN-9.4.2 Notes
+
+- Threshold overlays remain the default chart alert layer.
+- Event markers are available through the alert overlay mode selector but are hidden by default to reduce noise.
+- Single-series indicator charts no longer render a redundant Metric selector or `Selected: Value` pill.
+- ECharts dirty-rect rendering is disabled to avoid hover trails/temporary line disappearance on dense canvas charts.

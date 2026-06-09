@@ -30,7 +30,7 @@ The optimized execution path is now underway:
 6. Replace current SVG sparkline/chart panels progressively.
 7. Use D3 for specialty helpers once ECharts is stable.
 
-DN-9.1 begins this work by replacing the copied `.NET-lane` `Sparkline.jsx` and `MultiSeriesSparkline.jsx` internals with ECharts renderers while keeping their existing public props stable for parent components. DN-9.2 then extracts that first pass into reusable chart architecture folders so future chart work can target stable ECharts components rather than page-level rendering code. DN-9.3 polishes the runtime and chart UX so the extracted components are safer under real dashboard/page conditions. DN-9.4 then connects alert thresholds and recent alert history into the detail-chart surface as optional overlays.
+DN-9.1 begins this work by replacing the copied `.NET-lane` `Sparkline.jsx` and `MultiSeriesSparkline.jsx` internals with ECharts renderers while keeping their existing public props stable for parent components. DN-9.2 then extracts that first pass into reusable chart architecture folders so future chart work can target stable ECharts components rather than page-level rendering code. DN-9.3 polishes the runtime and chart UX so the extracted components are safer under real dashboard/page conditions. DN-9.4 then connects alert thresholds and recent alert history into the detail-chart surface as optional overlays. DN-9.4.2 tightens that surface by defaulting to threshold-only overlays, making event markers optional, and removing redundant single-series indicator controls.
 ```
 
 This avoids doing the same chart migration twice.
@@ -1010,3 +1010,11 @@ This keeps the current dashboard, indicator detail, and macro-view pages stable 
 DN-9.4 keeps the chart migration inside the .NET-lane client and adds the first direct connection between charts and alert intelligence. Indicator detail and macro-view detail pages now fetch matching active alert rules for signed-in users, retrieve recent rule events and alert notifications, and render the result through reusable ECharts overlay support.
 
 The detail charts now support severity-aware threshold lines, alert event markers, notification-status markers, and a local overlay toggle. Dashboard mini charts intentionally remain restrained so small dashboard cards do not turn into visual soup.
+
+## DN-9.4.2 Update — Overlay Noise Control and Indicator Chart Cleanup
+
+DN-9.4.2 keeps the overlay feature useful without turning dense financial charts into visual soup. ChartPanel now separates threshold counts from event-marker counts, defaults overlay mode to threshold lines only, and lets the user choose `Thresholds + events` only when event markers are useful for inspection.
+
+The ECharts base wrapper also disables dirty-rect canvas rendering. This is a small runtime tradeoff in favor of cleaner pointer interaction on dense macro series, avoiding hover trails or temporary line-erasure artifacts while dragging across the chart.
+
+For single-series indicator pages, the Metric dropdown and `Selected: Value` meta pill are removed because every indicator only exposes the `Value` metric. Multi-series macro views keep their existing picker controls.

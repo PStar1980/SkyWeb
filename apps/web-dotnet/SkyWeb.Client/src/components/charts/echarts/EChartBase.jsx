@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts/core';
-import { LineChart } from 'echarts/charts';
+import { LineChart, ScatterChart } from 'echarts/charts';
 import {
   DataZoomComponent,
   GridComponent,
@@ -13,6 +13,7 @@ import { CanvasRenderer } from 'echarts/renderers';
 // Central ECharts registration for the .NET-lane chart stack.
 echarts.use([
   LineChart,
+  ScatterChart,
   DataZoomComponent,
   GridComponent,
   LegendComponent,
@@ -60,7 +61,9 @@ export default function EChartBase({
 
     chartRef.current = echarts.init(containerRef.current, null, {
       renderer: 'canvas',
-      useDirtyRect: true,
+      // Dirty-rect rendering can leave hover artifacts/trails on dense line charts.
+      // Full canvas repaint is slightly heavier but much cleaner for precision macro surfaces.
+      useDirtyRect: false,
     });
 
     const resizeChart = () => {
@@ -95,7 +98,7 @@ export default function EChartBase({
     }
 
     try {
-      chartRef.current.setOption(option, true);
+      chartRef.current.setOption(option, { lazyUpdate: false, notMerge: true });
       chartRef.current.resize();
       setRenderError(null);
     } catch (chartError) {

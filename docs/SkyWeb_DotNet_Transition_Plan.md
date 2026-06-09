@@ -81,7 +81,8 @@ DN-8  Implement Alerts and Signal Center                    [implemented]
 DN-9.1 ECharts + D3 Chart Engine Foundation                 [implemented]
 DN-9.2 Chart Architecture Extraction and Adapters            [implemented]
 DN-9.3 Chart UX Polish and Runtime Hardening                 [implemented]
-DN-9.4 Alert Overlays and Chart Annotations                  [current]
+DN-9.4 Alert Overlays and Chart Annotations                  [done]
+DN-9.4.2 Alert Overlay Polish and Indicator Chart Cleanup      [current]
 DN-9  ECharts + D3 Migration Polish
 DN-10 Cutover and Legacy Removal
 ```
@@ -1803,3 +1804,15 @@ Acceptance checks for DN-9.4:
 - `/macro/views/:viewKey` loads matching view-metric overlays only for selected chart series.
 - Overlay toggle hides/shows threshold lines and markers without reloading page data.
 - Dashboard mini charts remain restrained and do not inherit detail-chart overlays.
+
+## DN-9.4.2 implementation note
+
+DN-9.4.2 polishes the alert-overlay chart layer after threshold overlays were proven on indicator detail charts. The chart panel now defaults to threshold-only overlays, keeps dense event markers optional, and reports threshold/event counts separately so chart metadata stays readable. Indicator detail charts no longer show redundant metric selection controls when only the single `Value` series exists. The ECharts base wrapper now disables dirty-rect canvas rendering to avoid hover trails or temporary line disappearance while dragging across dense macro series.
+
+Acceptance checks for DN-9.4.2:
+
+- Indicator detail pages with one series show only the Period and Alerts controls, not a Metric dropdown.
+- The chart meta strip no longer shows `Selected: Value` for one-series indicator pages.
+- Alert overlay mode defaults to threshold lines only.
+- Event markers can still be enabled through `Thresholds + events`.
+- Dense charts do not leave hover trails or temporarily erase line segments during pointer movement.

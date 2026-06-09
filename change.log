@@ -1,8 +1,10 @@
 # SkyWeb Change Log
 
-## DN-9.4.1 — Alert Overlay Page Wiring Fix
 
-- Restored page-level alert overlay loading for the .NET-lane indicator detail page.
-- Restored page-level alert overlay loading for the .NET-lane macro-view detail page.
-- Indicator charts now fetch matching authenticated alert rules, rule event history, and notification history before passing overlays into ChartPanel.
-- Macro-view charts now fetch matching active view-metric alerts and filter overlays to selected chart series.
+## DN-9.4.2 — Alert Overlay Polish and Indicator Chart Cleanup
+
+- Defaulted chart alert overlays to threshold-only mode.
+- Added optional `Thresholds + events` mode so dense event markers stay available without overwhelming charts.
+- Split alert overlay counts into clearer threshold/event-marker metadata.
+- Removed redundant Metric dropdown and `Selected: Value` pill for single-series indicator detail charts.
+- Disabled ECharts dirty-rect canvas rendering to avoid hover trails or temporary line disappearance while dragging over dense chart lines.

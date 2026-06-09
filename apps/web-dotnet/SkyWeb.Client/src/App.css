@@ -4939,6 +4939,15 @@
   color: rgba(220, 232, 255, 0.58);
 }
 
+.skyweb-chart-overlay-picker {
+  min-width: 180px;
+}
+
+.skyweb-chart-overlay-picker .form-select {
+  border-color: rgba(255, 184, 107, 0.32);
+  color: #ffd7a2;
+}
+
 /* DN-9.4 alert overlays + chart annotations */
 .skyweb-chart-overlay-toggle {
   align-self: end;

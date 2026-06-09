@@ -55,12 +55,14 @@ function getModeOptionsForSource(itemSource = 'indicator', currentMode = '') {
   const options = DASHBOARD_ITEM_MODE_OPTIONS.filter((option) => allowedModes.has(option.value));
 
   if (currentMode && !allowedModes.has(currentMode)) {
-    const legacyOption = DASHBOARD_ITEM_MODE_OPTIONS.find((option) => option.value === currentMode);
+    const currentModeOption = DASHBOARD_ITEM_MODE_OPTIONS.find(
+      (option) => option.value === currentMode,
+    );
 
-    if (legacyOption) {
+    if (currentModeOption) {
       return [
         ...options,
-        { ...legacyOption, label: `${legacyOption.label} (legacy lens summary)` },
+        { ...currentModeOption, label: `${currentModeOption.label} (saved lens summary)` },
       ];
     }
   }

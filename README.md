@@ -7,9 +7,9 @@ SkyServer Admin remains the private control plane for ingestion, tools, automati
 ## Current Status
 
 **Historical feature baseline:** Phase 8.8 — Macro Alerts complete  
-**Active implementation:** DN-10.1 — Legacy Client Removal and Reference Cleanup
+**Active implementation:** Phase 9.1 — Portfolio Presentation Foundation
 
-DN-10 promoted the ASP.NET Core / C# lane as the default SkyWeb development and build path. DN-10.1 removes the old React-only client from the repository and cleans the remaining references so the repo now has one active SkyWeb client.
+The .NET transition is complete. DN-10 promoted the ASP.NET Core / C# lane as the default SkyWeb development and build path, and DN-10.1 removed the retired React-only client. Phase 9 shifts SkyWeb from migration work into portfolio and presentation polish.
 
 ```text
 Primary client/API path:
@@ -46,7 +46,7 @@ POST /api/skyweb/alerts/{alertKey}/evaluate
 
 Those continue to route through SkyServer because SkyServer currently owns ingestion, workers, scheduler/listener behavior, and alert evaluation writes. This is intentional, not a migration gap.
 
-Current DN-10.1 request flow:
+Current request flow:
 
 ```text
 SkyWeb.Client
@@ -184,17 +184,28 @@ The .NET migration uses a dedicated `DN-*` numbering system so it does not colli
 
 ## SkyWeb Feature Roadmap
 
-| Phase   | Status | Objective                                                                                                            |
-| ------- | -----: | -------------------------------------------------------------------------------------------------------------------- |
-| Phase 1 |     ✅ | SkyWeb foundation: identity, README, package scripts, environment template, API client, and route shell              |
-| Phase 2 |     ✅ | SkyServer public macro API bridge: safe unauthenticated macro endpoints with public limits                           |
-| Phase 3 |     ✅ | Macro Dashboard v1: live overview, curated view cards, drilldowns, formatted tables, and indicator explorer          |
-| Phase 4 |     ✅ | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation |
-| Phase 5 |     ✅ | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces             |
-| Phase 6 |     ✅ | Profile and preferences UI: editable member profile, saved display preferences, and account settings                 |
-| Phase 7 |     ✅ | Saved dashboards and watchlists: personalized dashboard builder, presentation mode, analytical view polish           |
-| Phase 8 |     ✅ | Macro alerts: alert rules, evaluation history, signal queue, preferences, Signal Center, and alert-rule UX polish    |
-| Phase 9 |     🔜 | Public portfolio polish: screenshots, GitHub/LinkedIn proof assets, and presentation-ready feature storytelling      |
+| Phase   | Status | Objective                                                                                                                    |
+| ------- | -----: | ---------------------------------------------------------------------------------------------------------------------------- |
+| Phase 1 |     ✅ | SkyWeb foundation: identity, README, package scripts, environment template, API client, and route shell                      |
+| Phase 2 |     ✅ | SkyServer public macro API bridge: safe unauthenticated macro endpoints with public limits                                   |
+| Phase 3 |     ✅ | Macro Dashboard v1: live overview, curated view cards, drilldowns, formatted tables, and indicator explorer                  |
+| Phase 4 |     ✅ | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation         |
+| Phase 5 |     ✅ | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces                     |
+| Phase 6 |     ✅ | Profile and preferences UI: editable member profile, saved display preferences, and account settings                         |
+| Phase 7 |     ✅ | Saved dashboards and watchlists: personalized dashboard builder, presentation mode, analytical view polish                   |
+| Phase 8 |     ✅ | Macro alerts: alert rules, evaluation history, signal queue, preferences, Signal Center, and alert-rule UX polish            |
+| Phase 9 |     🔥 | Public portfolio polish: feature tour, architecture story, GitHub/LinkedIn proof assets, and presentation-ready storytelling |
+
+## Portfolio / Presentation Assets
+
+Phase 9 starts the portfolio-polish lane. These documents translate the working product into material that can be used for GitHub, LinkedIn, interview prep, screenshots, and live demos.
+
+| Asset                                                              | Purpose                                                                   |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| [`docs/SkyWeb_Portfolio_Brief.md`](docs/SkyWeb_Portfolio_Brief.md) | Concise portfolio story, technical proof points, and architecture summary |
+| [`docs/SkyWeb_Feature_Tour.md`](docs/SkyWeb_Feature_Tour.md)       | Guided product walkthrough and screenshot capture plan                    |
+| [`docs/SkyWeb_Demo_Script.md`](docs/SkyWeb_Demo_Script.md)         | Five-minute interview/demo narrative                                      |
+| [`docs/SkyWeb_Phase_9_Roadmap.md`](docs/SkyWeb_Phase_9_Roadmap.md) | Phase 9 execution plan and remaining polish slices                        |
 
 ## Relationship to SkyServer
 

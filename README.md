@@ -9,7 +9,7 @@ Detailed phase history now lives in [`change.log`](./change.log) so this README 
 ## Current Status
 
 **Current application phase:** Phase 8.8 — Alert Rule UX Polish  
-**Active transition lane:** DN-9.4 — Alert Overlays and Chart Annotations
+**Active transition lane:** DN-9.4.2 — Alert Overlay Polish + Indicator Chart Cleanup
 
 The original `apps/web` React/Vite application remains the working SkyWeb Analytics baseline. The new `apps/web-dotnet` lane is being built in parallel so the ASP.NET Core/C# API can be proven route-by-route without disrupting the existing application.
 
@@ -29,9 +29,11 @@ The .NET foundation is active:
 - DN-9.1 begins the chart migration inside `SkyWeb.Client` by replacing the copied SVG sparkline renderers with Apache ECharts-powered single-series and multi-series charts, using D3 for value-range/tick calculations.
 - DN-9.2 extracts the ECharts logic into reusable chart architecture folders (`components/charts/echarts`, `shared`, and `adapters`) while keeping legacy `Sparkline`/`MultiSeriesSparkline` wrappers stable for existing pages.
 - DN-9.3 hardens the ECharts runtime wrapper and polishes chart UX with consistent loading/empty/error states, adaptive axis labels, denser-series symbol control, tooltip/crosshair consistency, and safer chart rendering.
-- DN-9.4 connects alert rules, thresholds, and alert event/notification history into the .NET-lane chart surface with toggleable severity-aware overlays on indicator and macro-view detail charts.
+- DN-9.4 connects alert rules, thresholds, and alert event/notification history into the .NET-lane chart surface with severity-aware overlays on indicator and macro-view detail charts.
 
-Current DN-9.4 request flow:
+- DN-9.4.2 polishes alert overlays by defaulting to threshold-only mode, making event markers optional, fixing ECharts hover-trail artifacts on dense canvas charts, and removing redundant single-indicator metric controls.
+
+Current DN-9.4.2 request flow:
 
 ```text
 SkyWeb.Client
@@ -188,6 +190,7 @@ The .NET migration uses a dedicated `DN-*` numbering system so it does not colli
 | DN-9.2   |     ✅ | Extract reusable ECharts chart architecture and frontend adapters      |
 | DN-9.3   |     ✅ | Polish chart UX and harden ECharts runtime behavior                    |
 | DN-9.4   |     ✅ | Add alert overlays and chart annotations                               |
+| DN-9.4.2 |     ✅ | Polish overlay counts/modes and indicator chart controls               |
 | DN-9     |     🚧 | Complete chart migration polish and specialty visuals                  |
 | DN-10    |     🔜 | Cutover and legacy removal                                             |
 
@@ -229,7 +232,7 @@ SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on publi
 - `/account` is protected by the SkyWeb AuthContext and reads `/api/skyweb/profile`.
 - SkyWeb profiles and preferences are staged in the `skyweb` database schema.
 - SkyServer Admin controls which shared users have `SKYWEB` application membership and SkyWeb-specific roles.
-- During DN-9.4, `SkyWeb.Api` serves `/api/public/macro/*`, `/api/auth/*`, `/api/skyweb/profile`, `/api/skyweb/preferences`, `/api/skyweb/alert-preferences`, `/api/skyweb/saved-views`, `/api/skyweb/dashboards`, `/api/skyweb/alerts`, and `/api/skyweb/alert-notifications` natively in C#. Alert evaluation endpoints still proxy to SkyServer so the existing worker/evaluator remains the source of truth for evaluation writes.
+- During DN-9.4.2, `SkyWeb.Api` serves `/api/public/macro/*`, `/api/auth/*`, `/api/skyweb/profile`, `/api/skyweb/preferences`, `/api/skyweb/alert-preferences`, `/api/skyweb/saved-views`, `/api/skyweb/dashboards`, `/api/skyweb/alerts`, and `/api/skyweb/alert-notifications` natively in C#. Alert evaluation endpoints still proxy to SkyServer so the existing worker/evaluator remains the source of truth for evaluation writes.
 
 ## Primary Local URLs
 

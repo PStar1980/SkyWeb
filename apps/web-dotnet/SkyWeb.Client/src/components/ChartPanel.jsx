@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { normalizeChartPeriodPreference } from '../context/PreferencesContext.jsx';
 import {
-  countAlertOverlays,
+  countAlertOverlayParts,
   filterAlertOverlaysByMetricKeys,
+  filterAlertOverlaysByMode,
   hasAlertOverlays,
 } from './charts/adapters/alertOverlayAdapter.js';
 import { getPreferredSeriesKey, getSeriesCatalog, summarizeSeries } from '../utils/charting.js';
@@ -24,6 +25,12 @@ const PERIOD_YEARS = new Map(PERIOD_OPTIONS.map((option) => [option.value, optio
 const DEFAULT_MULTI_SERIES_COUNT = 3;
 const MAX_MULTI_SERIES_COUNT = 5;
 const MULTI_SERIES_PICKER_LIMIT = 12;
+const DEFAULT_ALERT_OVERLAY_MODE = 'thresholds';
+const ALERT_OVERLAY_MODE_OPTIONS = [
+  { label: 'Thresholds', value: 'thresholds' },
+  { label: 'Thresholds + events', value: 'events' },
+  { label: 'Off', value: 'off' },
+];
 
 function getDefaultSelectedKeys(catalog = []) {
   return catalog
@@ -60,6 +67,10 @@ function subtractYears(date, years) {
   const nextDate = new Date(date);
   nextDate.setFullYear(nextDate.getFullYear() - years);
   return nextDate;
+}
+
+function formatOverlayCount(value, noun) {
+  return `${formatNumber(value)} ${noun}${value === 1 ? '' : 's'}`;
 }
 
 function getPeriodedSeries(series = [], periodKey = '3Y', latestDate = null) {
@@ -105,7 +116,7 @@ export default function ChartPanel({
   const [selectedKey, setSelectedKey] = useState('');
   const [selectedKeys, setSelectedKeys] = useState([]);
   const [period, setPeriod] = useState(initialPeriod);
-  const [showAlertOverlays, setShowAlertOverlays] = useState(true);
+  const [alertOverlayMode, setAlertOverlayMode] = useState(DEFAULT_ALERT_OVERLAY_MODE);
   const activeKey = seriesKeys.includes(selectedKey) ? selectedKey : preferredKey;
   const activeMetric = catalog.find((item) => item.key === activeKey) || catalog[0] || null;
   const safeSelectedKeys = useMemo(() => {
@@ -144,6 +155,7 @@ export default function ChartPanel({
   );
   const summary = useMemo(() => summarizeSeries(displaySeries), [displaySeries]);
   const selectedLabel = activeMetric?.label || 'Metric';
+  const hasMultipleMetricChoices = catalog.length > 1;
   const quickMetrics = catalog.slice(0, multiSeries ? MULTI_SERIES_PICKER_LIMIT : 6);
   const firstMultiPoint = multiDisplaySeries
     .flatMap((series) => series.points)
@@ -160,16 +172,17 @@ export default function ChartPanel({
     () => (multiSeries ? safeSelectedKeys : [activeKey]),
     [activeKey, multiSeries, safeSelectedKeys],
   );
-  const availableAlertOverlayCount = countAlertOverlays(alertOverlays);
-  const alertOverlaysAvailable = hasAlertOverlays(alertOverlays);
-  const visibleAlertOverlays = useMemo(
-    () =>
-      showAlertOverlays
-        ? filterAlertOverlaysByMetricKeys(alertOverlays, selectedOverlayMetricKeys)
-        : { events: [], thresholds: [] },
-    [alertOverlays, selectedOverlayMetricKeys, showAlertOverlays],
+  const metricAlertOverlays = useMemo(
+    () => filterAlertOverlaysByMetricKeys(alertOverlays, selectedOverlayMetricKeys),
+    [alertOverlays, selectedOverlayMetricKeys],
   );
-  const visibleAlertOverlayCount = countAlertOverlays(visibleAlertOverlays);
+  const alertOverlaysAvailable = hasAlertOverlays(metricAlertOverlays);
+  const visibleAlertOverlays = useMemo(
+    () => filterAlertOverlaysByMode(metricAlertOverlays, alertOverlayMode),
+    [alertOverlayMode, metricAlertOverlays],
+  );
+  const availableAlertOverlayParts = countAlertOverlayParts(metricAlertOverlays);
+  const visibleAlertOverlayParts = countAlertOverlayParts(visibleAlertOverlays);
 
   function toggleSeriesKey(key) {
     setSelectedKeys((currentKeys) => {
@@ -192,7 +205,7 @@ export default function ChartPanel({
 
   useEffect(() => {
     if (!alertOverlaysAvailable) {
-      setShowAlertOverlays(true);
+      setAlertOverlayMode(DEFAULT_ALERT_OVERLAY_MODE);
     }
   }, [alertOverlaysAvailable]);
 
@@ -227,7 +240,7 @@ export default function ChartPanel({
           </p>
         </div>
         <div className="skyweb-chart-controls">
-          {!multiSeries && (
+          {!multiSeries && hasMultipleMetricChoices && (
             <label className="skyweb-chart-picker">
               <span>Metric</span>
               <select
@@ -258,13 +271,20 @@ export default function ChartPanel({
             </select>
           </label>
           {alertOverlaysAvailable && (
-            <button
-              className={`skyweb-chart-overlay-toggle${showAlertOverlays ? ' active' : ''}`}
-              onClick={() => setShowAlertOverlays((currentValue) => !currentValue)}
-              type="button"
-            >
-              {showAlertOverlays ? 'Alert overlays on' : 'Alert overlays off'}
-            </button>
+            <label className="skyweb-chart-picker skyweb-chart-overlay-picker">
+              <span>Alerts</span>
+              <select
+                className="form-select"
+                onChange={(event) => setAlertOverlayMode(event.target.value)}
+                value={alertOverlayMode}
+              >
+                {ALERT_OVERLAY_MODE_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </label>
           )}
         </div>
       </div>
@@ -298,7 +318,7 @@ export default function ChartPanel({
             })}
           </div>
         </div>
-      ) : (
+      ) : hasMultipleMetricChoices ? (
         <div className="skyweb-metric-option-grid">
           {quickMetrics.map((metric) => (
             <MetricQuickCard
@@ -309,7 +329,7 @@ export default function ChartPanel({
             />
           ))}
         </div>
-      )}
+      ) : null}
 
       <div className="skyweb-chart-meta-strip">
         {multiSeries ? (
@@ -327,16 +347,31 @@ export default function ChartPanel({
             </span>
             {alertOverlayLoading && <span>Loading alert overlays</span>}
             {alertOverlaysAvailable && (
-              <span>
-                {showAlertOverlays
-                  ? `${formatNumber(visibleAlertOverlayCount)} alert overlay(s)`
-                  : `${formatNumber(availableAlertOverlayCount)} alert overlay(s) hidden`}
-              </span>
+              <>
+                {visibleAlertOverlayParts.thresholds > 0 && (
+                  <span>
+                    {formatOverlayCount(visibleAlertOverlayParts.thresholds, 'threshold')}
+                  </span>
+                )}
+                {alertOverlayMode === 'events' && visibleAlertOverlayParts.events > 0 && (
+                  <span>{formatOverlayCount(visibleAlertOverlayParts.events, 'event marker')}</span>
+                )}
+                {alertOverlayMode === 'thresholds' && availableAlertOverlayParts.events > 0 && (
+                  <span>
+                    {formatOverlayCount(availableAlertOverlayParts.events, 'event marker')} hidden
+                  </span>
+                )}
+                {alertOverlayMode === 'off' && (
+                  <span>
+                    {formatOverlayCount(availableAlertOverlayParts.total, 'alert overlay')} hidden
+                  </span>
+                )}
+              </>
             )}
           </>
         ) : (
           <>
-            <span>Selected: {selectedLabel}</span>
+            {hasMultipleMetricChoices && <span>Selected: {selectedLabel}</span>}
             <span>{selectedPeriodLabel} period</span>
             <span>{formatNumber(displaySeries.length)} plotted point(s)</span>
             <span>
@@ -345,11 +380,26 @@ export default function ChartPanel({
             </span>
             {alertOverlayLoading && <span>Loading alert overlays</span>}
             {alertOverlaysAvailable && (
-              <span>
-                {showAlertOverlays
-                  ? `${formatNumber(visibleAlertOverlayCount)} alert overlay(s)`
-                  : `${formatNumber(availableAlertOverlayCount)} alert overlay(s) hidden`}
-              </span>
+              <>
+                {visibleAlertOverlayParts.thresholds > 0 && (
+                  <span>
+                    {formatOverlayCount(visibleAlertOverlayParts.thresholds, 'threshold')}
+                  </span>
+                )}
+                {alertOverlayMode === 'events' && visibleAlertOverlayParts.events > 0 && (
+                  <span>{formatOverlayCount(visibleAlertOverlayParts.events, 'event marker')}</span>
+                )}
+                {alertOverlayMode === 'thresholds' && availableAlertOverlayParts.events > 0 && (
+                  <span>
+                    {formatOverlayCount(availableAlertOverlayParts.events, 'event marker')} hidden
+                  </span>
+                )}
+                {alertOverlayMode === 'off' && (
+                  <span>
+                    {formatOverlayCount(availableAlertOverlayParts.total, 'alert overlay')} hidden
+                  </span>
+                )}
+              </>
             )}
           </>
         )}

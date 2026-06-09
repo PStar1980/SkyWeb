@@ -195,8 +195,37 @@ export function buildChartAlertOverlays({
   return { events, thresholds };
 }
 
+export function countAlertOverlayParts(overlays = EMPTY_OVERLAYS) {
+  const thresholds = (overlays.thresholds || []).length;
+  const events = (overlays.events || []).length;
+
+  return {
+    events,
+    thresholds,
+    total: thresholds + events,
+  };
+}
+
 export function countAlertOverlays(overlays = EMPTY_OVERLAYS) {
-  return (overlays.thresholds || []).length + (overlays.events || []).length;
+  return countAlertOverlayParts(overlays).total;
+}
+
+export function filterAlertOverlaysByMode(overlays = EMPTY_OVERLAYS, mode = 'thresholds') {
+  if (mode === 'off') {
+    return EMPTY_OVERLAYS;
+  }
+
+  if (mode === 'events') {
+    return {
+      thresholds: overlays.thresholds || [],
+      events: overlays.events || [],
+    };
+  }
+
+  return {
+    thresholds: overlays.thresholds || [],
+    events: [],
+  };
 }
 
 export function filterAlertOverlaysByMetricKeys(overlays = EMPTY_OVERLAYS, metricKeys = []) {

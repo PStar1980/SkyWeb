@@ -209,11 +209,6 @@ SkyWeb/
 │                   ├── formatters.js
 │                   └── macroStory.js
 ├── docs/
-│   ├── SkyWeb_Analytics_Chart_Migration.md
-│   ├── SkyWeb_Chart_Audit_PostDotNet.md
-│   ├── SkyWeb_DN_Validation_Checklist.md
-│   ├── SkyWeb_DotNet_Transition_Plan.md
-│   ├── SkyWeb_PreDotNet_Baseline.md
 │   └── SkyWeb_RepoMap.md
 └── tests/
     └── e2e/

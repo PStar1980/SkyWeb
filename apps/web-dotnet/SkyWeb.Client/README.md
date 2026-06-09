@@ -1,9 +1,8 @@
-# SkyWeb.Client — Primary DN-10 Client
+# SkyWeb.Client
 
-This React/Vite client is the primary SkyWeb Analytics browser application after DN-10 cutover.
+This React/Vite client is the active SkyWeb Analytics browser application after DN-10 cutover and DN-10.1 retired-client cleanup.
 
-- The preserved legacy rollback client remains at `apps/web`.
-- This client talks to `SkyWeb.Api` first through `/api`.
+- The client talks to `SkyWeb.Api` first through `/api`.
 - `SkyWeb.Api` serves nearly all SkyWeb Analytics API surfaces natively in ASP.NET Core/C#.
 - Alert evaluation still routes through SkyServer intentionally because SkyServer owns the worker/evaluator path.
 - The client defaults to `http://localhost:5175`.
@@ -38,20 +37,6 @@ Equivalent explicit command:
 
 ```powershell
 npm run web:dotnet:build
-```
-
-## Legacy rollback
-
-The original client can still be run separately:
-
-```powershell
-npm run web:legacy
-```
-
-It defaults to:
-
-```text
-http://localhost:5174
 ```
 
 ## Optional local environment override

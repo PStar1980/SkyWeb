@@ -1,75 +1,73 @@
 # SkyWeb Analytics
 
-SkyWeb Analytics is the public-facing analytics layer for the Sky ecosystem. It consumes curated SkyServer APIs and presents polished dashboards, macroeconomic views, alert signals, and future personalized user experiences.
+SkyWeb Analytics is the public-facing analytics layer for the Sky ecosystem. It presents macroeconomic dashboards, indicator detail views, curated macro lenses, saved member dashboards, alert signals, and professional charting surfaces.
 
 SkyServer Admin remains the private control plane for ingestion, tools, automation, access control, audit, repository/system configuration, and operational workflow work. SkyWeb Analytics is the presentation and user-facing analytics layer.
 
-Detailed phase history now lives in [`change.log`](./change.log) so this README stays readable.
+Detailed implementation history lives in [`change.log`](./change.log) so this README stays readable.
 
 ## Current Status
 
-**Current application phase:** Phase 8.8 — Alert Rule UX Polish  
-**Active transition lane:** DN-9.4.2 — Alert Overlay Polish + Indicator Chart Cleanup
+**Historical feature baseline:** Phase 8.8 — Macro Alerts complete  
+**Active .NET transition lane:** DN-9.5 — Pre-Cutover Cleanup + Documentation Lockdown
 
-The original `apps/web` React/Vite application remains the working SkyWeb Analytics baseline. The new `apps/web-dotnet` lane is being built in parallel so the ASP.NET Core/C# API can be proven route-by-route without disrupting the existing application.
+The original `apps/web` React/Vite application remains preserved as the legacy rollback baseline. The active migration lane is `apps/web-dotnet`, which contains:
 
-The .NET foundation is active:
+```text
+apps/web-dotnet/
+  SkyWeb.Api      ASP.NET Core / C# API
+  SkyWeb.Client   React / Vite client connected to SkyWeb.Api
+```
 
-- `SkyWeb.Api` runs on `http://localhost:7280`.
-- `/_health`, `/_db/health`, and `/swagger` are available.
-- `SkyWeb.Api` connects to the existing PostgreSQL `skyserver_dev` database.
-- `SkyWeb.Client` is a copied React/Vite client for the .NET migration lane.
-- DN-4 replaced the public macro proxy with native ASP.NET Core/C# endpoints.
-- DN-5 replaces `/api/auth/*` with native ASP.NET Core/C# authentication while leaving `/api/skyweb/*` on the temporary SkyServer proxy bridge.
-- DN-5.2 hardens native indicator-series reads by casting PostgreSQL `regclass` checks to text and scrubbing numeric `NaN` values before JSON serialization.
-- DN-6 replaces the core `/api/skyweb/profile`, `/api/skyweb/preferences`, and `/api/skyweb/alert-preferences` proxy routes with native ASP.NET Core/C# endpoints.
-- DN-7 replaces `/api/skyweb/saved-views` and `/api/skyweb/dashboards` with native ASP.NET Core/C# endpoints.
-- DN-7.1 fixes the initial C# dashboard service build blocker caused by local variable shadowing and clears a nullable saved-view handoff warning.
-- DN-8 replaces alert-rule CRUD, event history, alert notifications, and Signal Center queue actions with native ASP.NET Core/C# endpoints while keeping evaluate-now routed through SkyServer worker logic for now.
-- DN-9.1 begins the chart migration inside `SkyWeb.Client` by replacing the copied SVG sparkline renderers with Apache ECharts-powered single-series and multi-series charts, using D3 for value-range/tick calculations.
-- DN-9.2 extracts the ECharts logic into reusable chart architecture folders (`components/charts/echarts`, `shared`, and `adapters`) while keeping legacy `Sparkline`/`MultiSeriesSparkline` wrappers stable for existing pages.
-- DN-9.3 hardens the ECharts runtime wrapper and polishes chart UX with consistent loading/empty/error states, adaptive axis labels, denser-series symbol control, tooltip/crosshair consistency, and safer chart rendering.
-- DN-9.4 connects alert rules, thresholds, and alert event/notification history into the .NET-lane chart surface with severity-aware overlays on indicator and macro-view detail charts.
+The .NET lane is now feature-rich and validated through the main SkyWeb Analytics surfaces:
 
-- DN-9.4.2 polishes alert overlays by defaulting to threshold-only mode, making event markers optional, fixing ECharts hover-trail artifacts on dense canvas charts, and removing redundant single-indicator metric controls.
+- Native C# public macro endpoints under `/api/public/macro/*`.
+- Native C# authentication/session endpoints under `/api/auth/*`.
+- Native C# profile, preferences, alert preferences, saved views, dashboards, alert rules, alert events, alert notifications, and Signal Center endpoints under `/api/skyweb/*`.
+- React/Vite `.NET-lane` client running on `http://localhost:5175`.
+- ASP.NET Core API running on `http://localhost:7280`.
+- Apache ECharts + D3 chart layer in `SkyWeb.Client`.
+- Alert threshold overlays and optional alert-event markers on indicator and macro-view detail charts.
 
-Current DN-9.4.2 request flow:
+The only intentional proxy bridge still remaining is alert evaluation:
+
+```text
+POST /api/skyweb/alerts/evaluate
+POST /api/skyweb/alerts/{alertKey}/evaluate
+```
+
+Those continue to route through SkyServer because SkyServer currently owns ingestion, workers, scheduler/listener behavior, and alert evaluation writes. This is intentional, not a migration gap.
+
+Current DN-9.5 request flow:
 
 ```text
 SkyWeb.Client
   → SkyWeb.Api
       → native C# public macro endpoints
       → native C# auth/session endpoints
-      → native C# SkyWeb profile/preferences/alert-preferences endpoints
+      → native C# SkyWeb member/profile/preference endpoints
       → native C# saved-view and dashboard endpoints
       → native C# alert-rule, event-history, alert-notification, and Signal Center endpoints
-      → proxy to SkyServer Node API for evaluate-now alert execution
+      → proxy to SkyServer Node API for evaluate-now alert execution only
 ```
-
-Proxy fallback is migration scaffolding only. Each route family will be replaced with native C# implementation as the DN phases progress.
 
 ## Repository Layout
 
 ```text
 SkyWeb/
 ├── apps/
-│   ├── web/                 # Current working React/Vite frontend
-│   │   ├── src/
-│   │   │   ├── components/  # Shared UI components
-│   │   │   ├── context/     # Auth/session context
-│   │   │   ├── pages/       # Route pages
-│   │   │   ├── services/    # API service clients
-│   │   │   └── utils/       # Formatting helpers
-│   │   └── vite.config.js
-│   └── web-dotnet/          # Parallel .NET migration lane
+│   ├── web/                 # Legacy React/Vite baseline retained for rollback
+│   └── web-dotnet/          # Active .NET migration lane
 │       ├── SkyWeb.DotNet.sln
 │       ├── SkyWeb.Api/      # ASP.NET Core / C# API
-│       └── SkyWeb.Client/   # Copied React/Vite client for .NET transition testing
-├── docs/                    # Repo maps and project docs
+│       └── SkyWeb.Client/   # React / Vite client for .NET transition testing
+├── docs/                    # Repo maps, transition plans, validation notes
 ├── change.log               # Detailed historical phase/change log
 ├── .env.example
 └── package.json
 ```
+
+Build artifacts such as `bin/`, `obj/`, `dist/`, and `node_modules/` should not be included in generated repo zips.
 
 ## Local Development
 
@@ -79,57 +77,53 @@ Install JavaScript dependencies from the repository root:
 npm install
 ```
 
-Run the existing working SkyWeb Analytics app:
+### Existing legacy baseline
 
 ```bash
 npm run web
-```
-
-Build the existing working app:
-
-```bash
 npm run web:build
-```
-
-Preview the existing working app production build:
-
-```bash
 npm run web:preview
 ```
 
-Run the parallel .NET API:
+### .NET migration lane
+
+Run these in separate terminals when testing the full `.NET` lane:
 
 ```bash
+# Terminal 1 — SkyServer Node API / control plane
+cd ../SkyServer
+npm run api
+```
+
+```bash
+# Terminal 2 — SkyWeb ASP.NET Core API
+cd ../SkyWeb
 npm run dotnet:api
 ```
 
-Build the .NET solution:
-
 ```bash
-npm run dotnet:build
-```
-
-Run the copied .NET-lane React client:
-
-```bash
+# Terminal 3 — SkyWeb .NET-lane React client
+cd ../SkyWeb
 npm run web:dotnet
 ```
 
-Build the copied .NET-lane React client:
+Useful validation/build commands:
 
 ```bash
+npm run dotnet:build
 npm run web:dotnet:build
+npm run lint
 ```
 
 ## Environment
 
-Create `.env.local` from `.env.example` when needed for the existing `apps/web` app:
+Create `.env.local` from `.env.example` when needed for the legacy `apps/web` app:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Important existing-app variables:
+Important legacy-app variables:
 
 ```text
 VITE_SKYSERVER_API_BASE_URL=/api
@@ -140,7 +134,7 @@ VITE_SKYWEB_SESSION_TOKEN_KEY=skyweb.sessionToken
 VITE_SKYWEB_PUBLIC_MODE=true
 ```
 
-The .NET-lane client has its own environment file:
+The .NET-lane client uses:
 
 ```text
 apps/web-dotnet/SkyWeb.Client/.env.development
@@ -170,7 +164,7 @@ Use .NET user secrets for local database passwords instead of committing real cr
 
 ## .NET Transition Lane
 
-The .NET migration uses a dedicated `DN-*` numbering system so it does not collide with the historical SkyWeb feature phases.
+The .NET migration uses a dedicated `DN-*` numbering system so it does not collide with historical SkyWeb feature phases.
 
 | DN Phase | Status | Objective                                                              |
 | -------- | -----: | ---------------------------------------------------------------------- |
@@ -190,17 +184,16 @@ The .NET migration uses a dedicated `DN-*` numbering system so it does not colli
 | DN-9.2   |     ✅ | Extract reusable ECharts chart architecture and frontend adapters      |
 | DN-9.3   |     ✅ | Polish chart UX and harden ECharts runtime behavior                    |
 | DN-9.4   |     ✅ | Add alert overlays and chart annotations                               |
+| DN-9.4.1 |     ✅ | Restore page-level alert overlay wiring                                |
 | DN-9.4.2 |     ✅ | Polish overlay counts/modes and indicator chart controls               |
-| DN-9     |     🚧 | Complete chart migration polish and specialty visuals                  |
-| DN-10    |     🔜 | Cutover and legacy removal                                             |
+| DN-9.5   |     ✅ | Pre-cutover cleanup and documentation lockdown                         |
+| DN-10    |     🔜 | Cutover and legacy consolidation                                       |
 
 ## SkyWeb Feature Roadmap
 
-SkyServer tracks the broader ecosystem integration separately. SkyWeb Analytics uses standalone feature phases for the public/user-facing application.
-
 | Phase   | Status | Objective                                                                                                            |
 | ------- | -----: | -------------------------------------------------------------------------------------------------------------------- |
-| Phase 1 |     ✅ | SkyWeb foundation: identity, README, root package scripts, environment template, API client, and route shell         |
+| Phase 1 |     ✅ | SkyWeb foundation: identity, README, package scripts, environment template, API client, and route shell              |
 | Phase 2 |     ✅ | SkyServer public macro API bridge: safe unauthenticated macro endpoints with public limits                           |
 | Phase 3 |     ✅ | Macro Dashboard v1: live overview, curated view cards, drilldowns, formatted tables, and indicator explorer          |
 | Phase 4 |     ✅ | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation |
@@ -222,8 +215,9 @@ SkyWeb Analytics should not duplicate SkyServer Admin features. SkyServer owns:
 - Repository/system configuration
 - Application membership management
 - Future Temporal workflow orchestration
+- Current alert evaluation execution
 
-SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on public presentation, exploration, and user personalization.
+SkyWeb Analytics consumes curated APIs and focuses on public presentation, exploration, member personalization, dashboards, alerts, and chart intelligence.
 
 ## Auth Notes
 
@@ -232,18 +226,22 @@ SkyWeb Analytics consumes curated APIs exposed by SkyServer and focuses on publi
 - `/account` is protected by the SkyWeb AuthContext and reads `/api/skyweb/profile`.
 - SkyWeb profiles and preferences are staged in the `skyweb` database schema.
 - SkyServer Admin controls which shared users have `SKYWEB` application membership and SkyWeb-specific roles.
-- During DN-9.4.2, `SkyWeb.Api` serves `/api/public/macro/*`, `/api/auth/*`, `/api/skyweb/profile`, `/api/skyweb/preferences`, `/api/skyweb/alert-preferences`, `/api/skyweb/saved-views`, `/api/skyweb/dashboards`, `/api/skyweb/alerts`, and `/api/skyweb/alert-notifications` natively in C#. Alert evaluation endpoints still proxy to SkyServer so the existing worker/evaluator remains the source of truth for evaluation writes.
+- During DN-9.5, `SkyWeb.Api` serves nearly all SkyWeb Analytics API surfaces natively in C#. Alert evaluation remains intentionally SkyServer-owned.
 
 ## Primary Local URLs
 
 | Surface                 | URL                                                       |
 | ----------------------- | --------------------------------------------------------- |
-| Existing SkyWeb app     | `http://localhost:5174`                                   |
+| Legacy SkyWeb app       | `http://localhost:5174`                                   |
 | SkyServer Node API      | `http://localhost:7171`                                   |
 | SkyWeb.Api health       | `http://localhost:7280/_health`                           |
 | SkyWeb.Api DB health    | `http://localhost:7280/_db/health`                        |
 | SkyWeb.Api Swagger      | `http://localhost:7280/swagger`                           |
 | .NET-lane SkyWeb.Client | `http://localhost:5175` when running `npm run web:dotnet` |
+
+## Pre-Cutover Validation
+
+Use [`docs/SkyWeb_DN_Validation_Checklist.md`](./docs/SkyWeb_DN_Validation_Checklist.md) before DN-10. The checklist covers local services, build checks, public macro pages, auth/member pages, saved views, dashboards, alerts, Signal Center, and chart overlays.
 
 ## Portfolio Positioning
 

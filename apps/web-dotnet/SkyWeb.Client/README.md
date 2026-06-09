@@ -1,15 +1,22 @@
-# SkyWeb.Client — Parallel .NET Lane
+# SkyWeb.Client — Primary DN-10 Client
 
-This is the copied React/Vite client for the SkyWeb .NET transition lane.
+This React/Vite client is the primary SkyWeb Analytics browser application after DN-10 cutover.
 
-- Original working baseline remains at `apps/web`.
-- This copy remains safe to mutate during the .NET migration.
-- The client points at `SkyWeb.Api` first, then `SkyWeb.Api` proxies unfinished route families to SkyServer Node API during DN-3.
-- The .NET-lane client defaults to `http://localhost:5175` so it can run beside the existing `apps/web` client on `http://localhost:5174`.
+- The preserved legacy rollback client remains at `apps/web`.
+- This client talks to `SkyWeb.Api` first through `/api`.
+- `SkyWeb.Api` serves nearly all SkyWeb Analytics API surfaces natively in ASP.NET Core/C#.
+- Alert evaluation still routes through SkyServer intentionally because SkyServer owns the worker/evaluator path.
+- The client defaults to `http://localhost:5175`.
 
 ## Local run
 
 From the SkyWeb repo root:
+
+```powershell
+npm run web
+```
+
+Equivalent explicit command:
 
 ```powershell
 npm run web:dotnet
@@ -19,6 +26,32 @@ Open:
 
 ```text
 http://localhost:5175
+```
+
+## Build
+
+```powershell
+npm run build
+```
+
+Equivalent explicit command:
+
+```powershell
+npm run web:dotnet:build
+```
+
+## Legacy rollback
+
+The original client can still be run separately:
+
+```powershell
+npm run web:legacy
+```
+
+It defaults to:
+
+```text
+http://localhost:5174
 ```
 
 ## Optional local environment override

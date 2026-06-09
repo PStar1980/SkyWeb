@@ -48,16 +48,16 @@ SkyWeb Analytics
   Apache ECharts + D3 chart layer
 ```
 
-The migration should be done in parallel:
+The migration was done in parallel and DN-10 keeps the legacy baseline available:
 
 ```text
-apps/web                  existing SkyWeb React app, preserved as legacy baseline
-apps/web-dotnet            new parallel implementation
+apps/web                  legacy SkyWeb React app, preserved as rollback baseline
+apps/web-dotnet            primary DN-10 implementation
   SkyWeb.Api               ASP.NET Core / C# API
   SkyWeb.Client            React / Vite client copied from existing apps/web
 ```
 
-Once the new app reaches feature parity, `apps/web` can be deprecated and the new app can become the main SkyWeb implementation.
+DN-10 promotes the new app as the default SkyWeb implementation while preserving `apps/web` as the legacy rollback baseline.
 
 ---
 
@@ -84,8 +84,8 @@ DN-9.3  Chart UX Polish and Runtime Hardening                      [done]
 DN-9.4  Alert Overlays and Chart Annotations                       [done]
 DN-9.4.1 Restore Page-Level Alert Overlay Wiring                   [done]
 DN-9.4.2 Alert Overlay Polish and Indicator Chart Cleanup          [done]
-DN-9.5  Pre-Cutover Cleanup and Documentation Lockdown             [current]
-DN-10   Cutover and Legacy Consolidation                           [next]
+DN-9.5  Pre-Cutover Cleanup and Documentation Lockdown             [done]
+DN-10   Cutover and Legacy Consolidation                           [current]
 ```
 
 This keeps the historical SkyWeb feature phases separate from the .NET migration lane.
@@ -1460,11 +1460,27 @@ Acceptance checks for DN-9.5:
 - `docs/SkyWeb_RepoMap.md` reflects the current source tree and excludes `bin/`, `obj/`, `dist/`, and `node_modules/`.
 - `.env.example` documents both the legacy SkyServer API variables and the optional .NET lane variables.
 
-# DN-10 — Cutover and Legacy Removal
+# DN-10 — Cutover and Legacy Consolidation
 
 ## Goal
 
-Promote the .NET version after feature parity.
+Promote the .NET version as the default local development/build path while preserving the original `apps/web` client as a rollback baseline.
+
+DN-10 uses the safest cutover option: no folder deletion and no destructive rename. Instead, package scripts now point default SkyWeb commands at `apps/web-dotnet/SkyWeb.Client`, and explicit `web:legacy*` commands remain available for the old client.
+
+## Selected cutover option
+
+```text
+Primary default path:
+  npm run web      -> apps/web-dotnet/SkyWeb.Client
+  npm run build    -> apps/web-dotnet/SkyWeb.Client
+  npm run preview  -> apps/web-dotnet/SkyWeb.Client
+
+Legacy rollback path:
+  npm run web:legacy
+  npm run web:legacy:build
+  npm run web:legacy:preview
+```
 
 ## Cutover checklist
 
@@ -1475,37 +1491,43 @@ Promote the .NET version after feature parity.
 5. User dashboard pages work.
 6. Alerts and Signal Center work.
 7. ECharts migration is stable.
-8. Old `apps/web` remains untouched and buildable until final decision.
-9. README updated.
-10. Screenshots captured for portfolio.
-11. Repo map regenerated.
-12. Repo zip regenerated.
+8. Alert overlays are useful and event-marker noise is controlled.
+9. Old `apps/web` remains untouched and runnable through legacy scripts.
+10. README updated with DN-10 commands and request flow.
+11. Validation checklist updated for post-cutover defaults.
+12. Repo map regenerated without generated artifacts.
+13. Repo zip regenerated without `bin/`, `obj/`, `dist/`, or `node_modules/`.
 
-## Final cleanup options
+## Remaining intentional split
+
+Alert evaluation remains SkyServer-owned:
+
+```text
+POST /api/skyweb/alerts/evaluate
+POST /api/skyweb/alerts/{alertKey}/evaluate
+```
+
+This remains intentionally proxied through `SkyWeb.Api` because evaluation writes are part of SkyServer's worker/control-plane role.
+
+## Future cleanup options
+
+Later, after portfolio screenshots and any deployment decisions are complete, the project can choose a more aggressive cleanup:
 
 Option A:
 
 ```text
-apps/web              → apps/web-legacy
-apps/web-dotnet       → apps/web
+apps/web              -> apps/web-legacy
+apps/web-dotnet       -> apps/web
 ```
 
 Option B:
 
 ```text
-apps/web              → delete after archive tag
-apps/web-dotnet       → apps/web
+apps/web              -> delete after archive tag
+apps/web-dotnet       -> apps/web
 ```
 
-Option C:
-
-```text
-keep both until job portfolio screenshots and README are finalized
-```
-
-Recommended: Option A first, then Option B later.
-
----
+Current DN-10 recommendation: keep both until the portfolio/deployment story is finalized.
 
 ## 10. API Migration Inventory
 
@@ -1829,3 +1851,34 @@ Acceptance checks for DN-9.4.2:
 - Alert overlay mode defaults to threshold lines only.
 - Event markers can still be enabled through `Thresholds + events`.
 - Dense charts do not leave hover trails or temporarily erase line segments during pointer movement.
+
+---
+
+## DN-10 Cutover Notes
+
+DN-10 promotes the `.NET` lane as the default local development and build path without deleting the legacy app. This is the safest cutover form because the primary commands now exercise `apps/web-dotnet/SkyWeb.Client`, while `apps/web` remains available through explicit rollback scripts.
+
+Default commands after DN-10:
+
+```text
+npm run web      -> apps/web-dotnet/SkyWeb.Client
+npm run build    -> apps/web-dotnet/SkyWeb.Client production build
+npm run preview  -> apps/web-dotnet/SkyWeb.Client preview
+```
+
+Legacy rollback commands after DN-10:
+
+```text
+npm run web:legacy
+npm run web:legacy:build
+npm run web:legacy:preview
+```
+
+The only remaining proxy bridge is alert evaluation:
+
+```text
+POST /api/skyweb/alerts/evaluate
+POST /api/skyweb/alerts/{alertKey}/evaluate
+```
+
+This remains intentionally SkyServer-owned because evaluation writes are part of the worker/control-plane side of the system.

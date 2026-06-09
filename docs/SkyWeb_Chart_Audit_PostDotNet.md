@@ -97,3 +97,14 @@ The chart layer now accepts alert overlay payloads without forcing page-level ch
 - Event markers are available through the alert overlay mode selector but are hidden by default to reduce noise.
 - Single-series indicator charts no longer render a redundant Metric selector or `Selected: Value` pill.
 - ECharts dirty-rect rendering is disabled to avoid hover trails/temporary line disappearance on dense canvas charts.
+
+## DN-9.5 Notes
+
+DN-9.5 confirms the chart architecture is ready for cutover planning:
+
+- `Sparkline` and `MultiSeriesSparkline` remain compatibility wrappers.
+- `MacroLineChart` and `MultiSeriesMacroChart` own the reusable ECharts rendering layer.
+- Alert thresholds are useful by default; dense event markers are opt-in.
+- Indicator detail charts expose only the period and alert overlay controls.
+- Macro-view charts keep multi-series selection and period control.
+- Dashboard mini charts remain clean and avoid alert overlay clutter.

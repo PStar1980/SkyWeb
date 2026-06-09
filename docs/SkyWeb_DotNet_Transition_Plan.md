@@ -15,7 +15,7 @@
 
 ## 1. Executive Summary
 
-SkyWeb is currently a React/Vite analytics application. It does not contain its own backend API server. It calls SkyServer's Node/Express API through the shared `api.js` client.
+SkyWeb started as a React/Vite analytics application calling SkyServer's Node/Express API through the shared `api.js` client. The .NET lane now adds a SkyWeb-specific ASP.NET Core/C# API in parallel while preserving the original `apps/web` baseline as rollback.
 
 SkyServer is currently the backend/control-plane repository. It contains:
 
@@ -66,25 +66,26 @@ Once the new app reaches feature parity, `apps/web` can be deprecated and the ne
 The existing SkyWeb roadmap already used numbered phases, including the completed Phase 8 alert system work. To avoid confusion, this .NET transition uses a dedicated `DN-*` prefix.
 
 ```text
-DN-0  Preserve Pre-.NET Baseline
-DN-1  Create Parallel .NET App Structure
-DN-2  Configure API, CORS, Health, DB Connection
-DN-3  Wire SkyWeb.Client to SkyWeb.Api
-DN-4  Implement Public Macro REST Endpoints in C#        [implemented]
-DN-5  Implement Authentication in C#                   [implemented]
-DN-5.1 Stabilize Public Macro Series Reads              [implemented]
-DN-5.2 Fix Indicator Series Regclass/NaN Handling        [done]
-DN-6  Implement SkyWeb Profile and Preferences           [implemented]
-DN-7  Implement Saved Views and Dashboards                [implemented]
-DN-7.1 Stabilize Saved Views/Dashboards Build             [implemented]
-DN-8  Implement Alerts and Signal Center                    [implemented]
-DN-9.1 ECharts + D3 Chart Engine Foundation                 [implemented]
-DN-9.2 Chart Architecture Extraction and Adapters            [implemented]
-DN-9.3 Chart UX Polish and Runtime Hardening                 [implemented]
-DN-9.4 Alert Overlays and Chart Annotations                  [done]
-DN-9.4.2 Alert Overlay Polish and Indicator Chart Cleanup      [current]
-DN-9  ECharts + D3 Migration Polish
-DN-10 Cutover and Legacy Removal
+DN-0    Preserve Pre-.NET Baseline                              [done]
+DN-1    Create Parallel .NET App Structure                        [done]
+DN-2    Configure API, CORS, Health, DB Connection                 [done]
+DN-3    Wire SkyWeb.Client to SkyWeb.Api                           [done]
+DN-4    Implement Public Macro REST Endpoints in C#                [done]
+DN-5    Implement Authentication in C#                             [done]
+DN-5.1  Stabilize Public Macro Series Reads                        [done]
+DN-5.2  Fix Indicator Series Regclass/NaN Handling                 [done]
+DN-6    Implement SkyWeb Profile and Preferences                   [done]
+DN-7    Implement Saved Views and Dashboards                       [done]
+DN-7.1  Stabilize Saved Views/Dashboards Build                     [done]
+DN-8    Implement Alerts and Signal Center                         [done]
+DN-9.1  ECharts + D3 Chart Engine Foundation                       [done]
+DN-9.2  Chart Architecture Extraction and Adapters                 [done]
+DN-9.3  Chart UX Polish and Runtime Hardening                      [done]
+DN-9.4  Alert Overlays and Chart Annotations                       [done]
+DN-9.4.1 Restore Page-Level Alert Overlay Wiring                   [done]
+DN-9.4.2 Alert Overlay Polish and Indicator Chart Cleanup          [done]
+DN-9.5  Pre-Cutover Cleanup and Documentation Lockdown             [current]
+DN-10   Cutover and Legacy Consolidation                           [next]
 ```
 
 This keeps the historical SkyWeb feature phases separate from the .NET migration lane.
@@ -1446,6 +1447,18 @@ Acceptance checks for DN-9.3:
 - Dense precision charts do not overdraw point symbols.
 - Empty/loading/error chart states are readable and consistent.
 - Tooltips and axis labels remain legible across long histories and shorter periods.
+
+## DN-9.5 implementation note
+
+DN-9.5 is a pre-cutover cleanup pass. It does not change runtime behavior. It locks down the project documentation, restores the root `change.log`, refreshes the repository map without generated .NET build artifacts, clarifies local development commands, and adds a dedicated DN validation checklist for the upcoming cutover decision.
+
+Acceptance checks for DN-9.5:
+
+- `README.md` identifies DN-9.5 as the active cleanup pass and clearly explains the remaining intentional alert-evaluation proxy.
+- `change.log` exists at the repository root and carries the detailed phase history removed from the README.
+- `docs/SkyWeb_DN_Validation_Checklist.md` provides the pre-cutover QA checklist.
+- `docs/SkyWeb_RepoMap.md` reflects the current source tree and excludes `bin/`, `obj/`, `dist/`, and `node_modules/`.
+- `.env.example` documents both the legacy SkyServer API variables and the optional .NET lane variables.
 
 # DN-10 — Cutover and Legacy Removal
 

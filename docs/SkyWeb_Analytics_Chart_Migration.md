@@ -1018,3 +1018,9 @@ DN-9.4.2 keeps the overlay feature useful without turning dense financial charts
 The ECharts base wrapper also disables dirty-rect canvas rendering. This is a small runtime tradeoff in favor of cleaner pointer interaction on dense macro series, avoiding hover trails or temporary line-erasure artifacts while dragging across the chart.
 
 For single-series indicator pages, the Metric dropdown and `Selected: Value` meta pill are removed because every indicator only exposes the `Value` metric. Multi-series macro views keep their existing picker controls.
+
+## DN-9.5 Update — Pre-Cutover Documentation Lockdown
+
+DN-9.5 does not change chart runtime behavior. It freezes the current chart migration state before cutover planning: ECharts/D3 are active in the .NET-lane client, alert threshold overlays are proven, event markers are optional, single-indicator metric controls are cleaned up, and dashboard mini charts remain intentionally restrained.
+
+The next chart-related work after cutover can focus on specialty visuals, such as yield-curve views, regime panels, spread-focused comparison surfaces, or alert timelines.

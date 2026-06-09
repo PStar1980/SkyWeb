@@ -7,8 +7,6 @@ SkyWeb/
 ├── package-lock.json
 ├── package.json
 ├── README.md
-├── .github/
-│   └── workflows/
 ├── .husky/
 │   ├── pre-commit
 │   ├── pre-push
@@ -38,24 +36,6 @@ SkyWeb/
 │       │   ├── appsettings.json
 │       │   ├── Program.cs
 │       │   ├── SkyWeb.Api.csproj
-│       │   ├── bin/
-│       │   │   └── Debug/
-│       │   │       └── net10.0/
-│       │   │           ├── appsettings.Development.json
-│       │   │           ├── appsettings.json
-│       │   │           ├── BCrypt-Net-Next.dll
-│       │   │           ├── Dapper.dll
-│       │   │           ├── Microsoft.OpenApi.dll
-│       │   │           ├── Npgsql.dll
-│       │   │           ├── SkyWeb.Api.deps.json
-│       │   │           ├── SkyWeb.Api.dll
-│       │   │           ├── SkyWeb.Api.exe
-│       │   │           ├── SkyWeb.Api.pdb
-│       │   │           ├── SkyWeb.Api.runtimeconfig.json
-│       │   │           ├── SkyWeb.Api.staticwebassets.endpoints.json
-│       │   │           ├── Swashbuckle.AspNetCore.Swagger.dll
-│       │   │           ├── Swashbuckle.AspNetCore.SwaggerGen.dll
-│       │   │           └── Swashbuckle.AspNetCore.SwaggerUI.dll
 │       │   ├── Controllers/
 │       │   │   ├── AuthController.cs
 │       │   │   ├── HealthController.cs
@@ -76,43 +56,6 @@ SkyWeb/
 │       │   ├── Models/
 │       │   │   └── Macro/
 │       │   │       └── MacroViewDefinition.cs
-│       │   ├── obj/
-│       │   │   ├── project.assets.json
-│       │   │   ├── project.nuget.cache
-│       │   │   ├── SkyWeb.Api.csproj.nuget.dgspec.json
-│       │   │   ├── SkyWeb.Api.csproj.nuget.g.props
-│       │   │   ├── SkyWeb.Api.csproj.nuget.g.targets
-│       │   │   └── Debug/
-│       │   │       └── net10.0/
-│       │   │           ├── .NETCoreApp,Version=v10.0.AssemblyAttributes.cs
-│       │   │           ├── apphost.exe
-│       │   │           ├── rjsmcshtml.dswa.cache.json
-│       │   │           ├── rjsmrazor.dswa.cache.json
-│       │   │           ├── rpswa.dswa.cache.json
-│       │   │           ├── SkyWeb.Api.AssemblyInfo.cs
-│       │   │           ├── SkyWeb.Api.AssemblyInfoInputs.cache
-│       │   │           ├── SkyWeb.Api.assets.cache
-│       │   │           ├── SkyWeb.Api.csproj.AssemblyReference.cache
-│       │   │           ├── SkyWeb.Api.csproj.CoreCompileInputs.cache
-│       │   │           ├── SkyWeb.Api.csproj.FileListAbsolute.txt
-│       │   │           ├── SkyWeb.Api.csproj.Up2Date
-│       │   │           ├── SkyWeb.Api.dll
-│       │   │           ├── SkyWeb.Api.GeneratedMSBuildEditorConfig.editorconfig
-│       │   │           ├── SkyWeb.Api.genruntimeconfig.cache
-│       │   │           ├── SkyWeb.Api.GlobalUsings.g.cs
-│       │   │           ├── SkyWeb.Api.MvcApplicationPartsAssemblyInfo.cache
-│       │   │           ├── SkyWeb.Api.MvcApplicationPartsAssemblyInfo.cs
-│       │   │           ├── SkyWeb.Api.pdb
-│       │   │           ├── SkyWeb.Api.sourcelink.json
-│       │   │           ├── staticwebassets.build.endpoints.json
-│       │   │           ├── staticwebassets.build.json
-│       │   │           ├── staticwebassets.build.json.cache
-│       │   │           ├── swae.build.ex.cache
-│       │   │           ├── ref/
-│       │   │           │   └── SkyWeb.Api.dll
-│       │   │           ├── refint/
-│       │   │           │   └── SkyWeb.Api.dll
-│       │   │           └── staticwebassets/
 │       │   ├── Options/
 │       │   │   ├── AuthOptions.cs
 │       │   │   └── SkyServerOptions.cs
@@ -209,6 +152,9 @@ SkyWeb/
 │                   ├── formatters.js
 │                   └── macroStory.js
 ├── docs/
+│   ├── SkyWeb_Demo_Script.md
+│   ├── SkyWeb_Feature_Tour.md
+│   ├── SkyWeb_Phase_9_Roadmap.md
+│   ├── SkyWeb_Portfolio_Brief.md
 │   └── SkyWeb_RepoMap.md
 └── tests/
-    └── e2e/

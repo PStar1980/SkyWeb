@@ -30,7 +30,7 @@ The optimized execution path is now underway:
 6. Replace current SVG sparkline/chart panels progressively.
 7. Use D3 for specialty helpers once ECharts is stable.
 
-DN-9.1 begins this work by replacing the copied `.NET-lane` `Sparkline.jsx` and `MultiSeriesSparkline.jsx` internals with ECharts renderers while keeping their existing public props stable for parent components. DN-9.2 then extracts that first pass into reusable chart architecture folders so future chart work can target stable ECharts components rather than page-level rendering code. DN-9.3 polishes the runtime and chart UX so the extracted components are safer under real dashboard/page conditions. DN-9.4 then connects alert thresholds and recent alert history into the detail-chart surface as optional overlays. DN-9.4.2 tightens that surface by defaulting to threshold-only overlays, making event markers optional, and removing redundant single-series indicator controls.
+DN-9.1 begins this work by replacing the copied `.NET-lane` `Sparkline.jsx` and `MultiSeriesSparkline.jsx` internals with ECharts renderers while keeping their existing public props stable for parent components. DN-9.2 then extracts that first pass into reusable chart architecture folders so future chart work can target stable ECharts components rather than page-level rendering code. DN-9.3 polishes the runtime and chart UX so the extracted components are safer under real dashboard/page conditions. DN-9.4 then connects alert thresholds and recent alert history into the detail-chart surface as optional overlays. DN-9.4.2 tightens that surface by defaulting to threshold-only overlays, making event markers optional, and removing redundant single-series indicator controls. DN-10 then promotes the `.NET` client as the default SkyWeb client while preserving the legacy app as rollback.
 ```
 
 This avoids doing the same chart migration twice.
@@ -1024,3 +1024,9 @@ For single-series indicator pages, the Metric dropdown and `Selected: Value` met
 DN-9.5 does not change chart runtime behavior. It freezes the current chart migration state before cutover planning: ECharts/D3 are active in the .NET-lane client, alert threshold overlays are proven, event markers are optional, single-indicator metric controls are cleaned up, and dashboard mini charts remain intentionally restrained.
 
 The next chart-related work after cutover can focus on specialty visuals, such as yield-curve views, regime panels, spread-focused comparison surfaces, or alert timelines.
+
+---
+
+## DN-10 Chart Cutover Note
+
+DN-10 promotes `apps/web-dotnet/SkyWeb.Client` as the default client for `npm run web` and `npm run build`. The ECharts/D3 chart layer is therefore the primary SkyWeb Analytics chart implementation. The legacy `apps/web` chart components remain available only through `npm run web:legacy` rollback commands.

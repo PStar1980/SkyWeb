@@ -1,13 +1,13 @@
-# SkyWeb DN Validation Checklist
+# SkyWeb DN-10 Validation Checklist
 
-Use this checklist before DN-10 cutover.
+Use this checklist after applying DN-10 cutover.
 
 ## Services
 
 Run the three-lane local stack:
 
 ```bash
-# Terminal 1 — SkyServer Node API
+# Terminal 1 — SkyServer Node API / control plane
 cd ../SkyServer
 npm run api
 
@@ -15,9 +15,9 @@ npm run api
 cd ../SkyWeb
 npm run dotnet:api
 
-# Terminal 3 — SkyWeb .NET-lane client
+# Terminal 3 — Primary SkyWeb Analytics client after DN-10
 cd ../SkyWeb
-npm run web:dotnet
+npm run web
 ```
 
 Confirm:
@@ -26,21 +26,31 @@ Confirm:
 - `http://localhost:7280/_health` returns `ok: true`.
 - `http://localhost:7280/_db/health` returns `ok: true` and the expected database.
 - `http://localhost:7280/swagger` loads.
-- `http://localhost:5175` loads the .NET-lane client.
+- `http://localhost:5175` loads the primary DN-10 client.
 
 ## Build Checks
 
 ```bash
 npm run dotnet:build
-npm run web:dotnet:build
+npm run build
 npm run lint
 ```
 
 Expected:
 
 - .NET solution builds successfully.
-- .NET-lane React client builds successfully.
+- Primary React client builds successfully.
 - Lint passes or only shows known/non-blocking warnings.
+
+## Default Script Cutover
+
+Confirm:
+
+- `npm run web` starts `apps/web-dotnet/SkyWeb.Client` on `http://localhost:5175`.
+- `npm run build` builds `apps/web-dotnet/SkyWeb.Client`.
+- `npm run web:dotnet` still works as an explicit alias.
+- `npm run web:legacy` starts the original `apps/web` client on `http://localhost:5174`.
+- `apps/web` remains untouched as rollback.
 
 ## Public Macro Surfaces
 
@@ -117,11 +127,11 @@ Check:
 - Threshold labels are visible when relevant alerts exist.
 - Event markers appear only when enabled.
 
-## Pre-Cutover Notes
+## Repo Hygiene
 
-Before DN-10:
+Before committing or regenerating repo zips:
 
-- Confirm legacy `apps/web` remains untouched as rollback.
 - Confirm repo zips exclude `bin/`, `obj/`, `dist/`, and `node_modules/`.
+- Confirm no real database password is committed in `appsettings.Development.json`.
 - Confirm `README.md`, `change.log`, transition docs, and repo map are current.
 - Confirm alert evaluation remains intentionally SkyServer-owned.

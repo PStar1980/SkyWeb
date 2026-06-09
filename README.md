@@ -9,22 +9,41 @@ Detailed implementation history lives in [`change.log`](./change.log) so this RE
 ## Current Status
 
 **Historical feature baseline:** Phase 8.8 — Macro Alerts complete  
-**Active .NET transition lane:** DN-9.5 — Pre-Cutover Cleanup + Documentation Lockdown
+**Active implementation:** DN-10 — Cutover and Legacy Consolidation
 
-The original `apps/web` React/Vite application remains preserved as the legacy rollback baseline. The active migration lane is `apps/web-dotnet`, which contains:
+DN-10 promotes the `.NET` lane as the default SkyWeb development/build path while preserving the original React app as a rollback baseline.
 
 ```text
-apps/web-dotnet/
-  SkyWeb.Api      ASP.NET Core / C# API
-  SkyWeb.Client   React / Vite client connected to SkyWeb.Api
+Primary client/API path:
+  apps/web-dotnet/SkyWeb.Client  React / Vite / Apache ECharts / D3
+  apps/web-dotnet/SkyWeb.Api     ASP.NET Core / C# / Dapper / PostgreSQL
+
+Legacy rollback path:
+  apps/web                       Original React / Vite client
 ```
 
-The .NET lane is now feature-rich and validated through the main SkyWeb Analytics surfaces:
+The default npm scripts now use the `.NET` lane:
+
+```text
+npm run web      -> apps/web-dotnet/SkyWeb.Client
+npm run build    -> apps/web-dotnet/SkyWeb.Client production build
+npm run preview  -> apps/web-dotnet/SkyWeb.Client preview
+```
+
+Legacy scripts remain available:
+
+```text
+npm run web:legacy
+npm run web:legacy:build
+npm run web:legacy:preview
+```
+
+The .NET lane is validated through the main SkyWeb Analytics surfaces:
 
 - Native C# public macro endpoints under `/api/public/macro/*`.
 - Native C# authentication/session endpoints under `/api/auth/*`.
 - Native C# profile, preferences, alert preferences, saved views, dashboards, alert rules, alert events, alert notifications, and Signal Center endpoints under `/api/skyweb/*`.
-- React/Vite `.NET-lane` client running on `http://localhost:5175`.
+- React/Vite primary client running on `http://localhost:5175`.
 - ASP.NET Core API running on `http://localhost:7280`.
 - Apache ECharts + D3 chart layer in `SkyWeb.Client`.
 - Alert threshold overlays and optional alert-event markers on indicator and macro-view detail charts.
@@ -38,7 +57,7 @@ POST /api/skyweb/alerts/{alertKey}/evaluate
 
 Those continue to route through SkyServer because SkyServer currently owns ingestion, workers, scheduler/listener behavior, and alert evaluation writes. This is intentional, not a migration gap.
 
-Current DN-9.5 request flow:
+Current DN-10 request flow:
 
 ```text
 SkyWeb.Client
@@ -57,10 +76,10 @@ SkyWeb.Client
 SkyWeb/
 ├── apps/
 │   ├── web/                 # Legacy React/Vite baseline retained for rollback
-│   └── web-dotnet/          # Active .NET migration lane
+│   └── web-dotnet/          # Primary SkyWeb Analytics implementation after DN-10
 │       ├── SkyWeb.DotNet.sln
 │       ├── SkyWeb.Api/      # ASP.NET Core / C# API
-│       └── SkyWeb.Client/   # React / Vite client for .NET transition testing
+│       └── SkyWeb.Client/   # React / Vite client backed by SkyWeb.Api
 ├── docs/                    # Repo maps, transition plans, validation notes
 ├── change.log               # Detailed historical phase/change log
 ├── .env.example
@@ -77,17 +96,7 @@ Install JavaScript dependencies from the repository root:
 npm install
 ```
 
-### Existing legacy baseline
-
-```bash
-npm run web
-npm run web:build
-npm run web:preview
-```
-
-### .NET migration lane
-
-Run these in separate terminals when testing the full `.NET` lane:
+Run these in separate terminals for the primary DN-10 stack:
 
 ```bash
 # Terminal 1 — SkyServer Node API / control plane
@@ -102,56 +111,61 @@ npm run dotnet:api
 ```
 
 ```bash
-# Terminal 3 — SkyWeb .NET-lane React client
+# Terminal 3 — Primary SkyWeb Analytics client
 cd ../SkyWeb
-npm run web:dotnet
+npm run web
+```
+
+Open:
+
+```text
+http://localhost:5175
 ```
 
 Useful validation/build commands:
 
 ```bash
 npm run dotnet:build
-npm run web:dotnet:build
+npm run build
 npm run lint
+```
+
+### Legacy rollback baseline
+
+The original `apps/web` client remains available but is no longer the default path:
+
+```bash
+npm run web:legacy
+npm run web:legacy:build
+npm run web:legacy:preview
 ```
 
 ## Environment
 
-Create `.env.local` from `.env.example` when needed for the legacy `apps/web` app:
+Create `.env.local` from `.env.example` when needed:
 
 ```bash
 cp .env.example .env.local
 ```
 
-Important legacy-app variables:
+Primary DN-10 client variables:
 
 ```text
+VITE_SKYWEB_API_BASE_URL=/api
+VITE_SKYWEB_API_ORIGIN=http://localhost:7280
 VITE_SKYSERVER_API_BASE_URL=/api
 VITE_SKYSERVER_API_ORIGIN=http://localhost:7171
 VITE_MACRO_API_PREFIX=/public/macro
 VITE_SKYWEB_AUTH_APP_CODE=SKYWEB
 VITE_SKYWEB_SESSION_TOKEN_KEY=skyweb.sessionToken
 VITE_SKYWEB_PUBLIC_MODE=true
+VITE_API_TIMEOUT_MS=20000
 ```
 
-The .NET-lane client uses:
+The .NET-lane client also has its own optional local override file:
 
 ```text
 apps/web-dotnet/SkyWeb.Client/.env.development
-```
-
-Important .NET-lane variables:
-
-```text
-VITE_SKYWEB_API_BASE_URL=http://localhost:7280/api
-VITE_SKYSERVER_API_BASE_URL=http://localhost:7280/api
-VITE_SKYWEB_API_ORIGIN=http://localhost:7280
-VITE_SKYSERVER_API_ORIGIN=http://localhost:7171
-VITE_MACRO_API_PREFIX=/public/macro
-VITE_SKYWEB_AUTH_APP_CODE=SKYWEB
-VITE_SKYWEB_SESSION_TOKEN_KEY=skyweb.sessionToken
-VITE_SKYWEB_PUBLIC_MODE=true
-VITE_API_TIMEOUT_MS=20000
 ```
 
 The .NET API connection string is configured in:
@@ -166,28 +180,28 @@ Use .NET user secrets for local database passwords instead of committing real cr
 
 The .NET migration uses a dedicated `DN-*` numbering system so it does not collide with historical SkyWeb feature phases.
 
-| DN Phase | Status | Objective                                                              |
-| -------- | -----: | ---------------------------------------------------------------------- |
-| DN-0     |     ✅ | Preserve Pre-.NET baseline                                             |
-| DN-1     |     ✅ | Create parallel `.NET` app structure                                   |
-| DN-2     |     ✅ | Configure API, CORS, health, DB connection                             |
-| DN-3     |     ✅ | Wire `SkyWeb.Client` to `SkyWeb.Api` with temporary proxy fallback     |
-| DN-4     |     ✅ | Implement public macro REST endpoints in C#                            |
-| DN-5     |     ✅ | Implement authentication in C#                                         |
-| DN-5.1   |     ✅ | Stabilize public macro series reads                                    |
-| DN-5.2   |     ✅ | Fix indicator-table `regclass` materialization and `NaN` series values |
-| DN-6     |     ✅ | Implement SkyWeb profile and preferences in C#                         |
-| DN-7     |     ✅ | Implement saved views and dashboards in C#                             |
-| DN-7.1   |     ✅ | Stabilize saved views/dashboards build                                 |
-| DN-8     |     ✅ | Implement alerts and Signal Center in C#                               |
-| DN-9.1   |     ✅ | Add ECharts + D3 chart engine foundation in `SkyWeb.Client`            |
-| DN-9.2   |     ✅ | Extract reusable ECharts chart architecture and frontend adapters      |
-| DN-9.3   |     ✅ | Polish chart UX and harden ECharts runtime behavior                    |
-| DN-9.4   |     ✅ | Add alert overlays and chart annotations                               |
-| DN-9.4.1 |     ✅ | Restore page-level alert overlay wiring                                |
-| DN-9.4.2 |     ✅ | Polish overlay counts/modes and indicator chart controls               |
-| DN-9.5   |     ✅ | Pre-cutover cleanup and documentation lockdown                         |
-| DN-10    |     🔜 | Cutover and legacy consolidation                                       |
+| DN Phase | Status | Objective                                                               |
+| -------- | -----: | ----------------------------------------------------------------------- |
+| DN-0     |     ✅ | Preserve Pre-.NET baseline                                              |
+| DN-1     |     ✅ | Create parallel `.NET` app structure                                    |
+| DN-2     |     ✅ | Configure API, CORS, health, DB connection                              |
+| DN-3     |     ✅ | Wire `SkyWeb.Client` to `SkyWeb.Api` with temporary proxy fallback      |
+| DN-4     |     ✅ | Implement public macro REST endpoints in C#                             |
+| DN-5     |     ✅ | Implement authentication in C#                                          |
+| DN-5.1   |     ✅ | Stabilize public macro series reads                                     |
+| DN-5.2   |     ✅ | Fix indicator-table `regclass` materialization and `NaN` series values  |
+| DN-6     |     ✅ | Implement SkyWeb profile and preferences in C#                          |
+| DN-7     |     ✅ | Implement saved views and dashboards in C#                              |
+| DN-7.1   |     ✅ | Stabilize saved views/dashboards build                                  |
+| DN-8     |     ✅ | Implement alerts and Signal Center in C#                                |
+| DN-9.1   |     ✅ | Add ECharts + D3 chart engine foundation in `SkyWeb.Client`             |
+| DN-9.2   |     ✅ | Extract reusable ECharts chart architecture and frontend adapters       |
+| DN-9.3   |     ✅ | Polish chart UX and harden ECharts runtime behavior                     |
+| DN-9.4   |     ✅ | Add alert overlays and chart annotations                                |
+| DN-9.4.1 |     ✅ | Restore page-level alert overlay wiring                                 |
+| DN-9.4.2 |     ✅ | Polish overlay counts/modes and indicator chart controls                |
+| DN-9.5   |     ✅ | Pre-cutover cleanup and documentation lockdown                          |
+| DN-10    |     ✅ | Promote the `.NET` lane as default and preserve legacy rollback scripts |
 
 ## SkyWeb Feature Roadmap
 
@@ -226,29 +240,15 @@ SkyWeb Analytics consumes curated APIs and focuses on public presentation, explo
 - `/account` is protected by the SkyWeb AuthContext and reads `/api/skyweb/profile`.
 - SkyWeb profiles and preferences are staged in the `skyweb` database schema.
 - SkyServer Admin controls which shared users have `SKYWEB` application membership and SkyWeb-specific roles.
-- During DN-9.5, `SkyWeb.Api` serves nearly all SkyWeb Analytics API surfaces natively in C#. Alert evaluation remains intentionally SkyServer-owned.
+- During DN-10, `SkyWeb.Api` serves nearly all SkyWeb Analytics API surfaces natively in C#. Alert evaluation remains intentionally SkyServer-owned.
 
 ## Primary Local URLs
 
-| Surface                 | URL                                                       |
-| ----------------------- | --------------------------------------------------------- |
-| Legacy SkyWeb app       | `http://localhost:5174`                                   |
-| SkyServer Node API      | `http://localhost:7171`                                   |
-| SkyWeb.Api health       | `http://localhost:7280/_health`                           |
-| SkyWeb.Api DB health    | `http://localhost:7280/_db/health`                        |
-| SkyWeb.Api Swagger      | `http://localhost:7280/swagger`                           |
-| .NET-lane SkyWeb.Client | `http://localhost:5175` when running `npm run web:dotnet` |
-
-## Pre-Cutover Validation
-
-Use [`docs/SkyWeb_DN_Validation_Checklist.md`](./docs/SkyWeb_DN_Validation_Checklist.md) before DN-10. The checklist covers local services, build checks, public macro pages, auth/member pages, saved views, dashboards, alerts, Signal Center, and chart overlays.
-
-## Portfolio Positioning
-
-Once complete, SkyWeb can be described as:
-
-> Full-stack macroeconomic analytics platform built with React, ASP.NET Core Web API, C#, PostgreSQL, REST APIs, authenticated user dashboards, alert-rule workflows, and advanced charting with Apache ECharts and D3.
-
-SkyServer can be described separately as:
-
-> Node.js/React/PostgreSQL admin and automation control plane with ingestion pipelines, worker scheduling, script execution, database build tooling, operational dashboards, and planned Temporal workflow orchestration.
+| Surface                         | URL                                                       |
+| ------------------------------- | --------------------------------------------------------- |
+| Primary SkyWeb Analytics client | `http://localhost:5175` when running `npm run web`        |
+| Legacy SkyWeb app               | `http://localhost:5174` when running `npm run web:legacy` |
+| SkyServer Node API              | `http://localhost:7171`                                   |
+| SkyWeb.Api health               | `http://localhost:7280/_health`                           |
+| SkyWeb.Api DB health            | `http://localhost:7280/_db/health`                        |
+| SkyWeb.Api Swagger              | `http://localhost:7280/swagger`                           |

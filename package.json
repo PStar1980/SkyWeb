@@ -6,13 +6,22 @@
   "type": "module",
   "scripts": {
     "prepare": "husky",
-    "web": "vite --config apps/web/vite.config.js",
+    "web": "npm run web:dotnet",
     "web:dev": "npm run web",
-    "web:build": "vite build --config apps/web/vite.config.js",
-    "web:preview": "vite preview --config apps/web/vite.config.js",
+    "web:build": "npm run web:dotnet:build",
+    "web:preview": "npm run web:dotnet:preview",
     "dev": "npm run web",
     "build": "npm run web:build",
     "preview": "npm run web:preview",
+    "web:dotnet": "vite --config apps/web-dotnet/SkyWeb.Client/vite.config.js",
+    "web:dotnet:build": "vite build --config apps/web-dotnet/SkyWeb.Client/vite.config.js",
+    "web:dotnet:preview": "vite preview --config apps/web-dotnet/SkyWeb.Client/vite.config.js",
+    "web:legacy": "vite --config apps/web/vite.config.js",
+    "web:legacy:build": "vite build --config apps/web/vite.config.js",
+    "web:legacy:preview": "vite preview --config apps/web/vite.config.js",
+    "dotnet:api": "dotnet run --project apps/web-dotnet/SkyWeb.Api/SkyWeb.Api.csproj",
+    "dotnet:build": "dotnet build apps/web-dotnet/SkyWeb.DotNet.sln",
+    "dotnet:clean": "dotnet clean apps/web-dotnet/SkyWeb.DotNet.sln",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -20,11 +29,7 @@
     "clean": "npm run lint:fix && npm run format",
     "prepush": "npm run lint:fix && npm run format:check",
     "setup": "npm install",
-    "hooks": "husky",
-    "web:dotnet": "vite --config apps/web-dotnet/SkyWeb.Client/vite.config.js",
-    "web:dotnet:build": "vite build --config apps/web-dotnet/SkyWeb.Client/vite.config.js",
-    "dotnet:api": "dotnet run --project apps/web-dotnet/SkyWeb.Api/SkyWeb.Api.csproj",
-    "dotnet:build": "dotnet build apps/web-dotnet/SkyWeb.DotNet.sln"
+    "hooks": "husky"
   },
   "lint-staged": {
     "*.{js,jsx,mjs,cjs,ts,tsx}": [

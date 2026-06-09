@@ -108,3 +108,9 @@ DN-9.5 confirms the chart architecture is ready for cutover planning:
 - Indicator detail charts expose only the period and alert overlay controls.
 - Macro-view charts keep multi-series selection and period control.
 - Dashboard mini charts remain clean and avoid alert overlay clutter.
+
+---
+
+## DN-10 Chart Cutover Note
+
+DN-10 promotes `apps/web-dotnet/SkyWeb.Client` as the default client for `npm run web` and `npm run build`. The ECharts/D3 chart layer is therefore the primary SkyWeb Analytics chart implementation. The legacy `apps/web` chart components remain available only through `npm run web:legacy` rollback commands.

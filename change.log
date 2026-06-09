@@ -1,44 +1,118 @@
-# SkyWeb change.log
+# SkyWeb Analytics Change Log
 
-This log captures detailed implementation history that no longer belongs in the main README.
+This file carries the detailed implementation history so `README.md` can stay focused on current usage and architecture.
 
-## SkyWeb Feature Phases
+## DN-10 — Cutover and Legacy Consolidation
 
-- Phase 1 — SkyWeb foundation: project identity, README, root scripts, environment template, API client, and route shell.
-- Phase 2 — SkyServer public macro API bridge for unauthenticated macro endpoints with safe public limits.
-- Phase 3 — Macro Dashboard v1 with overview cards, curated macro views, drilldowns, formatted tables, and indicator explorer.
-- Phase 4 — Auth shell and member layer preparation with `SKYWEB` app-scoped login, protected account route, profile, and preferences foundation.
-- Phase 5 — Dashboard/chart polish, trend previews, responsive refinements, and richer macro storytelling surfaces.
-- Phase 6 — Editable profile and dashboard preference UI.
-- Phase 7 — Saved views, custom dashboards, dashboard viewer, presentation view, and analytical view polish.
-- Phase 8 — Macro alerts: rule CRUD, manual/scheduled evaluation surfaces, triggered notifications, Signal Center, alert preferences, and alert-rule UX polish.
+- Promoted `apps/web-dotnet/SkyWeb.Client` as the default SkyWeb client for local development and production build scripts.
+- Preserved the original `apps/web` app as an explicit rollback baseline.
+- Updated root package scripts:
+  - `npm run web` -> `.NET` client.
+  - `npm run build` -> `.NET` client build.
+  - `npm run preview` -> `.NET` client preview.
+  - `npm run web:legacy` -> original legacy client.
+  - `npm run web:legacy:build` -> original legacy client build.
+  - `npm run web:legacy:preview` -> original legacy client preview.
+- Added `dotnet:clean` convenience script.
+- Updated DN-10 README status, request-flow notes, local development commands, environment notes, and primary URLs.
+- Updated DN validation checklist for post-cutover defaults.
+- Updated `.env.example` and `SkyWeb.Client` README for the new primary client path.
+- Kept alert evaluation intentionally SkyServer-owned.
 
-## .NET Transition Lane
+## DN-9.5 — Pre-Cutover Cleanup and Documentation Lockdown
 
-- DN-0 — Preserved the pre-.NET baseline.
-- DN-1 — Created parallel `apps/web-dotnet` structure with `SkyWeb.Api` and `SkyWeb.Client`.
-- DN-2 — Added ASP.NET Core API skeleton, CORS, Swagger, health checks, and PostgreSQL DB health.
-- DN-3 — Wired `SkyWeb.Client` to `SkyWeb.Api` with temporary proxy fallback.
-- DN-4 — Implemented native C# public macro endpoints.
-- DN-5 — Implemented native C# auth/session endpoints.
-- DN-5.1 — Stabilized public macro series reads.
-- DN-5.2 — Fixed PostgreSQL `regclass` materialization and numeric `NaN` handling in indicator series.
-- DN-6 — Implemented native C# profile, dashboard preferences, and alert preferences.
-- DN-7 — Implemented native C# saved views and dashboards.
-- DN-7.1 — Fixed C# dashboard service build blocker and nullable saved-view handoff warning.
-- DN-8 — Implemented native C# alert rules, alert events, alert notifications, and Signal Center actions. Alert evaluation remained proxied to SkyServer.
-- DN-9.1 — Added Apache ECharts + D3 chart engine foundation in the .NET-lane client.
-- DN-9.2 — Extracted reusable chart architecture, adapters, shared chart utilities, and ECharts wrappers.
-- DN-9.3 — Hardened the chart runtime and polished loading, empty, error, tooltip, axis, and dense-series behavior.
-- DN-9.4 — Added severity-aware alert threshold overlays and event/notification markers to indicator and macro-view charts.
-- DN-9.4.1 — Restored page-level alert overlay fetching/passing for indicator and macro-view detail pages.
-- DN-9.4.2 — Added overlay noise control, threshold/event mode selection, dirty-rect hover-artifact mitigation, and removed redundant single-indicator metric controls.
-- DN-9.5 — Cleaned pre-cutover documentation, restored root `change.log`, refreshed repo map, and added a DN validation checklist before cutover.
+- Cleaned README around current status, request flow, and local development commands.
+- Moved detailed history out of README and into this change log.
+- Added DN validation checklist.
+- Refreshed repo map and documentation notes.
+- Confirmed repo zip hygiene expectations: exclude `bin/`, `obj/`, `dist/`, and `node_modules/`.
 
-## Current Architecture Notes
+## DN-9.4.2 — Alert Overlay Polish and Indicator Chart Cleanup
 
-- `apps/web` remains the legacy React/Vite rollback baseline.
-- `apps/web-dotnet/SkyWeb.Client` is the active React/Vite migration client.
-- `apps/web-dotnet/SkyWeb.Api` is the ASP.NET Core/C# analytics API.
-- SkyServer remains the ingestion, automation, admin, worker, and alert-evaluation control plane.
-- Build artifacts (`bin/`, `obj/`, `dist/`, `node_modules/`) should stay out of repo zips.
+- Added overlay mode selector: `Thresholds`, `Thresholds + events`, and `Off`.
+- Defaulted detail charts to threshold overlays without event-marker noise.
+- Split overlay counts into threshold count and event-marker count.
+- Removed redundant single-indicator metric dropdown and `Selected: Value` pill.
+- Adjusted ECharts rendering to reduce hover repaint artifacts.
+
+## DN-9.4.1 — Alert Overlay Page Wiring Fix
+
+- Restored page-level alert overlay loading for indicator detail pages.
+- Restored page-level alert overlay loading for macro-view detail pages.
+- Confirmed overlays appear on relevant chart surfaces when matching alert rules exist.
+
+## DN-9.4 — Alert Overlays and Chart Annotations
+
+- Added alert threshold overlays to ECharts detail charts.
+- Added optional alert-event markers.
+- Added severity-aware overlay styling and tooltip details.
+- Kept dashboard mini charts clean by avoiding dense overlay rendering there.
+
+## DN-9.3 — Chart UX Polish and Runtime Hardening
+
+- Hardened the ECharts base wrapper lifecycle.
+- Added resize handling through `ResizeObserver` with fallback behavior.
+- Added chart loading, empty, and unavailable states.
+- Improved date axis labels, numeric labels, tooltip filtering, and latest-point emphasis.
+
+## DN-9.2 — Chart Architecture Extraction and Adapters
+
+- Added reusable chart architecture under `components/charts`.
+- Added adapters for indicator series, view series, dashboard charts, and alert overlays.
+- Refactored compatibility wrappers so existing page call sites could remain stable.
+
+## DN-9.1 — ECharts + D3 Chart Engine Foundation
+
+- Added Apache ECharts and D3 dependencies.
+- Replaced copied `.NET` lane SVG chart internals with ECharts renderers.
+- Preserved parent component APIs.
+
+## DN-8 — Alerts and Signal Center in C#
+
+- Implemented native C# alert-rule endpoints.
+- Implemented native C# alert notification and Signal Center endpoints.
+- Left alert evaluation intentionally proxied to SkyServer.
+
+## DN-7 / DN-7.1 — Saved Views and Dashboards in C#
+
+- Implemented saved-view CRUD in C#.
+- Implemented dashboard CRUD in C#.
+- Implemented dashboard item management in C#.
+- Stabilized saved-view/dashboard build warnings and compile behavior.
+
+## DN-6 — Profile and Preferences in C#
+
+- Implemented profile endpoints in C#.
+- Implemented dashboard preference endpoints in C#.
+- Implemented alert preference endpoints in C#.
+
+## DN-5 / DN-5.1 / DN-5.2 — Auth and Macro Stabilization
+
+- Implemented native C# auth endpoints.
+- Mirrored opaque bearer-token session behavior with SHA-256 token hashes.
+- Added permissions/session handling and auth middleware.
+- Stabilized public macro series reads.
+- Fixed PostgreSQL `regclass` materialization and numeric `NaN` handling.
+
+## DN-4 — Public Macro REST Endpoints in C#
+
+- Implemented public macro summary, view, latest-row, column, indicator, and indicator-series endpoints in ASP.NET Core/C#.
+- Kept response contracts compatible with the React client.
+
+## DN-0 through DN-3 — Parallel .NET Lane Foundation
+
+- Preserved the pre-.NET baseline.
+- Created `apps/web-dotnet` with `SkyWeb.Api` and `SkyWeb.Client`.
+- Added health, DB health, Swagger, CORS, and PostgreSQL connection setup.
+- Wired the copied client through `SkyWeb.Api` with proxy fallback during migration.
+
+## Historical SkyWeb Feature Phases
+
+- Phase 1: SkyWeb foundation, routing shell, package scripts, environment template, and API client.
+- Phase 2: SkyServer public macro bridge.
+- Phase 3: Macro Dashboard v1, view cards, drilldowns, tables, and indicator explorer.
+- Phase 4: Auth shell and member layer prep.
+- Phase 5: Dashboard chart polish and macro storytelling.
+- Phase 6: Profile and preferences UI.
+- Phase 7: Saved dashboards, watchlists, builder, viewer, and presentation mode.
+- Phase 8: Macro alerts, evaluation history, notification queue, alert preferences, Signal Center, and alert-rule UX polish.

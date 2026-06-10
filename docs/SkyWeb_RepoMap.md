@@ -156,5 +156,10 @@ SkyWeb/
 │   ├── SkyWeb_Feature_Tour.md
 │   ├── SkyWeb_Phase_9_Roadmap.md
 │   ├── SkyWeb_Portfolio_Brief.md
-│   └── SkyWeb_RepoMap.md
+│   ├── SkyWeb_RepoMap.md
+│   ├── SkyWeb_Screenshot_Capture_Guide.md
+│   ├── SkyWeb_Visual_Asset_Manifest.md
+│   └── assets/
+│       └── screenshots/
+│           └── README.md
 └── tests/

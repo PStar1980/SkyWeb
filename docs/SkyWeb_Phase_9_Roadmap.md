@@ -4,7 +4,7 @@ Phase 9 begins after the successful DN-10 / DN-10.1 cutover and retired-client c
 
 ## Phase 9.1 — Portfolio Presentation Foundation
 
-Status: **Completed in this slice**
+Status: **Completed**
 
 Deliverables:
 
@@ -16,12 +16,15 @@ Deliverables:
 
 ## Phase 9.2 — Screenshot and Visual Asset Pass
 
-Planned deliverables:
+Status: **Completed in this slice**
 
-- Capture polished screenshots for key pages.
-- Add `docs/assets/` or equivalent screenshot folder if desired.
-- Update README with screenshot references.
-- Create a compact visual feature tour section.
+Deliverables:
+
+- Added screenshot capture guide.
+- Added `docs/assets/screenshots/` folder with export notes.
+- Added visual asset manifest with canonical screenshot filenames.
+- Added README screenshot asset targets without broken image links.
+- Updated feature tour with screenshot readiness notes.
 
 Candidate screenshots:
 

@@ -133,3 +133,25 @@ Before capturing screenshots, confirm:
 - Dashboard has at least one chart card and one saved-view card.
 - Tables are not scrolled to awkward positions.
 - No local database passwords, tokens, or dev-only errors are visible.
+
+## Phase 9.2 Visual Asset Notes
+
+The canonical screenshot capture instructions now live in:
+
+```text
+docs/SkyWeb_Screenshot_Capture_Guide.md
+```
+
+The screenshot file/status tracker now lives in:
+
+```text
+docs/SkyWeb_Visual_Asset_Manifest.md
+```
+
+Screenshots should be saved under:
+
+```text
+docs/assets/screenshots/
+```
+
+Keep the root README free of image links until the corresponding screenshot files exist.

@@ -7,7 +7,7 @@ SkyServer Admin remains the private control plane for ingestion, tools, automati
 ## Current Status
 
 **Historical feature baseline:** Phase 8.8 — Macro Alerts complete  
-**Active implementation:** Phase 9.1 — Portfolio Presentation Foundation
+**Active implementation:** Phase 9.2 — Screenshot and Visual Asset Pass
 
 The .NET transition is complete. DN-10 promoted the ASP.NET Core / C# lane as the default SkyWeb development and build path, and DN-10.1 removed the retired React-only client. Phase 9 shifts SkyWeb from migration work into portfolio and presentation polish.
 
@@ -200,12 +200,38 @@ The .NET migration uses a dedicated `DN-*` numbering system so it does not colli
 
 Phase 9 starts the portfolio-polish lane. These documents translate the working product into material that can be used for GitHub, LinkedIn, interview prep, screenshots, and live demos.
 
-| Asset                                                              | Purpose                                                                   |
-| ------------------------------------------------------------------ | ------------------------------------------------------------------------- |
-| [`docs/SkyWeb_Portfolio_Brief.md`](docs/SkyWeb_Portfolio_Brief.md) | Concise portfolio story, technical proof points, and architecture summary |
-| [`docs/SkyWeb_Feature_Tour.md`](docs/SkyWeb_Feature_Tour.md)       | Guided product walkthrough and screenshot capture plan                    |
-| [`docs/SkyWeb_Demo_Script.md`](docs/SkyWeb_Demo_Script.md)         | Five-minute interview/demo narrative                                      |
-| [`docs/SkyWeb_Phase_9_Roadmap.md`](docs/SkyWeb_Phase_9_Roadmap.md) | Phase 9 execution plan and remaining polish slices                        |
+| Asset                                                                                | Purpose                                                                             |
+| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| [`docs/SkyWeb_Portfolio_Brief.md`](docs/SkyWeb_Portfolio_Brief.md)                   | Concise portfolio story, technical proof points, and architecture summary           |
+| [`docs/SkyWeb_Feature_Tour.md`](docs/SkyWeb_Feature_Tour.md)                         | Guided product walkthrough and screenshot capture plan                              |
+| [`docs/SkyWeb_Demo_Script.md`](docs/SkyWeb_Demo_Script.md)                           | Five-minute interview/demo narrative                                                |
+| [`docs/SkyWeb_Phase_9_Roadmap.md`](docs/SkyWeb_Phase_9_Roadmap.md)                   | Phase 9 execution plan and remaining polish slices                                  |
+| [`docs/SkyWeb_Screenshot_Capture_Guide.md`](docs/SkyWeb_Screenshot_Capture_Guide.md) | Browser setup, capture rules, route sequence, and privacy checklist for screenshots |
+| [`docs/SkyWeb_Visual_Asset_Manifest.md`](docs/SkyWeb_Visual_Asset_Manifest.md)       | Canonical screenshot filenames, README usage priority, and asset status tracker     |
+| [`docs/assets/screenshots/README.md`](docs/assets/screenshots/README.md)             | Target folder for portfolio screenshots and export notes                            |
+
+## Screenshot Asset Targets
+
+Phase 9.2 defines the canonical screenshot set for the portfolio pass. Capture the images into:
+
+```text
+docs/assets/screenshots/
+```
+
+Recommended first-pass assets:
+
+```text
+01-macro-overview.png
+02-macro-dashboard.png
+03-macro-view-detail.png
+04-indicator-alert-overlays.png
+05-alert-rules.png
+06-signal-center.png
+07-dashboard-builder.png
+08-account-preferences.png
+```
+
+Do not include local tokens, database values, terminal windows, or browser profile details in captured images.
 
 ## Relationship to SkyServer
 

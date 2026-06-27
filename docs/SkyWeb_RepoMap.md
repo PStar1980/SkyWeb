@@ -169,5 +169,6 @@ SkyWeb/
 │           ├── 08-account-preferences.png
 │           ├── 09-alert-preferences.png
 │           ├── 10-chart-tooltip.png
-│           └── 11-dashboard-presentation.png
+│           ├── 11-dashboard-presentation.png
+│           └── README.md
 └── tests/

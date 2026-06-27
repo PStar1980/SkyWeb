@@ -92,13 +92,13 @@ SkyServer
 
 ## Visual Portfolio Assets
 
-Phase 9.2 defines the screenshot capture lane for turning the working app into a public-facing portfolio package. The strongest README candidates are:
+The screenshot set is now captured and wired into the root README. The strongest portfolio candidates are:
 
 ```text
-01-macro-overview.png
 02-macro-dashboard.png
 04-indicator-alert-overlays.png
+03-macro-view-detail.png
 06-signal-center.png
 ```
 
-The full asset plan is tracked in `docs/SkyWeb_Visual_Asset_Manifest.md`, with capture guidance in `docs/SkyWeb_Screenshot_Capture_Guide.md`.
+The full asset plan is tracked in `docs/SkyWeb_Visual_Asset_Manifest.md`, and screenshot folder notes live in `docs/assets/screenshots/README.md`.

@@ -90,6 +90,18 @@ SkyServer
 
 > Built SkyWeb Analytics, a React + ASP.NET Core + PostgreSQL macroeconomic analytics platform featuring authenticated dashboards, saved views, alert rules, signal notifications, and ECharts/D3 visualizations. Migrated the application from a Node-backed prototype lane into a dedicated C# API with incremental route-family cutover, while preserving SkyServer as the ingestion and automation control plane.
 
+## Career / Interview Assets
+
+Phase 9.4 adds dedicated career-facing documentation so the project can be explained consistently in interviews, recruiter calls, resume updates, and portfolio walkthroughs.
+
+| Asset                                     | Use                                                                                                             |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `docs/SkyWeb_Interview_Talking_Points.md` | Project story, architecture explanation, migration narrative, alerts, charts, auth, and tradeoffs               |
+| `docs/SkyWeb_Architecture_Decisions.md`   | ADR-style decisions for React, ASP.NET Core, SkyServer ownership, REST, Dapper, ECharts/D3, and cutover cleanup |
+| `docs/SkyWeb_Resume_Bullets.md`           | Role-specific bullets for full-stack, backend/API, data/BI, AI automation, and business systems analyst resumes |
+| `docs/SkyWeb_Recruiter_Brief.md`          | Short summaries for recruiter screens, LinkedIn, applications, and portfolio blurbs                             |
+| `docs/SkyWeb_Demo_QA.md`                  | Interview Q&A, STAR prompts, demo answers, and future-improvement talking points                                |
+
 ## Visual Portfolio Assets
 
 The screenshot set is now captured and wired into the root README. The strongest portfolio candidates are:

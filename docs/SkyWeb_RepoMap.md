@@ -152,10 +152,15 @@ SkyWeb/
 │                   ├── formatters.js
 │                   └── macroStory.js
 ├── docs/
+│   ├── SkyWeb_Architecture_Decisions.md
+│   ├── SkyWeb_Demo_QA.md
 │   ├── SkyWeb_Feature_Tour.md
+│   ├── SkyWeb_Interview_Talking_Points.md
 │   ├── SkyWeb_Phase_9_Roadmap.md
 │   ├── SkyWeb_Portfolio_Brief.md
+│   ├── SkyWeb_Recruiter_Brief.md
 │   ├── SkyWeb_RepoMap.md
+│   ├── SkyWeb_Resume_Bullets.md
 │   ├── SkyWeb_Visual_Asset_Manifest.md
 │   └── assets/
 │       └── screenshots/

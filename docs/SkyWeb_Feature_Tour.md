@@ -110,3 +110,15 @@ Screenshot folder notes live in:
 ```text
 docs/assets/screenshots/README.md
 ```
+
+## Supporting Interview Docs
+
+Use these after the visual walkthrough when a recruiter or interviewer wants deeper detail:
+
+| Document                                  | Best Use                                                |
+| ----------------------------------------- | ------------------------------------------------------- |
+| `docs/SkyWeb_Interview_Talking_Points.md` | Explaining the project clearly in a technical interview |
+| `docs/SkyWeb_Demo_QA.md`                  | Preparing for demo questions and STAR-style prompts     |
+| `docs/SkyWeb_Architecture_Decisions.md`   | Discussing tradeoffs and migration judgment             |
+| `docs/SkyWeb_Resume_Bullets.md`           | Tailoring resume/project bullets to a target role       |
+| `docs/SkyWeb_Recruiter_Brief.md`          | Short recruiter-facing project summaries                |

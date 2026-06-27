@@ -8,6 +8,12 @@ The project demonstrates a practical transition from a Node-backed prototype/cli
 
 SkyWeb Analytics is a React + ASP.NET Core + PostgreSQL macro analytics platform with authenticated member dashboards, saved views, alert rules, signal center workflows, and ECharts/D3 charting over live economic indicators.
 
+## Release Candidate Status
+
+SkyWeb Analytics has completed the DN-10 cutover and Phase 9 portfolio polish track. It is now documented as a portfolio release candidate with a GitHub-facing README, screenshot gallery, feature tour, recruiter brief, interview talking points, resume bullets, demo Q&A, release checklist, release notes, and known-limitation roadmap.
+
+Generated handoff zips intentionally exclude screenshot binaries to keep AI/project exchange lean; the GitHub working tree can retain screenshots for README rendering.
+
 ## What This Project Demonstrates
 
 | Area                    | Proof Point                                                                                     |
@@ -101,6 +107,9 @@ Phase 9.4 adds dedicated career-facing documentation so the project can be expla
 | `docs/SkyWeb_Resume_Bullets.md`           | Role-specific bullets for full-stack, backend/API, data/BI, AI automation, and business systems analyst resumes |
 | `docs/SkyWeb_Recruiter_Brief.md`          | Short summaries for recruiter screens, LinkedIn, applications, and portfolio blurbs                             |
 | `docs/SkyWeb_Demo_QA.md`                  | Interview Q&A, STAR prompts, demo answers, and future-improvement talking points                                |
+| `docs/SkyWeb_Release_Checklist.md`        | Final validation checklist for release-candidate/demo readiness                                                 |
+| `docs/SkyWeb_Release_Notes.md`            | Portfolio release-candidate summary and milestone notes                                                         |
+| `docs/SkyWeb_Known_Limitations.md`        | Honest limitations and future roadmap framing                                                                   |
 
 ## Visual Portfolio Assets
 

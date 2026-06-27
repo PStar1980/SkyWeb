@@ -41,7 +41,7 @@ Account / Preferences
 
 ## Phase 9.3 — GitHub README Polish + Screenshot Integration
 
-Status: **Completed in this slice**
+Status: **Completed**
 
 Deliverables:
 
@@ -54,7 +54,7 @@ Deliverables:
 
 ## Phase 9.4 — Career / Interview Proof Assets
 
-Status: **Completed in this slice**
+Status: **Completed**
 
 Deliverables:
 
@@ -66,14 +66,20 @@ Deliverables:
 
 ## Phase 9.5 — Demo / Release Candidate Cleanup
 
-Planned deliverables:
+Status: **Completed in this slice**
 
-- Final manual demo checklist.
-- Confirm local setup commands are clean.
-- Confirm no sensitive values appear in screenshots/docs.
-- Confirm repo zip hygiene remains clean.
-- Confirm GitHub README image rendering and docs links after commit.
-- Declare SkyWeb portfolio package ready.
+Deliverables:
+
+- Added final release checklist for build, API health, product demo, screenshot, and security checks.
+- Added release notes summarizing the post-cutover portfolio release candidate.
+- Added known limitations and future roadmap framing.
+- Confirmed the README/docs story describes SkyWeb as post-cutover, not mid-transition.
+- Documented that generated handoff zips intentionally exclude image binaries while GitHub can retain screenshots.
+- Declared SkyWeb Phase 9 portfolio package release-candidate ready.
+
+## Phase 9 Completion State
+
+SkyWeb Phase 9 is complete when the Phase 9.5 checklist passes locally and the GitHub README renders as expected. At that point, SkyWeb can be used as a portfolio/interview project and the next major workstream should move back to SkyServer control-plane hardening.
 
 ## Out-of-Scope For Phase 9
 

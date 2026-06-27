@@ -86,6 +86,16 @@ Show authenticated member profile and preference management without exposing sen
 5. **Show Signal Center:** “Triggered events become notifications with acknowledge/dismiss lifecycle and permanent history.”
 6. **Close with architecture:** “The client is React/Vite, the analytics API is ASP.NET Core/C#, data is PostgreSQL, and SkyServer remains the Node.js control plane.”
 
+## Release Demo Checklist
+
+Before a public demo or interview walkthrough:
+
+- Start SkyServer, SkyWeb.Api, and the SkyWeb client from fresh terminals.
+- Confirm `/macro`, `/dashboard`, `/macro/views/rates-curve`, `/macro/indicators/FXUSDCAD`, `/macro/alerts`, and `/macro/alerts/signals` load cleanly.
+- Use a user account with safe demo data and no private notes visible in the first screen.
+- Keep the alert-overlay example ready because it shows product integration across data, rules, notifications, and charts.
+- Use `docs/SkyWeb_Release_Checklist.md` for the full pre-demo validation path.
+
 ## Visual Polish Checklist
 
 Before using screenshots in public material, confirm:
@@ -122,3 +132,5 @@ Use these after the visual walkthrough when a recruiter or interviewer wants dee
 | `docs/SkyWeb_Architecture_Decisions.md`   | Discussing tradeoffs and migration judgment             |
 | `docs/SkyWeb_Resume_Bullets.md`           | Tailoring resume/project bullets to a target role       |
 | `docs/SkyWeb_Recruiter_Brief.md`          | Short recruiter-facing project summaries                |
+| `docs/SkyWeb_Release_Checklist.md`        | Final demo/release validation checklist                 |
+| `docs/SkyWeb_Known_Limitations.md`        | Future roadmap and honest limitation framing            |

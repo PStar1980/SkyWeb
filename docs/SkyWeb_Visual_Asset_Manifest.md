@@ -59,6 +59,10 @@ Use lowercase kebab-case filenames with numeric prefixes:
 
 Avoid spaces, timestamps, browser-export suffixes, and vague names like `screenshot-final-final2.png`.
 
+## Transfer Zip Policy
+
+The screenshot assets are intended to live in the GitHub working tree so the README and portfolio docs render visually. Generated AI/project handoff zips exclude image binaries by default to keep archive size low. Use the repo zip for code/docs review and GitHub for screenshot rendering.
+
 ## Related Career Assets
 
 Phase 9.4 adds interview and recruiter-facing documents that use this screenshot set as supporting evidence:

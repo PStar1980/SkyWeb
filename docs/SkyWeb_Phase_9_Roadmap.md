@@ -54,12 +54,15 @@ Deliverables:
 
 ## Phase 9.4 — Career / Interview Proof Assets
 
-Planned deliverables:
+Status: **Completed in this slice**
 
-- Resume bullet options for SkyWeb.
-- LinkedIn project summary.
-- Interview Q&A prompts.
-- Technical decision record summary for the .NET migration.
+Deliverables:
+
+- Added interview talking points for architecture, migration, alerts, charts, auth, and tradeoffs.
+- Added ADR-style architecture decision notes for React, ASP.NET Core, SkyServer boundaries, REST, Dapper, ECharts/D3, and cutover cleanup.
+- Added resume bullet options across full-stack, backend/API, data/BI, AI automation, and business systems analyst angles.
+- Added recruiter-friendly summaries and LinkedIn/project positioning.
+- Added demo Q&A prep with STAR prompts and technical interview answers.
 
 ## Phase 9.5 — Demo / Release Candidate Cleanup
 
@@ -69,6 +72,7 @@ Planned deliverables:
 - Confirm local setup commands are clean.
 - Confirm no sensitive values appear in screenshots/docs.
 - Confirm repo zip hygiene remains clean.
+- Confirm GitHub README image rendering and docs links after commit.
 - Declare SkyWeb portfolio package ready.
 
 ## Out-of-Scope For Phase 9

@@ -58,3 +58,15 @@ Use lowercase kebab-case filenames with numeric prefixes:
 ```
 
 Avoid spaces, timestamps, browser-export suffixes, and vague names like `screenshot-final-final2.png`.
+
+## Related Career Assets
+
+Phase 9.4 adds interview and recruiter-facing documents that use this screenshot set as supporting evidence:
+
+```text
+docs/SkyWeb_Interview_Talking_Points.md
+docs/SkyWeb_Architecture_Decisions.md
+docs/SkyWeb_Resume_Bullets.md
+docs/SkyWeb_Recruiter_Brief.md
+docs/SkyWeb_Demo_QA.md
+```

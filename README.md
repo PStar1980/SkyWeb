@@ -76,9 +76,9 @@ Alert evaluation remains intentionally SkyServer-owned because SkyServer owns in
 
 ## Current Status
 
-**Active phase:** Phase 9.4 — Career / Interview Proof Assets
+**Active phase:** Phase 9.5 — Demo / Release Cleanup
 
-The .NET transition is complete. DN-10 promoted the ASP.NET Core/C# lane as the default SkyWeb development and build path, and DN-10.1 removed the retired React-only client. Recovery for the retired client is through Git history or an earlier repo archive, not through an active source folder.
+The .NET transition is complete, the retired React-only client has been removed, and the Phase 9 portfolio/docs track is in release-candidate cleanup. SkyWeb is now presented as a post-cutover React + ASP.NET Core analytics product rather than a migration workbench.
 
 Primary implementation path:
 
@@ -194,7 +194,7 @@ SkyWeb/
 └── package.json
 ```
 
-Build artifacts such as `bin/`, `obj/`, `dist/`, and `node_modules/` should not be included in generated repo zips.
+Build artifacts such as `bin/`, `obj/`, `dist/`, and `node_modules/` should not be included in generated repo zips. Generated AI/project handoff zips also exclude screenshot image binaries by default so transfer archives stay small; the GitHub working tree can still retain the screenshot assets used by this README.
 
 ## Portfolio Docs
 
@@ -207,9 +207,18 @@ Build artifacts such as `bin/`, `obj/`, `dist/`, and `node_modules/` should not 
 | [`docs/SkyWeb_Resume_Bullets.md`](docs/SkyWeb_Resume_Bullets.md)                     | Resume, LinkedIn, ATS keyword, and role-specific project bullet source material         |
 | [`docs/SkyWeb_Recruiter_Brief.md`](docs/SkyWeb_Recruiter_Brief.md)                   | Short recruiter-friendly summaries and role-specific positioning                        |
 | [`docs/SkyWeb_Demo_QA.md`](docs/SkyWeb_Demo_QA.md)                                   | Demo walkthrough Q&A, STAR prompts, and technical interview answers                     |
-| [`docs/SkyWeb_Phase_9_Roadmap.md`](docs/SkyWeb_Phase_9_Roadmap.md)                   | Phase 9 execution plan and remaining polish slices                                      |
+| [`docs/SkyWeb_Release_Checklist.md`](docs/SkyWeb_Release_Checklist.md)               | Final local validation, demo, security, and release-candidate checklist                 |
+| [`docs/SkyWeb_Release_Notes.md`](docs/SkyWeb_Release_Notes.md)                       | Portfolio release-candidate summary and completed milestone notes                       |
+| [`docs/SkyWeb_Known_Limitations.md`](docs/SkyWeb_Known_Limitations.md)               | Honest limitations and future roadmap framing                                           |
+| [`docs/SkyWeb_Phase_9_Roadmap.md`](docs/SkyWeb_Phase_9_Roadmap.md)                   | Phase 9 execution plan and polish status                                                |
 | [`docs/SkyWeb_Visual_Asset_Manifest.md`](docs/SkyWeb_Visual_Asset_Manifest.md)       | Canonical screenshot inventory and README usage notes                                   |
 | [`docs/assets/screenshots/README.md`](docs/assets/screenshots/README.md)             | Screenshot folder notes and file inventory                                              |
+
+## Release Candidate Readiness
+
+Phase 9.5 marks the portfolio release-candidate cleanup pass. Before public sharing or interview use, run the checklist in [`docs/SkyWeb_Release_Checklist.md`](docs/SkyWeb_Release_Checklist.md), confirm the README screenshots render in GitHub, and keep local secrets out of committed configuration.
+
+Known limitations and future roadmap items are tracked in [`docs/SkyWeb_Known_Limitations.md`](docs/SkyWeb_Known_Limitations.md). The short version: SkyWeb is portfolio-ready locally; deployment, external alert delivery, ingestion resilience, and workflow orchestration remain future product/hardening tracks.
 
 ## Relationship to SkyServer
 

@@ -166,3 +166,23 @@ Structure:
 ## Final Demo Close
 
 > SkyWeb is valuable because it combines product thinking with engineering discipline: real data, authenticated workflows, API migration, charting, alerts, and clear system boundaries. It shows I can work across database, backend, frontend, documentation, and stakeholder-style requirements without treating any one layer as isolated.
+
+## Release Candidate Framing
+
+### Is this production deployed?
+
+Good answer:
+
+> Not yet. SkyWeb is currently a local portfolio release candidate. It demonstrates full-stack architecture, authenticated workflows, PostgreSQL data access, charting, alerting, and migration discipline. The next hardening steps would be deployment, CI/CD, containerization, secrets management, and monitoring.
+
+### What are the current limitations?
+
+Good answer:
+
+> The main limitations are intentional boundaries: alert evaluation remains SkyServer-owned, external alert delivery is staged but not active, ingestion resilience can be improved with retry/backoff/resume logic, and the app is not yet hosted. I documented those limitations separately so the project stays transparent and roadmap-ready.
+
+### What would you tackle next after the portfolio release?
+
+Good answer:
+
+> I would move back to SkyServer and pilot Temporal for durable workflow orchestration around ingestion and alert evaluation. That would make the control plane stronger while preserving SkyWeb as the polished analytics/member experience.

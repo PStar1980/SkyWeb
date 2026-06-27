@@ -23,3 +23,7 @@ This folder contains the captured portfolio screenshot set for SkyWeb Analytics.
 - The root README uses a compact subset of these screenshots.
 - Portfolio and demo docs may reference the full set.
 - Avoid committing images with secrets, local credentials, access tokens, browser downloads, or private personal data.
+
+## Generated Zip Policy
+
+Screenshots may be present in the GitHub working tree, but normal generated repo handoff zips intentionally exclude image binaries. This keeps project-file uploads small while preserving screenshot references for GitHub rendering. If a full visual archive is ever needed, regenerate the repo zip with image inclusion enabled from SkyServer tooling.

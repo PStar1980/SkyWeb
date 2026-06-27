@@ -16,7 +16,7 @@ Deliverables:
 
 ## Phase 9.2 — Screenshot and Visual Asset Pass
 
-Status: **Completed in this slice**
+Status: **Completed**
 
 Deliverables:
 
@@ -39,15 +39,18 @@ Dashboard Builder
 Account / Preferences
 ```
 
-## Phase 9.3 — GitHub README Polish
+## Phase 9.3 — GitHub README Polish + Screenshot Integration
 
-Planned deliverables:
+Status: **Completed in this slice**
 
-- Tighten README for public GitHub scanning.
-- Add feature badges/stack summary if desired.
-- Add quick-start and architecture diagram section.
-- Add screenshots once assets exist.
-- Move deeper implementation details to docs where appropriate.
+Deliverables:
+
+- Reworked root README for public GitHub scanning.
+- Added a compact stack summary.
+- Added a screenshot gallery using captured portfolio assets.
+- Added a Mermaid architecture diagram and concise request-flow story.
+- Moved deeper migration detail out of the root README and into supporting docs.
+- Updated the visual asset manifest to reflect captured screenshots.
 
 ## Phase 9.4 — Career / Interview Proof Assets
 

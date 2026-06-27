@@ -1,50 +1,65 @@
 # SkyWeb Analytics
 
-SkyWeb Analytics is the public-facing analytics layer for the Sky ecosystem. It presents macroeconomic dashboards, indicator detail views, curated macro lenses, saved member dashboards, alert signals, and professional charting surfaces.
+SkyWeb Analytics is a full-stack macroeconomic analytics platform built for exploring indicators, curated macro lenses, authenticated dashboards, alert rules, signal notifications, and professional chart surfaces.
 
-SkyServer Admin remains the private control plane for ingestion, tools, automation, access control, audit, repository/system configuration, and operational workflow work. SkyWeb Analytics is the presentation and user-facing analytics layer.
+It is the public/member-facing analytics layer of the Sky ecosystem. SkyServer remains the private control plane for ingestion, automation, workers, tooling, repository utilities, and alert evaluation execution.
 
-## Current Status
+## Stack at a Glance
 
-**Historical feature baseline:** Phase 8.8 — Macro Alerts complete  
-**Active implementation:** Phase 9.2 — Screenshot and Visual Asset Pass
+| Layer         | Technology                                                                                  |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| Client        | React, Vite, React Router, Bootstrap, Axios                                                 |
+| Charts        | Apache ECharts with D3 helpers                                                              |
+| API           | ASP.NET Core Web API, C#                                                                    |
+| Data access   | Dapper, Npgsql                                                                              |
+| Database      | PostgreSQL                                                                                  |
+| Auth          | App-scoped login, opaque bearer sessions, BCrypt validation, SHA-256 session-token hashes   |
+| Control plane | SkyServer Node.js / Express / Knex for ingestion, workers, automation, and alert evaluation |
 
-The .NET transition is complete. DN-10 promoted the ASP.NET Core / C# lane as the default SkyWeb development and build path, and DN-10.1 removed the retired React-only client. Phase 9 shifts SkyWeb from migration work into portfolio and presentation polish.
+## Screenshots
 
-```text
-Primary client/API path:
-  apps/web-dotnet/SkyWeb.Client  React / Vite / Apache ECharts / D3
-  apps/web-dotnet/SkyWeb.Api     ASP.NET Core / C# / Dapper / PostgreSQL
+| Macro Dashboard                                                    | Indicator Alert Overlays                                                             |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| ![Macro Dashboard](docs/assets/screenshots/02-macro-dashboard.png) | ![Indicator Alert Overlays](docs/assets/screenshots/04-indicator-alert-overlays.png) |
+
+| Macro View Detail                                                      | Signal Center                                                  |
+| ---------------------------------------------------------------------- | -------------------------------------------------------------- |
+| ![Macro View Detail](docs/assets/screenshots/03-macro-view-detail.png) | ![Signal Center](docs/assets/screenshots/06-signal-center.png) |
+
+Additional screenshots are available in [`docs/assets/screenshots/`](docs/assets/screenshots/), including the macro overview, alert rules, dashboard builder, account preferences, alert preferences, chart tooltip, and presentation-mode views.
+
+## What This Project Demonstrates
+
+- **React + ASP.NET Core full-stack architecture** with a dedicated C# analytics API.
+- **PostgreSQL-backed macro data exploration** across public indicators and curated multi-series macro views.
+- **Authenticated member workflows** for profiles, preferences, saved views, dashboards, alert rules, and signal notifications.
+- **Professional charting with ECharts/D3**, including dense time-series charts, tooltips, adaptive axes, threshold overlays, and optional alert-event markers.
+- **Safe migration discipline**, moving route families from a Node-backed prototype path into native C# services with validation and cutover cleanup.
+- **Clear system boundaries**, with SkyWeb focused on analytics/product presentation and SkyServer focused on operational control-plane work.
+
+## Product Surfaces
+
+| Surface               | Purpose                                                                                     |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| Macro Overview        | Public macro entry point with curated economic context                                      |
+| Macro Dashboard       | Authenticated cockpit with dashboard blocks, charts, saved content, and alert summary       |
+| Macro Views           | Curated multi-indicator lenses such as rates, inflation, labor, FX, and macro regime views  |
+| Indicator Details     | Single-indicator drilldown with ECharts chart, time-series table, and alert overlays        |
+| Dashboard Builder     | Member dashboard creation with saved-view and direct-indicator cards                        |
+| Alert Rules           | Threshold watches with severity, status, history, clone/edit/delete, and evaluate-now flows |
+| Signal Center         | Alert-notification lifecycle for open, acknowledged, dismissed, and historical signals      |
+| Account + Preferences | Authenticated profile, dashboard preferences, and alert-surfacing preferences               |
+
+## Architecture
+
+```mermaid
+flowchart LR
+    Browser[Browser] --> Client[SkyWeb.Client\nReact + Vite + ECharts + D3]
+    Client --> Api[SkyWeb.Api\nASP.NET Core + C#]
+    Api --> Db[(PostgreSQL\nmacro + skyweb + auth schemas)]
+    Api -->|evaluate alerts only| Server[SkyServer\nNode.js control plane]
+    Server --> Db
 ```
-
-The default npm scripts use the active SkyWeb client:
-
-```text
-npm run web      -> apps/web-dotnet/SkyWeb.Client
-npm run build    -> apps/web-dotnet/SkyWeb.Client production build
-npm run preview  -> apps/web-dotnet/SkyWeb.Client preview
-```
-
-The previous React-only client has been removed from the working tree after successful DN-10 validation. Recovery is through Git history or an earlier repo archive, not through an active source folder.
-
-The .NET lane is validated through the main SkyWeb Analytics surfaces:
-
-- Native C# public macro endpoints under `/api/public/macro/*`.
-- Native C# authentication/session endpoints under `/api/auth/*`.
-- Native C# profile, preferences, alert preferences, saved views, dashboards, alert rules, alert events, alert notifications, and Signal Center endpoints under `/api/skyweb/*`.
-- React/Vite primary client running on `http://localhost:5175`.
-- ASP.NET Core API running on `http://localhost:7280`.
-- Apache ECharts + D3 chart layer in `SkyWeb.Client`.
-- Alert threshold overlays and optional alert-event markers on indicator and macro-view detail charts.
-
-The only intentional proxy bridge still remaining is alert evaluation:
-
-```text
-POST /api/skyweb/alerts/evaluate
-POST /api/skyweb/alerts/{alertKey}/evaluate
-```
-
-Those continue to route through SkyServer because SkyServer currently owns ingestion, workers, scheduler/listener behavior, and alert evaluation writes. This is intentional, not a migration gap.
 
 Current request flow:
 
@@ -53,27 +68,32 @@ SkyWeb.Client
   → SkyWeb.Api
       → native C# public macro endpoints
       → native C# auth/session endpoints
-      → native C# SkyWeb member/profile/preference endpoints
-      → native C# saved-view and dashboard endpoints
-      → native C# alert-rule, event-history, alert-notification, and Signal Center endpoints
+      → native C# profile, preference, saved-view, dashboard, alert-rule, alert-notification, and Signal Center endpoints
       → proxy to SkyServer Node API for evaluate-now alert execution only
 ```
 
-## Repository Layout
+Alert evaluation remains intentionally SkyServer-owned because SkyServer owns ingestion, workers, scheduler/listener behavior, automation, and control-plane execution.
+
+## Current Status
+
+**Active phase:** Phase 9.3 — GitHub README Polish + Screenshot Integration
+
+The .NET transition is complete. DN-10 promoted the ASP.NET Core/C# lane as the default SkyWeb development and build path, and DN-10.1 removed the retired React-only client. Recovery for the retired client is through Git history or an earlier repo archive, not through an active source folder.
+
+Primary implementation path:
 
 ```text
-SkyWeb/
-├── apps/
-│   └── web-dotnet/          # Active SkyWeb Analytics implementation
-│       ├── SkyWeb.DotNet.sln
-│       ├── SkyWeb.Api/      # ASP.NET Core / C# API
-│       └── SkyWeb.Client/   # React / Vite client backed by SkyWeb.Api
-├── docs/                    # Current repo map and reference notes
-├── .env.example
-└── package.json
+apps/web-dotnet/SkyWeb.Client  React / Vite / Apache ECharts / D3
+apps/web-dotnet/SkyWeb.Api     ASP.NET Core / C# / Dapper / PostgreSQL
 ```
 
-Build artifacts such as `bin/`, `obj/`, `dist/`, and `node_modules/` should not be included in generated repo zips.
+Default npm scripts use the active SkyWeb client:
+
+```text
+npm run web      -> apps/web-dotnet/SkyWeb.Client
+npm run build    -> apps/web-dotnet/SkyWeb.Client production build
+npm run preview  -> apps/web-dotnet/SkyWeb.Client preview
+```
 
 ## Local Development
 
@@ -83,7 +103,7 @@ Install JavaScript dependencies from the repository root:
 npm install
 ```
 
-Run these in separate terminals for the active stack:
+Run these in separate terminals:
 
 ```bash
 # Terminal 1 — SkyServer Node API / control plane
@@ -140,12 +160,6 @@ VITE_SKYWEB_PUBLIC_MODE=true
 VITE_API_TIMEOUT_MS=20000
 ```
 
-The client also has its own optional local override file:
-
-```text
-apps/web-dotnet/SkyWeb.Client/.env.development
-```
-
 The .NET API connection string is configured in:
 
 ```text
@@ -154,84 +168,43 @@ apps/web-dotnet/SkyWeb.Api/appsettings.Development.json
 
 Use .NET user secrets for local database passwords instead of committing real credentials.
 
-## .NET Transition Lane
+## Primary Local URLs
 
-The .NET migration uses a dedicated `DN-*` numbering system so it does not collide with historical SkyWeb feature phases.
+| Surface                 | URL                                |
+| ----------------------- | ---------------------------------- |
+| SkyWeb Analytics client | `http://localhost:5175`            |
+| SkyServer Node API      | `http://localhost:7171`            |
+| SkyWeb.Api health       | `http://localhost:7280/_health`    |
+| SkyWeb.Api DB health    | `http://localhost:7280/_db/health` |
+| SkyWeb.Api Swagger      | `http://localhost:7280/swagger`    |
 
-| DN Phase | Status | Objective                                                              |
-| -------- | -----: | ---------------------------------------------------------------------- |
-| DN-0     |     ✅ | Preserve Pre-.NET baseline                                             |
-| DN-1     |     ✅ | Create parallel `.NET` app structure                                   |
-| DN-2     |     ✅ | Configure API, CORS, health, DB connection                             |
-| DN-3     |     ✅ | Wire `SkyWeb.Client` to `SkyWeb.Api` with temporary proxy fallback     |
-| DN-4     |     ✅ | Implement public macro REST endpoints in C#                            |
-| DN-5     |     ✅ | Implement authentication in C#                                         |
-| DN-5.1   |     ✅ | Stabilize public macro series reads                                    |
-| DN-5.2   |     ✅ | Fix indicator-table `regclass` materialization and `NaN` series values |
-| DN-6     |     ✅ | Implement SkyWeb profile and preferences in C#                         |
-| DN-7     |     ✅ | Implement saved views and dashboards in C#                             |
-| DN-7.1   |     ✅ | Stabilize saved views/dashboards build                                 |
-| DN-8     |     ✅ | Implement alerts and Signal Center in C#                               |
-| DN-9.1   |     ✅ | Add ECharts + D3 chart engine foundation in `SkyWeb.Client`            |
-| DN-9.2   |     ✅ | Extract reusable ECharts chart architecture and frontend adapters      |
-| DN-9.3   |     ✅ | Polish chart UX and harden ECharts runtime behavior                    |
-| DN-9.4   |     ✅ | Add alert overlays and chart annotations                               |
-| DN-9.4.1 |     ✅ | Restore page-level alert overlay wiring                                |
-| DN-9.4.2 |     ✅ | Polish overlay counts/modes and indicator chart controls               |
-| DN-9.5   |     ✅ | Pre-cutover cleanup and documentation lockdown                         |
-| DN-10    |     ✅ | Promote the `.NET` lane as the default SkyWeb path                     |
-| DN-10.1  |     ✅ | Remove the retired client folder and clean stale references            |
-
-## SkyWeb Feature Roadmap
-
-| Phase   | Status | Objective                                                                                                                    |
-| ------- | -----: | ---------------------------------------------------------------------------------------------------------------------------- |
-| Phase 1 |     ✅ | SkyWeb foundation: identity, README, package scripts, environment template, API client, and route shell                      |
-| Phase 2 |     ✅ | SkyServer public macro API bridge: safe unauthenticated macro endpoints with public limits                                   |
-| Phase 3 |     ✅ | Macro Dashboard v1: live overview, curated view cards, drilldowns, formatted tables, and indicator explorer                  |
-| Phase 4 |     ✅ | Auth shell and member layer prep: app-scoped `SKYWEB` login, protected account route, profile/preferences foundation         |
-| Phase 5 |     ✅ | Dashboard polish: charts, trend previews, responsive refinements, and richer macro storytelling surfaces                     |
-| Phase 6 |     ✅ | Profile and preferences UI: editable member profile, saved display preferences, and account settings                         |
-| Phase 7 |     ✅ | Saved dashboards and watchlists: personalized dashboard builder, presentation mode, analytical view polish                   |
-| Phase 8 |     ✅ | Macro alerts: alert rules, evaluation history, signal queue, preferences, Signal Center, and alert-rule UX polish            |
-| Phase 9 |     🔥 | Public portfolio polish: feature tour, architecture story, GitHub/LinkedIn proof assets, and presentation-ready storytelling |
-
-## Portfolio / Presentation Assets
-
-Phase 9 starts the portfolio-polish lane. These documents translate the working product into material that can be used for GitHub, LinkedIn, interview prep, screenshots, and live demos.
-
-| Asset                                                                                | Purpose                                                                             |
-| ------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
-| [`docs/SkyWeb_Portfolio_Brief.md`](docs/SkyWeb_Portfolio_Brief.md)                   | Concise portfolio story, technical proof points, and architecture summary           |
-| [`docs/SkyWeb_Feature_Tour.md`](docs/SkyWeb_Feature_Tour.md)                         | Guided product walkthrough and screenshot capture plan                              |
-| [`docs/SkyWeb_Demo_Script.md`](docs/SkyWeb_Demo_Script.md)                           | Five-minute interview/demo narrative                                                |
-| [`docs/SkyWeb_Phase_9_Roadmap.md`](docs/SkyWeb_Phase_9_Roadmap.md)                   | Phase 9 execution plan and remaining polish slices                                  |
-| [`docs/SkyWeb_Screenshot_Capture_Guide.md`](docs/SkyWeb_Screenshot_Capture_Guide.md) | Browser setup, capture rules, route sequence, and privacy checklist for screenshots |
-| [`docs/SkyWeb_Visual_Asset_Manifest.md`](docs/SkyWeb_Visual_Asset_Manifest.md)       | Canonical screenshot filenames, README usage priority, and asset status tracker     |
-| [`docs/assets/screenshots/README.md`](docs/assets/screenshots/README.md)             | Target folder for portfolio screenshots and export notes                            |
-
-## Screenshot Asset Targets
-
-Phase 9.2 defines the canonical screenshot set for the portfolio pass. Capture the images into:
+## Repository Layout
 
 ```text
-docs/assets/screenshots/
+SkyWeb/
+├── apps/
+│   └── web-dotnet/
+│       ├── SkyWeb.DotNet.sln
+│       ├── SkyWeb.Api/      # ASP.NET Core / C# API
+│       └── SkyWeb.Client/   # React / Vite client backed by SkyWeb.Api
+├── docs/
+│   ├── assets/screenshots/  # Portfolio screenshots
+│   └── *.md                 # Portfolio, feature-tour, roadmap, and repo-map docs
+├── .env.example
+└── package.json
 ```
 
-Recommended first-pass assets:
+Build artifacts such as `bin/`, `obj/`, `dist/`, and `node_modules/` should not be included in generated repo zips.
 
-```text
-01-macro-overview.png
-02-macro-dashboard.png
-03-macro-view-detail.png
-04-indicator-alert-overlays.png
-05-alert-rules.png
-06-signal-center.png
-07-dashboard-builder.png
-08-account-preferences.png
-```
+## Portfolio Docs
 
-Do not include local tokens, database values, terminal windows, or browser profile details in captured images.
+| Asset                                                                          | Purpose                                                                    |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| [`docs/SkyWeb_Portfolio_Brief.md`](docs/SkyWeb_Portfolio_Brief.md)             | Concise product story, technical proof points, and interview-ready summary |
+| [`docs/SkyWeb_Feature_Tour.md`](docs/SkyWeb_Feature_Tour.md)                   | Guided product walkthrough and screenshot sequence                         |
+| [`docs/SkyWeb_Phase_9_Roadmap.md`](docs/SkyWeb_Phase_9_Roadmap.md)             | Phase 9 execution plan and remaining polish slices                         |
+| [`docs/SkyWeb_Visual_Asset_Manifest.md`](docs/SkyWeb_Visual_Asset_Manifest.md) | Canonical screenshot inventory and README usage notes                      |
+| [`docs/assets/screenshots/README.md`](docs/assets/screenshots/README.md)       | Screenshot folder notes and file inventory                                 |
 
 ## Relationship to SkyServer
 
@@ -240,7 +213,7 @@ SkyWeb Analytics should not duplicate SkyServer Admin features. SkyServer owns:
 - Tool execution
 - Ingestion management
 - Worker automation
-- Access control
+- Access control administration
 - Audit reporting
 - Repository/system configuration
 - Application membership management
@@ -248,22 +221,3 @@ SkyWeb Analytics should not duplicate SkyServer Admin features. SkyServer owns:
 - Current alert evaluation execution
 
 SkyWeb Analytics consumes curated APIs and focuses on public presentation, exploration, member personalization, dashboards, alerts, and chart intelligence.
-
-## Auth Notes
-
-- SkyWeb Analytics login posts to `/api/auth/login` with `appCode: SKYWEB`.
-- Public macro pages remain unauthenticated.
-- `/account` is protected by the SkyWeb AuthContext and reads `/api/skyweb/profile`.
-- SkyWeb profiles and preferences are staged in the `skyweb` database schema.
-- SkyServer Admin controls which shared users have `SKYWEB` application membership and SkyWeb-specific roles.
-- `SkyWeb.Api` serves nearly all SkyWeb Analytics API surfaces natively in C#. Alert evaluation remains intentionally SkyServer-owned.
-
-## Primary Local URLs
-
-| Surface                 | URL                                                |
-| ----------------------- | -------------------------------------------------- |
-| SkyWeb Analytics client | `http://localhost:5175` when running `npm run web` |
-| SkyServer Node API      | `http://localhost:7171`                            |
-| SkyWeb.Api health       | `http://localhost:7280/_health`                    |
-| SkyWeb.Api DB health    | `http://localhost:7280/_db/health`                 |
-| SkyWeb.Api Swagger      | `http://localhost:7280/swagger`                    |

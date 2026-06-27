@@ -152,14 +152,22 @@ SkyWeb/
 │                   ├── formatters.js
 │                   └── macroStory.js
 ├── docs/
-│   ├── SkyWeb_Demo_Script.md
 │   ├── SkyWeb_Feature_Tour.md
 │   ├── SkyWeb_Phase_9_Roadmap.md
 │   ├── SkyWeb_Portfolio_Brief.md
 │   ├── SkyWeb_RepoMap.md
-│   ├── SkyWeb_Screenshot_Capture_Guide.md
 │   ├── SkyWeb_Visual_Asset_Manifest.md
 │   └── assets/
 │       └── screenshots/
-│           └── README.md
+│           ├── 01-macro-overview.png
+│           ├── 02-macro-dashboard.png
+│           ├── 03-macro-view-detail.png
+│           ├── 04-indicator-alert-overlays.png
+│           ├── 05-alert-rules.png
+│           ├── 06-signal-center.png
+│           ├── 07-dashboard-builder.png
+│           ├── 08-account-preferences.png
+│           ├── 09-alert-preferences.png
+│           ├── 10-chart-tooltip.png
+│           └── 11-dashboard-presentation.png
 └── tests/
